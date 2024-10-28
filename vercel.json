@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://666d2bf37a3738f7cacbadeb.mockapi.io/api/v1/$1"
+    },
+    {
+      "source": "/(.*)", 
+      "destination": "/"
+    }
+  ]
+}
