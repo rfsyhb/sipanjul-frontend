@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 export default function Sidebar({ currentPath }) {
   return (
     <aside className="bg-card1 text-text flex flex-col p-4 gap-4 items-center min-h-screen">
-      <div className="flex flex-col bg-white rounded-3xl">
+      <div className="flex flex-col bg-white rounded-full">
         <SidebarItem
           icon={
             <FaHome
@@ -23,8 +23,7 @@ export default function Sidebar({ currentPath }) {
               }
             />
           }
-          label="Home"
-          isActive={currentPath == '/' && true}
+          to="/"
         />
         <SidebarItem
           icon={
@@ -35,8 +34,7 @@ export default function Sidebar({ currentPath }) {
               }
             />
           }
-          label="Calculator"
-          isActive={currentPath == '/kasir' && true}
+          to="/kasir"
         />
         <SidebarItem
           icon={
@@ -47,22 +45,22 @@ export default function Sidebar({ currentPath }) {
               }
             />
           }
-          label="Database"
-          isActive={currentPath == '/stok' && true}
+          to="/stok"
         />
       </div>
-      <div className="flex flex-col bg-white rounded-3xl">
+      <div className="flex flex-col bg-white rounded-full">
         <SidebarItem
           icon={
             <FaClipboardList
               size={24}
               className={
-                currentPath == '/laporan' ? 'text-activeBtn' : 'text-inactiveBtn'
+                currentPath == '/laporan'
+                  ? 'text-activeBtn'
+                  : 'text-inactiveBtn'
               }
             />
           }
-          label="Report"
-          isActive={currentPath == '/laporan' && true}
+          to="/laporan"
         />
         <SidebarItem
           icon={
@@ -73,8 +71,7 @@ export default function Sidebar({ currentPath }) {
               }
             />
           }
-          label="Grafik"
-          isActive={currentPath == '/grafik' && true}
+          to="/grafik"
         />
       </div>
       <div className="flex flex-col bg-white rounded-full">
@@ -82,14 +79,26 @@ export default function Sidebar({ currentPath }) {
       </div>
       <div className="mt-auto">
         <SidebarItem
-          icon={<FaSignOutAlt size={24} />}
-          label="Logout"
-          isActive={false}
+          icon={
+            <FaSignOutAlt
+              size={24}
+              className={
+                currentPath == '/logout' ? 'text-activeBtn' : 'text-inactiveBtn'
+              }
+            />
+          }
+          to="/logout"
         />
         <SidebarItem
-          icon={<FaUserCircle size={24} />}
-          label="User"
-          isActive={false}
+          icon={
+            <FaUserCircle
+              size={24}
+              className={
+                currentPath == '/user' ? 'text-activeBtn' : 'text-inactiveBtn'
+              }
+            />
+          }
+          to="/user"
         />
       </div>
     </aside>
