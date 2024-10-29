@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 export default function Sidebar({ currentPath }) {
   return (
-    <aside className="bg-card1 text-text flex flex-col p-4 gap-4 items-center min-h-screen">
+    <aside className="bg-card1 text-text flex flex-col p-4 gap-4 items-center">
       <div className="flex flex-col bg-white rounded-full">
         <SidebarItem
           icon={
