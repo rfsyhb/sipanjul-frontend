@@ -13,7 +13,7 @@ export default function Header() {
     <header className="w-full p-4 py-5 flex items-center justify-between">
       <div className="flex flex-row items-center gap-4">
         {/* on off toko */}
-        <div className="flex flex-row p-1 bg-gray-300 rounded-full">
+        <div className="flex flex-row p-1 bg-white rounded-full">
           <div className="p-4 px-6 bg-green-400 rounded-full cursor-pointer">
             <BsUnlockFill size={24} />
           </div>

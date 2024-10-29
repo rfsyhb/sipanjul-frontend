@@ -8,37 +8,73 @@ import {
   FaSignOutAlt,
 } from 'react-icons/fa';
 import SidebarItem from '../Sidebar/SidebarItem';
+import PropTypes from 'prop-types';
 
-export default function Sidebar() {
+export default function Sidebar({ currentPath }) {
   return (
     <aside className="bg-card1 text-text flex flex-col p-4 gap-4 items-center min-h-screen">
       <div className="flex flex-col bg-white rounded-3xl">
         <SidebarItem
-          icon={<FaHome size={24} className="text-inactiveBtn" />}
+          icon={
+            <FaHome
+              size={24}
+              className={
+                currentPath == '/' ? 'text-activeBtn' : 'text-inactiveBtn'
+              }
+            />
+          }
           label="Home"
-          isActive={true}
+          isActive={currentPath == '/' && true}
         />
         <SidebarItem
-          icon={<FaCalculator size={24} className="text-inactiveBtn" />}
+          icon={
+            <FaCalculator
+              size={24}
+              className={
+                currentPath == '/kasir' ? 'text-activeBtn' : 'text-inactiveBtn'
+              }
+            />
+          }
           label="Calculator"
-          isActive={false}
+          isActive={currentPath == '/kasir' && true}
         />
         <SidebarItem
-          icon={<FaDatabase size={24} className="text-inactiveBtn" />}
+          icon={
+            <FaDatabase
+              size={24}
+              className={
+                currentPath == '/stok' ? 'text-activeBtn' : 'text-inactiveBtn'
+              }
+            />
+          }
           label="Database"
-          isActive={false}
+          isActive={currentPath == '/stok' && true}
         />
       </div>
       <div className="flex flex-col bg-white rounded-3xl">
         <SidebarItem
-          icon={<FaClipboardList size={24} className="text-inactiveBtn" />}
+          icon={
+            <FaClipboardList
+              size={24}
+              className={
+                currentPath == '/laporan' ? 'text-activeBtn' : 'text-inactiveBtn'
+              }
+            />
+          }
           label="Report"
-          isActive={false}
+          isActive={currentPath == '/laporan' && true}
         />
         <SidebarItem
-          icon={<FaChartPie size={24} className="text-inactiveBtn" />}
-          label="Chart"
-          isActive={false}
+          icon={
+            <FaChartPie
+              size={24}
+              className={
+                currentPath == '/grafik' ? 'text-activeBtn' : 'text-inactiveBtn'
+              }
+            />
+          }
+          label="Grafik"
+          isActive={currentPath == '/grafik' && true}
         />
       </div>
       <div className="flex flex-col bg-white rounded-full">
@@ -46,12 +82,12 @@ export default function Sidebar() {
       </div>
       <div className="mt-auto">
         <SidebarItem
-          icon={<FaSignOutAlt size={24} className="text-inactiveBtn" />}
+          icon={<FaSignOutAlt size={24} />}
           label="Logout"
           isActive={false}
         />
         <SidebarItem
-          icon={<FaUserCircle size={24} className="text-inactiveBtn" />}
+          icon={<FaUserCircle size={24} />}
           label="User"
           isActive={false}
         />
@@ -59,3 +95,7 @@ export default function Sidebar() {
     </aside>
   );
 }
+
+Sidebar.propTypes = {
+  currentPath: PropTypes.string.isRequired,
+};
