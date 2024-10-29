@@ -5,9 +5,9 @@ import Header from './components/common/Header';
 
 function App() {
   return (
-    <div className="font-poppins bg-bg text-text min-h-screen w-full transition-all duration-500 ease-in-out flex flex-col">
+    <div className="font-poppins bg-text text-bg min-h-screen w-full transition-all duration-500 ease-in-out flex flex-col">
       <Header />
-      <div className='bg-green-700 flex flex-row'>
+      <div className=' flex flex-row'>
         <Sidebar />
         <div className="flex-1 flex flex-col">
           <Routes>
