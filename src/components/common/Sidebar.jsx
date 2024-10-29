@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fa';
 import SidebarItem from '../Sidebar/SidebarItem';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 export default function Sidebar({ currentPath }) {
   return (
@@ -74,9 +75,11 @@ export default function Sidebar({ currentPath }) {
           to="/grafik"
         />
       </div>
-      <div className="flex flex-col bg-white rounded-full">
-        <span className="font-bold text-inactiveBtn p-3 text-sm">GPM</span>
-      </div>
+      <Link to="/gpm" className="flex flex-col bg-white rounded-full p-1">
+        <div className={`flex flex-col ${currentPath == '/gpm' ? 'bg-inactiveBtn' : ''} rounded-full`}>
+          <span className={`font-bold ${currentPath == '/gpm' ? 'text-activeBtn' : 'text-inactiveBtn'} p-3 text-sm`}>GPM</span>
+        </div>
+      </Link>
       <div className="mt-auto">
         <SidebarItem
           icon={
