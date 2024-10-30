@@ -1,8 +1,13 @@
+import SalesCard from '../components/homepage/SalesCard';
+
 export default function Homepage() {
   return (
     <div className="flex flex-col h-full max-h-screen">
-      <h1 className="text-3xl font-bold">Homepage</h1>
-      <p className="mt-2">Welcome to the homepage!</p>
+      <section className='flex flex-row gap-4'>
+        <SalesCard label="Hari" value={924000} oldValue={800000} />
+        <SalesCard label="Bulan" value={8928500} oldValue={10756000} />
+        <SalesCard label="Tahun" value={162893000} oldValue={154765900} />
+      </section>
     </div>
   );
 }
