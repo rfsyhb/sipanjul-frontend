@@ -9,6 +9,7 @@ export default {
         text: '#EAE9E3',
         inactiveBtn: '#212121',
         activeBtn: '#F0AB26',
+        actionBtn: '#1B4F88',
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
