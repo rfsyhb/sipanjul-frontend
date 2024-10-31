@@ -18,7 +18,7 @@ export default function SalesCard({ label = 'test', value = 0, oldValue }) {
           <p className="font-medium text-xl">Rp. {value.toLocaleString('id-ID')}</p>
           <div
             className={`flex flex-row items-center gap-1 px-2 rounded-xl ${
-              isNegative ? 'bg-red-400' : 'bg-green-400'
+              isNegative ? 'bg-red-300' : 'bg-green-300'
             }`}
           >
             {isNegative ? (
