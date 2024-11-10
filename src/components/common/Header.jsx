@@ -10,7 +10,7 @@ export default function Header() {
   const formattedDate = date.toLocaleDateString('id-ID', options);
   
   return (
-    <header className="w-full p-4 py-5 flex items-center justify-between">
+    <header className="w-full px-4 pt-2 flex items-center justify-between">
       <div className="flex flex-row items-center gap-4">
         {/* on off toko */}
         <div className="flex flex-row p-1 bg-white rounded-full">
