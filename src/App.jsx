@@ -11,7 +11,7 @@ function App() {
       <Header />
       <div className="flex flex-1">
         <Sidebar currentPath={location.pathname} />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col py-2">
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/kasir" element={<h1>Kasir</h1>} />
@@ -19,6 +19,7 @@ function App() {
             <Route path="/laporan" element={<h1>Laporan</h1>} />
             <Route path="/grafik" element={<h1>Grafik</h1>} />
             <Route path="/gpm" element={<h1>Kalkulator GPM</h1>} />
+            <Route path='/test' element={<h1>test</h1>} />
             <Route path="*" element={<h1>404 Not Found</h1>} />
           </Routes>
         </div>
