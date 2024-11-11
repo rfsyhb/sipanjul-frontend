@@ -1,9 +1,7 @@
 import { FaArrowUp, FaArrowDown, FaMoneyBill } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 
-export default function SalesCard({ label = 'test', value = 0, oldValue }) {
-  const percentage = ((value - oldValue) / oldValue) * 100;
-  const isNegative = percentage < 0;
+export default function SalesCard({ label = 'test', value = 0, oldValue, percentage, isNegative }) {
 
   return (
     <div className="flex flex-col w-72 h-36 p-4 rounded-2xl bg-white gap-3">
