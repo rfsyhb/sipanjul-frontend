@@ -17,7 +17,7 @@ export default function BestSellingCard() {
     <section className="flex flex-col rounded-2xl bg-white w-auto p-4 gap-2">
       {/* w-full adalah koentji */}
       <div className="flex flex-row items-center justify-between w-full">
-        <h2 className="text-lg font-medium">Barang Terlaris</h2>
+        <h2 className="text-lg font-medium">Barang Terlaris {activeButton === 'Mingguan' ? <span className='text-sm'>(weekly)</span> : <span className='text-sm'>(monthly)</span>}</h2>
         {/* 2 button */}
         <div className="flex flex-row gap-2">
           <ToggleButton
