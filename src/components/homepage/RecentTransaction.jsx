@@ -2,9 +2,9 @@ import { recentTransactionList } from "../../utils/dummyData";
 
 export default function RecentTransaction() {
   return (
-    <section className="bg-white p-4 rounded-2xl shadow-md max-h-[38vh]">
+    <section className="bg-white p-4 rounded-2xl shadow-md ">
       <h2 className="text-lg font-medium pb-2">Transaksi Terbaru</h2>
-      <div className="overflow-x-auto max-h-64">
+      <div className="overflow-x-auto max-h-[24vh]">
         <table className="min-w-full table-auto border-collapse">
           <thead className="sticky top-0 bg-white">
             <tr>
