@@ -10,6 +10,41 @@ export const bestSellingList = {
       imageUrl:
         'https://allofresh.id/media/catalog/product/cache/fb82878314ebdeb4be369a6c3c22b713/b/r/brc-8994209001796-1.jpg',
     },
+    {
+      name: 'Beras Setra Ramos1',
+      imageUrl:
+        'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/90/MTA-154604032/befood_befood_beras_prem_setra_ramos_5kg_full01_f2hb19pw.jpg', 
+    },
+    {
+      name: 'Beras Medium SPHP1',
+      imageUrl:
+        'https://allofresh.id/media/catalog/product/cache/fb82878314ebdeb4be369a6c3c22b713/b/r/brc-8994209001796-1.jpg',
+    },
+    {
+      name: 'Beras Setra Ramos2',
+      imageUrl:
+        'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/90/MTA-154604032/befood_befood_beras_prem_setra_ramos_5kg_full01_f2hb19pw.jpg', 
+    },
+    {
+      name: 'Beras Medium SPHP2',
+      imageUrl:
+        'https://allofresh.id/media/catalog/product/cache/fb82878314ebdeb4be369a6c3c22b713/b/r/brc-8994209001796-1.jpg',
+    },
+    {
+      name: 'Beras Setra Ramos3',
+      imageUrl:
+        'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/90/MTA-154604032/befood_befood_beras_prem_setra_ramos_5kg_full01_f2hb19pw.jpg', 
+    },
+    {
+      name: 'Beras Medium SPHP3',
+      imageUrl:
+        'https://allofresh.id/media/catalog/product/cache/fb82878314ebdeb4be369a6c3c22b713/b/r/brc-8994209001796-1.jpg',
+    },
+    {
+      name: 'Beras Setra Ramos4',
+      imageUrl:
+        'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/90/MTA-154604032/befood_befood_beras_prem_setra_ramos_5kg_full01_f2hb19pw.jpg', 
+    },
   ],
   monthly: [
     {
