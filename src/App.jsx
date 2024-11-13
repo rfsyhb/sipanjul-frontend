@@ -3,6 +3,7 @@ import Homepage from './pages/Homepage';
 import Sidebar from './components/common/Sidebar';
 import Header from './components/common/Header';
 import CashierPage from './pages/CashierPage';
+import InventoryPage from './pages/InventoryPage';
 
 function App() {
   const location = useLocation();
@@ -16,7 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/kasir" element={<CashierPage />} />
-            <Route path="/stok" element={<h1>Stok</h1>} />
+            <Route path="/stok" element={<InventoryPage />} />
             <Route path="/laporan" element={<h1>Laporan</h1>} />
             <Route path="/grafik" element={<h1>Grafik</h1>} />
             <Route path="/gpm" element={<h1>Kalkulator GPM</h1>} />
