@@ -11,6 +11,9 @@ export default function ItemCard({
     <div
       className={`relative border ${stock < 20 ? 'border-red-400 border-2' : 'border-gray-300'} rounded-lg flex flex-col w-40`}
     >
+      {stock < 20 && (
+        <div className="absolute inset-0 bg-red-400 opacity-10 rounded-lg"></div>
+      )}
       <img
         src={imageUrl}
         alt={name}
