@@ -9,7 +9,7 @@ export default function CashierItemCard({
   setQuantity,
 }) {
   return (
-    <div className="flex flex-row gap-2 max-h-40">
+    <div className="flex flex-row gap-2 max-h-40 w-80">
       <ItemCard
         imageUrl={item.imageUrl}
         name={item.name}
@@ -17,7 +17,7 @@ export default function CashierItemCard({
         price={item.price}
         packageSize={item.packageSize}
       />
-      <div className="flex flex-col justify-center gap-2">
+      <div className="flex flex-col justify-center gap-2 w-40">
         <h3 className="text-sm font-semibold">{item.name}</h3>
         <div className="flex items-center gap-2">
           <input
