@@ -61,7 +61,7 @@ export default function CashierPage() {
               imageUrl={item.imageUrl}
               stock={item.stock}
               price={item.price}
-              type={item.type}
+              packageSize={item.packageSize}
               name={item.name}
               quantity={quantity}
               addToCart={() => addToCart(item)}

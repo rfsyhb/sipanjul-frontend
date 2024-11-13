@@ -4,7 +4,7 @@ export default function ItemCard({
   imageUrl,
   stock,
   price,
-  type,
+  packageSize,
   name,
   quantity,
   addToCart,
@@ -26,7 +26,7 @@ export default function ItemCard({
           Rp. {price.toLocaleString()}
         </div>
         <div className="absolute bottom-1 right-1 bg-gray-200 text-xs px-2 py-1 rounded">
-          {type}
+          {packageSize}
         </div>
       </div>
       <div className="flex flex-col justify-center gap-2">
@@ -62,7 +62,7 @@ ItemCard.propTypes = {
   imageUrl: PropTypes.string.isRequired,
   stock: PropTypes.number.isRequired,
   price: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired,
+  packageSize: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   quantity: PropTypes.number.isRequired,
   addToCart: PropTypes.func.isRequired,
