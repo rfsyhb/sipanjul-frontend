@@ -1,11 +1,8 @@
 import PropTypes from 'prop-types';
+import ItemCard from '../common/ItemCard';
 
-export default function ItemCard({
-  imageUrl,
-  stock,
-  price,
-  packageSize,
-  name,
+export default function CashierItemCard({
+  item,
   quantity,
   addToCart,
   removeFromCart,
@@ -13,30 +10,21 @@ export default function ItemCard({
 }) {
   return (
     <div className="flex flex-row gap-2 max-h-40">
-      <div className="relative border border-gray-300 rounded-lg flex flex-col min-w-40 max-w-40">
-        <img
-          src={imageUrl}
-          alt={name}
-          className="w-full min-h-40 object-cover rounded-lg"
-        />
-        <div className="absolute top-1 right-1 bg-gray-200 text-xs px-2 py-1 rounded">
-          stok: {stock}
-        </div>
-        <div className="absolute bottom-1 left-1 bg-gray-200 text-xs px-2 py-1 rounded">
-          Rp. {price.toLocaleString()}
-        </div>
-        <div className="absolute bottom-1 right-1 bg-gray-200 text-xs px-2 py-1 rounded">
-          {packageSize}
-        </div>
-      </div>
+      <ItemCard
+        imageUrl={item.imageUrl}
+        name={item.name}
+        stock={item.stock}
+        price={item.price}
+        packageSize={item.packageSize}
+      />
       <div className="flex flex-col justify-center gap-2">
-        <h3 className="text-sm font-semibold">{name}</h3>
+        <h3 className="text-sm font-semibold">{item.name}</h3>
         <div className="flex items-center gap-2">
           <input
             type="number"
             value={quantity}
             min="0"
-            max={stock}
+            max={item.stock}
             className="w-12 text-center border rounded"
             onChange={(e) => setQuantity(Number(e.target.value))}
           />
@@ -58,12 +46,15 @@ export default function ItemCard({
   );
 }
 
-ItemCard.propTypes = {
-  imageUrl: PropTypes.string.isRequired,
-  stock: PropTypes.number.isRequired,
-  price: PropTypes.number.isRequired,
-  packageSize: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+CashierItemCard.propTypes = {
+  item: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    stock: PropTypes.number.isRequired,
+    packageSize: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    imageUrl: PropTypes.string.isRequired,
+  }).isRequired,
   quantity: PropTypes.number.isRequired,
   addToCart: PropTypes.func.isRequired,
   removeFromCart: PropTypes.func.isRequired,

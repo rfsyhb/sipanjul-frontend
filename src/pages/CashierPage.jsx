@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ItemCard from '../components/cashierpage/ItemCard';
+import CashierItemCard from '../components/cashierpage/CashierItemCard';
 import { itemList } from '../utils/dummyData';
 
 export default function CashierPage() {
@@ -56,13 +56,9 @@ export default function CashierPage() {
           const cartItem = cart.find((cartItem) => cartItem.id === item.id);
           const quantity = cartItem ? cartItem.quantity : 0;
           return (
-            <ItemCard
+            <CashierItemCard
               key={item.id}
-              imageUrl={item.imageUrl}
-              stock={item.stock}
-              price={item.price}
-              packageSize={item.packageSize}
-              name={item.name}
+              item={item}
               quantity={quantity}
               addToCart={() => addToCart(item)}
               removeFromCart={() => removeFromCart(item.id)}
