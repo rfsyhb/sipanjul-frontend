@@ -68,7 +68,7 @@ export default function CashierPage() {
         })}
       </div>
       {/* cashier */}
-      <div className="w-1/3 p-4 border rounded-md bg-white shadow-md overflow-hidden flex flex-col justify-between">
+      <div className="w-1/2 h-[60vh] p-4 border rounded-md bg-white shadow-md overflow-hidden flex flex-col justify-between">
         
         {cart.length === 0 || cart.every((item) => item.quantity === 0) ? (
           <p>Your cart is empty.</p>
@@ -83,8 +83,8 @@ export default function CashierPage() {
                     className="flex justify-between items-center mb-2"
                   >
                     <div>
-                      <h4 className="text-lg">{item.name}</h4>
-                      <p>
+                      <h4 className="text-md">{item.name}</h4>
+                      <p className='text-sm'>
                         Rp. {item.price.toLocaleString()} x {item.quantity}
                       </p>
                     </div>
