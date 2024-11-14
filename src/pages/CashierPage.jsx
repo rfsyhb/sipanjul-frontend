@@ -13,15 +13,21 @@ export default function CashierPage() {
       if (existingItemIndex >= 0) {
         const updatedCart = prevCart.map((cartItem, index) => {
           if (index === existingItemIndex) {
+            // Prevent adding more if quantity exceeds stock
+            if (cartItem.quantity >= item.stock) return cartItem;
             return { ...cartItem, quantity: cartItem.quantity + 1 };
           }
           return cartItem;
         });
         return updatedCart;
       }
-      return [...prevCart, { ...item, quantity: 1 }];
+      // Add item with initial quantity only if it's within stock
+      return item.stock > 0
+        ? [...prevCart, { ...item, quantity: 1 }]
+        : prevCart;
     });
   };
+
 
   const removeFromCart = (itemId) => {
     setCart((prevCart) => {
@@ -55,6 +61,9 @@ export default function CashierPage() {
         {itemList.map((item) => {
           const cartItem = cart.find((cartItem) => cartItem.id === item.id);
           const quantity = cartItem ? cartItem.quantity : 0;
+          // Disable button if quantity exceeds stock
+          const isDisabled = quantity >= item.stock;
+
           return (
             <CashierItemCard
               key={item.id}
@@ -63,13 +72,13 @@ export default function CashierPage() {
               addToCart={() => addToCart(item)}
               removeFromCart={() => removeFromCart(item.id)}
               setQuantity={(value) => setQuantity(item.id, value)}
+              isDisabled={isDisabled} // Pass disabled state
             />
           );
         })}
       </div>
       {/* cashier */}
       <div className="w-1/2 h-[60vh] p-4 border rounded-md bg-white shadow-md overflow-hidden flex flex-col justify-between">
-        
         {cart.length === 0 || cart.every((item) => item.quantity === 0) ? (
           <p>Your cart is empty.</p>
         ) : (
@@ -84,7 +93,7 @@ export default function CashierPage() {
                   >
                     <div>
                       <h4 className="text-md">{item.name}</h4>
-                      <p className='text-sm'>
+                      <p className="text-sm">
                         Rp. {item.price.toLocaleString()} x {item.quantity}
                       </p>
                     </div>
