@@ -34,13 +34,6 @@ export default function ItemCard({
       <div className="absolute bottom-1 right-1 bg-gray-200 text-xs px-2 py-1 rounded">
         {packageSize}
       </div>
-
-      {/* Button Edit Barang */}
-      <div className="absolute inset-0 flex items-center justify-center bg-gray-300 bg-opacity-50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <button className="border border-actionBtn bg-actionBtn text-white px-4 py-1 rounded-lg hover:bg-activeBtn hover:text-inactiveBtn">
-          <span className="font-medium text-sm">Edit Barang</span>
-        </button>
-      </div>
     </div>
   );
 }

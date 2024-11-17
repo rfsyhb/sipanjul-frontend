@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import ItemCard from '../common/ItemCard';
+import EditableItemCard from '../common/EditableItemCard';
 
 export default function InventoryItemCard({ item }) {
   return (
     <div className='w-40'>
-      <ItemCard
+      <EditableItemCard
         imageUrl={item.imageUrl}
         name={item.name}
         stock={item.stock}
