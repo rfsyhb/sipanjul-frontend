@@ -28,7 +28,6 @@ export default function CashierPage() {
     });
   };
 
-
   const removeFromCart = (itemId) => {
     setCart((prevCart) => {
       return prevCart.map((cartItem) => {
@@ -77,6 +76,7 @@ export default function CashierPage() {
           );
         })}
       </div>
+
       {/* cashier */}
       <div className="w-1/2 h-[60vh] p-4 border rounded-md bg-white shadow-md overflow-hidden flex flex-col justify-between">
         {cart.length === 0 || cart.every((item) => item.quantity === 0) ? (
@@ -91,11 +91,24 @@ export default function CashierPage() {
                     key={item.id}
                     className="flex justify-between items-center mb-2"
                   >
-                    <div>
-                      <h4 className="text-md">{item.name}</h4>
-                      <p className="text-sm">
-                        Rp. {item.price.toLocaleString()} x {item.quantity}
-                      </p>
+                    <div className="flex flex-row items-center gap-2">
+                      <img
+                        src={item.imageUrl}
+                        alt={item.name}
+                        className="w-20 h-20 object-cover rounded-lg shadow-md p-1 border"
+                      />
+                      <div>
+                        <h4 className="text-md font-medium">{item.name}</h4>
+                        <p className="text-sm">
+                          quantity:{' '}
+                          <span className="font-medium ">
+                            {item.quantity}
+                          </span>{' '}
+                        </p>
+                        <p className="text-sm">
+                          total: Rp. {(item.price * item.quantity).toLocaleString()}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))}
