@@ -86,7 +86,7 @@ export default function EditableItemCard({
         overlayClassName="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center"
       >
         <h2 className="text-lg font-bold mb-4">Edit Barang</h2>
-        <form onSubmit={handleSave}>
+        <form onSubmit={handleSave} className='flex flex-col gap-4'>
           <div className="flex flex-col gap-2">
             <label>
               Nama Barang:
