@@ -4,6 +4,7 @@ import { itemList } from '../utils/dummyData';
 
 export default function CashierPage() {
   const [cart, setCart] = useState([]);
+  const [receivedMoney, setReceivedMoney] = useState(0);
 
   const addToCart = (item) => {
     setCart((prevCart) => {
@@ -51,6 +52,14 @@ export default function CashierPage() {
         return cartItem;
       });
     });
+  };
+
+  // Membuat uang kembalian jika minus tampilkan text "Uang tidak cukup"
+  const changeMoney = (receivedMoney) => {
+    const money =
+      receivedMoney -
+      cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return money < 0 ? 'Uang tidak cukup' : `Rp. ${money.toLocaleString()}`;
   };
 
   return (
@@ -101,29 +110,43 @@ export default function CashierPage() {
                         <h4 className="text-md font-medium">{item.name}</h4>
                         <p className="text-sm">
                           quantity:{' '}
-                          <span className="font-medium ">
-                            {item.quantity}
-                          </span>{' '}
+                          <span className="font-medium ">{item.quantity}</span>{' '}
                         </p>
                         <p className="text-sm">
-                          total: Rp. {(item.price * item.quantity).toLocaleString()}
+                          total: Rp.{' '}
+                          {(item.price * item.quantity).toLocaleString()}
                         </p>
                       </div>
                     </div>
                   </div>
                 ))}
             </div>
-            <div>
-              <hr className="my-2" />
-              <h3 className="text-lg font-bold">
-                Total: Rp.{' '}
-                {cart
-                  .reduce(
-                    (total, item) => total + item.price * item.quantity,
-                    0
-                  )
-                  .toLocaleString()}
-              </h3>
+            <div className="font-medium text-lg">
+              <div className="flex flex-row justify-between">
+                <h3>Total</h3>
+                <p>
+                  Rp.{' '}
+                  {cart
+                    .reduce(
+                      (total, item) => total + item.price * item.quantity,
+                      0
+                    )
+                    .toLocaleString()}
+                </p>
+              </div>
+              <div className="flex flex-row justify-between">
+                <h3>Uang Pembeli</h3>
+                <input
+                  type="number"
+                  value={receivedMoney}
+                  className=" px-1 border rounded w-1/3"
+                  onChange={(e) => setReceivedMoney(Number(e.target.value))}
+                />
+              </div>
+              <div className="flex flex-row justify-between">
+                <h3>Kembalian</h3>
+                <p>{changeMoney(receivedMoney)}</p>
+              </div>
             </div>
           </>
         )}
