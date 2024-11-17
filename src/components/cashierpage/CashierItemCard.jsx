@@ -11,7 +11,7 @@ export default function CashierItemCard({
   const isDisabled = quantity >= item.stock; // Disable button if quantity meets or exceeds stock
 
   return (
-    <div className="flex flex-row gap-2 max-h-40 w-80">
+    <div className={`flex flex-row gap-2 max-h-40 w-80 border ${quantity > 0 ? 'border-black bg-gray-100' : ''} rounded-lg`}>
       <ItemCard
         imageUrl={item.imageUrl}
         name={item.name}
