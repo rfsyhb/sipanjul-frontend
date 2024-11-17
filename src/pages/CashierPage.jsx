@@ -121,31 +121,52 @@ export default function CashierPage() {
                   </div>
                 ))}
             </div>
-            <div className="font-medium text-lg">
-              <div className="flex flex-row justify-between">
-                <h3>Total</h3>
-                <p>
-                  Rp.{' '}
-                  {cart
-                    .reduce(
-                      (total, item) => total + item.price * item.quantity,
-                      0
-                    )
-                    .toLocaleString()}
-                </p>
+            <div className="font-medium text-lg py-1 flex flex-col gap-2">
+              <div>
+                <div className="flex flex-row justify-between">
+                  <h3>Total</h3>
+                  <p>
+                    Rp.{' '}
+                    {cart
+                      .reduce(
+                        (total, item) => total + item.price * item.quantity,
+                        0
+                      )
+                      .toLocaleString()}
+                  </p>
+                </div>
+                <div className="flex flex-row justify-between">
+                  <h3>Uang Pembeli</h3>
+                  <input
+                    type="number"
+                    value={receivedMoney}
+                    className=" px-1 border rounded w-1/3"
+                    onChange={(e) => setReceivedMoney(Number(e.target.value))}
+                  />
+                </div>
+                <div className="flex flex-row justify-between">
+                  <h3>Kembalian</h3>
+                  <p>{changeMoney(receivedMoney)}</p>
+                </div>
               </div>
-              <div className="flex flex-row justify-between">
-                <h3>Uang Pembeli</h3>
-                <input
-                  type="number"
-                  value={receivedMoney}
-                  className=" px-1 border rounded w-1/3"
-                  onChange={(e) => setReceivedMoney(Number(e.target.value))}
-                />
-              </div>
-              <div className="flex flex-row justify-between">
-                <h3>Kembalian</h3>
-                <p>{changeMoney(receivedMoney)}</p>
+              {/* Check out button to alert object of cart */}
+              <div>
+                <button
+                  className="bg-actionBtn text-white text-xs py-1 px-2 rounded w-full hover:bg-activeBtn group"
+                  onClick={() => {
+                    const selectedCartItemsData = cart.map((item) => ({
+                      id: item.id,
+                      name: item.name,
+                      quantity: item.quantity,
+                      price: item.price,
+                    }));
+                    alert(JSON.stringify(selectedCartItemsData, null));
+                  }}
+                >
+                  <span className="font-medium text-lg group-hover:text-inactiveBtn">
+                    Check Out
+                  </span>
+                </button>
               </div>
             </div>
           </>
