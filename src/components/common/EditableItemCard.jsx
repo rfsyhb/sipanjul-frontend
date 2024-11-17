@@ -11,6 +11,7 @@ export default function EditableItemCard({
   stock,
   price,
   packageSize,
+  onDelete,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editedName, setEditedName] = useState(name);
@@ -29,7 +30,12 @@ export default function EditableItemCard({
 
   const handleSave = (e) => {
     e.preventDefault();
-    const editedData = { editedName, editedStock, editedPrice, editedPackageSize };
+    const editedData = {
+      editedName,
+      editedStock,
+      editedPrice,
+      editedPackageSize,
+    };
     alert(JSON.stringify(editedData, null));
     closeModal();
   };
@@ -119,19 +125,28 @@ export default function EditableItemCard({
               />
             </label>
           </div>
-          <div className="flex gap-2 mt-4">
+          <div className='flex flex-row justify-between'>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Save
+              </button>
+            </div>
             <button
               type="button"
-              onClick={closeModal}
-              className="bg-gray-500 text-white px-4 py-2 rounded"
+              className="bg-red-500 text-white px-4 py-2 rounded"
+              onClick={onDelete}
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Save
+              Delete
             </button>
           </div>
         </form>
@@ -146,4 +161,5 @@ EditableItemCard.propTypes = {
   stock: PropTypes.number.isRequired,
   price: PropTypes.number.isRequired,
   packageSize: PropTypes.string.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };

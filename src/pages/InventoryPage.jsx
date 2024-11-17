@@ -61,6 +61,17 @@ export default function InventoryPage() {
     );
   };
 
+  const handleDeleteItem = (id) => {
+    setItems(
+      produce((draft) => {
+        const index = draft.findIndex((item) => item.id === id);
+        if (index !== -1) {
+          draft.splice(index, 1);
+        }
+      })
+    )
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-row justify-between px-4">
@@ -86,7 +97,7 @@ export default function InventoryPage() {
             item.name.toLowerCase().includes(searchInput.toLowerCase())
           )
           .map((item) => (
-            <InventoryItemCard key={item.id} item={item} />
+            <InventoryItemCard key={item.id} item={item} onDelete={() => handleDeleteItem(item.id)} />
           ))}
       </div>
 
