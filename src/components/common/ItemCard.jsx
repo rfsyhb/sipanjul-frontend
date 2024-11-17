@@ -17,7 +17,7 @@ export default function ItemCard({
       <img
         src={imageUrl}
         alt={name}
-        className="w-full h-40 object-cover rounded-lg"
+        className="w-full h-40 object-cover rounded-lg overflow-hidden"
       />
       <div
         className={`absolute top-1 right-1 text-xs px-2 py-1 rounded ${stock < 20 ? 'bg-red-400 font-medium' : 'bg-gray-200'}`}
