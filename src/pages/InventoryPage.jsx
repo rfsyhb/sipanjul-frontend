@@ -104,6 +104,7 @@ export default function InventoryPage() {
                 value={newItem.name}
                 onChange={(e) => handleChange('name', e.target.value)}
                 className="border p-2 w-full"
+                required
               />
             </label>
             <label>
@@ -113,6 +114,8 @@ export default function InventoryPage() {
                 value={newItem.stock}
                 onChange={(e) => handleChange('stock', Number(e.target.value))}
                 className="border p-2 w-full"
+                min={0}
+                required
               />
             </label>
             <label>
@@ -122,6 +125,7 @@ export default function InventoryPage() {
                 value={newItem.price}
                 onChange={(e) => handleChange('price', Number(e.target.value))}
                 className="border p-2 w-full"
+                min={1000}
               />
             </label>
             <label>
@@ -131,6 +135,8 @@ export default function InventoryPage() {
                 value={newItem.packageSize}
                 onChange={(e) => handleChange('packageSize', e.target.value)}
                 className="border p-2 w-full"
+                required
+                placeholder='e.g. "1kg", "500gr", "1lt"'
               />
             </label>
             <label>
@@ -140,6 +146,7 @@ export default function InventoryPage() {
                 value={newItem.imageUrl}
                 onChange={(e) => handleChange('imageUrl', e.target.value)}
                 className="border p-2 w-full"
+                required
               />
             </label>
           </div>
