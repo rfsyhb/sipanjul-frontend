@@ -62,19 +62,22 @@ export default function InventoryPage() {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3">
       <div className="flex flex-row justify-between px-4">
         <button
-          className="bg-actionBtn text-white p-2 rounded-md hover:bg-white hover:text-bg outline outline-actionBtn"
+          className="bg-actionBtn text-white px-3 py-1 rounded-md hover:bg-activeBtn hover:text-bg border border-actionBtn"
           onClick={openModal} // Membuka modal untuk menambah item baru
         >
-          Tambah Barang
+          <span className='font-medium'>
+            Tambah Barang
+          </span>
         </button>
         <input
           type="text"
           value={searchInput}
           onChange={handleSearch}
-          className="px-2"
+          className="px-2 border border-inactiveBtn rounded-md"
+          placeholder="Cari barang..."
         />
       </div>
       <div className="flex flex-row flex-wrap gap-8 justify-center">
