@@ -18,21 +18,21 @@ export const gpmItems = [
     name: 'Gula Manis Kita',
     price: 17500,
     imageUrl:
-      'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//94/MTA-1614107/gula_pasir_putih_refill_1kg_full02.jpg',
+      'https://ngorder-1.sgp1.digitaloceanspaces.com/134329/products/gula-manis-kita-1717802523765.jpeg',
   },
   {
     id: 4,
     name: 'Bawang Putih',
     price: 18000,
     imageUrl:
-      'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//94/MTA-1614107/gula_pasir_putih_refill_1kg_full02.jpg',
+      'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//catalog-image/99/MTA-137722580/ch_ch-bawang-putih-pack-500gr_full01.jpg',
   },
   {
     id: 5,
     name: 'Bawang Merah',
     price: 17000,
     imageUrl:
-      'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//94/MTA-1614107/gula_pasir_putih_refill_1kg_full02.jpg',
+      'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//catalog-image/105/MTA-137722578/ch_ch-bawang-merah-pack-500gr_full01.jpg',
   },
   {
     id: 6,

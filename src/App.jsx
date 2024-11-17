@@ -4,6 +4,7 @@ import Sidebar from './components/common/Sidebar';
 import Header from './components/common/Header';
 import CashierPage from './pages/CashierPage';
 import InventoryPage from './pages/InventoryPage';
+import CalculatorPage from './pages/CalculatorPage';
 
 function App() {
   const location = useLocation();
@@ -20,7 +21,7 @@ function App() {
             <Route path="/stok" element={<InventoryPage />} />
             <Route path="/laporan" element={<h1>Laporan</h1>} />
             <Route path="/grafik" element={<h1>Grafik</h1>} />
-            <Route path="/gpm" element={<h1>Kalkulator GPM</h1>} />
+            <Route path="/gpm" element={<CalculatorPage />} />
             <Route path='/test' element={<h1>test</h1>} />
             <Route path="*" element={<h1>404 Not Found</h1>} />
           </Routes>
