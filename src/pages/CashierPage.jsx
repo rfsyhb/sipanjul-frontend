@@ -160,7 +160,10 @@ export default function CashierPage() {
                       quantity: item.quantity,
                       price: item.price,
                     }));
-                    alert(JSON.stringify(selectedCartItemsData, null));
+                    const filteredCartItemsData = selectedCartItemsData.filter(
+                      (item) => item.quantity > 0
+                    );
+                    alert(JSON.stringify(filteredCartItemsData, null));
                   }}
                 >
                   <span className="font-medium text-lg group-hover:text-inactiveBtn">
