@@ -7,6 +7,7 @@ import { userData } from './dummy/user';
 import { gpmItems } from './dummy/gpm/gpmItem';
 import { salesReport } from './dummy/report/salesReport';
 import { changedDataReport } from './dummy/report/changedDataReport';
+import { chartData } from './dummy/chart/chartData';
 
 export {
   bestSellingList,
@@ -19,5 +20,6 @@ export {
   userData,
   gpmItems,
   salesReport,
-  changedDataReport
+  changedDataReport,
+  chartData
 }
