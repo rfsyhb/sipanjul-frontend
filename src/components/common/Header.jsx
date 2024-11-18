@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { BsFillLockFill, BsUnlockFill } from 'react-icons/bs';
 import Modal from 'react-modal';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Setting the app element for accessibility
 Modal.setAppElement('#root');
@@ -12,6 +14,11 @@ export default function Header() {
   const toggleLock = () => {
     setIsLocked((prevState) => !prevState);
     setIsModalOpen(false);
+    if (isLocked) {
+      toast.success('Toko telah dibuka!');
+    } else {
+      toast.error('Toko telah ditutup!');
+    }
   };
 
   const openModal = () => {
@@ -66,9 +73,13 @@ export default function Header() {
         <h2 className="text-lg font-semibold mb-4">
           Apakah anda ingin{' '}
           {isLocked ? (
-            <span className="font-bold text-green-800 bg-green-200 px-1 rounded-sm">membuka</span>
+            <span className="font-bold text-green-800 bg-green-200 px-1 rounded-sm">
+              membuka
+            </span>
           ) : (
-            <span className="font-bold text-red-800 bg-red-200 px-1 rounded-sm">menutup</span>
+            <span className="font-bold text-red-800 bg-red-200 px-1 rounded-sm">
+              menutup
+            </span>
           )}{' '}
           toko?
         </h2>
@@ -87,6 +98,9 @@ export default function Header() {
           </button>
         </div>
       </Modal>
+
+      {/* Toast Container */}
+      <ToastContainer />
     </header>
   );
 }

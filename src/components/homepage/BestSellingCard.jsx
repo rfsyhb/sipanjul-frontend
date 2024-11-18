@@ -3,12 +3,12 @@ import ToggleButton from '../common/ToggleButton';
 import ItemCard from './ItemCard';
 import { bestSellingList } from '../../utils/dummyData';
 
-export default function BestSellingCard() {
+export default function BestSellingCard({ notify }) {
   const [activeButton, setActiveButton] = useState('Mingguan');
 
   const handleClick = (label) => {
     setActiveButton(label);
-    alert(`${label} clicked`);
+    notify(`${label} clicked`);
   };
   
   const selectedItems = activeButton === 'Mingguan' ? bestSellingList.weekly : bestSellingList.monthly;

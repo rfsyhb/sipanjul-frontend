@@ -6,8 +6,21 @@ import {
   monthlySales,
   weeklySales,
 } from '../utils/dummyData';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Homepage() {
+  const toastOptions = {
+    autoClose: 2000,
+    hideProgressBar: true,
+    pauseOnHover: false,
+    theme: 'colored',
+  }
+  
+  const notify = (message) => {
+    toast(message, toastOptions);
+  }
+  
   return (
     <div className="flex flex-col h-full max-h-screen gap-2 pr-4">
       <section className="flex flex-row gap-4">
@@ -33,9 +46,12 @@ export default function Homepage() {
           isNegative={monthlySales.isNegative}
         />
       </section>
-      <BestSellingCard />
+      <BestSellingCard notify={notify} />
 
       <RecentTransaction />
+
+      {/* Toast Container */}
+      <ToastContainer />
     </div>
   );
 }
