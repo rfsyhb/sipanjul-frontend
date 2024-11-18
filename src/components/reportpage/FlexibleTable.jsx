@@ -7,7 +7,7 @@ export default function FlexibleTable({ data, selectedData }) {
   if (!data || data.length === 0) {
     return null;
   }
-
+  
   // Definisikan kolom tabel secara dinamis
   const columns = React.useMemo(() => {
     let columnsArray = [

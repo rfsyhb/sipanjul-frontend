@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaRegFrownOpen } from 'react-icons/fa';
 import CashierItemCard from '../components/cashierpage/CashierItemCard';
 import { itemList } from '../utils/dummyData';
 
@@ -87,9 +88,14 @@ export default function CashierPage() {
       </div>
 
       {/* cashier */}
-      <div className="w-1/2 h-[60vh] p-4 border rounded-md bg-white shadow-md overflow-hidden flex flex-col justify-between">
+      <div
+        className={`w-1/2 h-[60vh] p-4 border rounded-md bg-white shadow-md overflow-hidden flex flex-col ${cart.every((item) => item.quantity === 0) ? 'justify-center' : 'justify-between'}`}
+      >
         {cart.length === 0 || cart.every((item) => item.quantity === 0) ? (
-          <p>Your cart is empty.</p>
+          <div className="flex flex-col items-center">
+            <FaRegFrownOpen className="text-4xl mb-2" />
+            <p>No items in the cart!</p>
+          </div>
         ) : (
           <>
             <div className="overflow-y-auto">

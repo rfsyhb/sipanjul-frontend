@@ -2,6 +2,7 @@ import { useState } from 'react';
 import FlexibleForm from '../components/reportpage/FlexibleForm';
 import FlexibleTable from '../components/reportpage/FlexibleTable';
 import { salesReport, changedDataReport } from '../utils/dummyData';
+import { FaRegFrownOpen } from 'react-icons/fa';
 
 export default function ReportPage() {
   // State untuk menyimpan data form yang diambil dari FlexibleForm
@@ -34,13 +35,18 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="p-4 flex flex-col gap-4">
+    <div className="p-4 flex flex-col gap-4 h-full">
       {/* FlexibleForm akan memanggil handleFormSearch ketika pengguna menekan tombol "Search" */}
       <FlexibleForm onSearch={handleFormSearch} />
 
       {/* Jika ada data di tableData, tampilkan FlexibleTable */}
-      {tableData.length > 0 && (
+      {tableData.length > 0 ? (
         <FlexibleTable data={tableData} selectedData={selectedData} />
+      ) : (
+        <div className="flex flex-col items-center h-full justify-center">
+          <FaRegFrownOpen className="text-4xl mb-2" />
+          <p>No data available!</p>
+        </div>
       )}
     </div>
   );
