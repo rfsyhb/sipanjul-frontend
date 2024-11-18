@@ -73,7 +73,7 @@ export default function InventoryPage() {
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 p-4">
       <div className="flex flex-row justify-between px-4">
         <button
           className="bg-actionBtn text-white px-3 py-1 rounded-md hover:bg-activeBtn hover:text-bg border border-actionBtn"

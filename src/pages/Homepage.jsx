@@ -22,7 +22,7 @@ export default function Homepage() {
   }
   
   return (
-    <div className="flex flex-col h-full max-h-screen gap-2 pr-4">
+    <div className="flex flex-col h-[88vh] p-4 max-h-screen gap-2 pr-4">
       <section className="flex flex-row gap-4">
         <SalesCard
           label="Hari"
