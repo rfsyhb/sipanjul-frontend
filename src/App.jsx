@@ -6,6 +6,7 @@ import CashierPage from './pages/CashierPage';
 import InventoryPage from './pages/InventoryPage';
 import CalculatorPage from './pages/CalculatorPage';
 import ReportPage from './pages/ReportPage';
+import ChartPage from './pages/ChartPage';
 
 function App() {
   const location = useLocation();
@@ -21,7 +22,7 @@ function App() {
             <Route path="/kasir" element={<CashierPage />} />
             <Route path="/stok" element={<InventoryPage />} />
             <Route path="/laporan" element={<ReportPage />} />
-            <Route path="/grafik" element={<h1>Grafik</h1>} />
+            <Route path="/grafik" element={<ChartPage />} />
             <Route path="/gpm" element={<CalculatorPage />} />
             <Route path='/test' element={<h1>test</h1>} />
             <Route path="*" element={<h1>404 Not Found</h1>} />
