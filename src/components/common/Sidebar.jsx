@@ -20,11 +20,11 @@ export default function Sidebar({ currentPath }) {
             <FaHome
               size={24}
               className={
-                currentPath == '/' ? 'text-activeBtn' : 'text-inactiveBtn'
+                currentPath == '/home' ? 'text-activeBtn' : 'text-inactiveBtn'
               }
             />
           }
-          to="/"
+          to="/home"
         />
         <SidebarItem
           icon={
