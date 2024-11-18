@@ -5,7 +5,6 @@ export default function FlexibleForm({ onSearch }) {
   const [selectedPeriod, setSelectedPeriod] = useState('');
   const [selectedDivision, setSelectedDivision] = useState('');
   const [selectedData, setSelectedData] = useState('');
-  const [selectedInfo, setSelectedInfo] = useState('');
   const [selectedDetail, setSelectedDetail] = useState('');
 
   // Handler untuk perubahan tiap dropdown
@@ -19,12 +18,6 @@ export default function FlexibleForm({ onSearch }) {
 
   const handleDataChange = (e) => {
     setSelectedData(e.target.value);
-    setSelectedInfo(''); // Reset opsi berikutnya agar tidak konflik
-    setSelectedDetail(''); // Reset opsi berikutnya agar tidak konflik
-  };
-
-  const handleInfoChange = (e) => {
-    setSelectedInfo(e.target.value);
     setSelectedDetail(''); // Reset opsi berikutnya agar tidak konflik
   };
 
@@ -38,10 +31,7 @@ export default function FlexibleForm({ onSearch }) {
       period: selectedPeriod,
       division: selectedDivision,
       data: selectedData,
-      ...(selectedData === 'detail' && {
-        information: selectedInfo,
-      }),
-      ...(selectedInfo === 'perubahan' && {
+      ...(selectedData === 'perubahan' && {
         detail: selectedDetail,
       }),
     };
@@ -91,27 +81,12 @@ export default function FlexibleForm({ onSearch }) {
           required
         >
           <option value="">Pilih Data</option>
-          <option value="detail">Detail</option>
+          <option value="perubahan">Data Perubahan</option>
           <option value="penjualan">Data Penjualan Perdagangan</option>
         </select>
 
-        {/* Select 4: Informasi Penjualan/Informasi Perubahan */}
-        {selectedData === 'detail' && (
-          <select
-            name="information"
-            value={selectedInfo}
-            onChange={handleInfoChange}
-            className="p-2 border rounded"
-            required
-          >
-            <option value="">Pilih Informasi</option>
-            <option value="penjualan">Informasi Penjualan</option>
-            <option value="perubahan">Informasi Perubahan</option>
-          </select>
-        )}
-
-        {/* Select 5: Detail/Penambahan Stok/Pengurangan Stok */}
-        {selectedInfo === 'perubahan' && (
+        {/* Select 4: Detail/Penambahan Stok/Pengurangan Stok */}
+        {selectedData === 'perubahan' && (
           <select
             name="detail"
             value={selectedDetail}
