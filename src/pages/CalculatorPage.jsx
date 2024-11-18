@@ -57,9 +57,9 @@ export default function CalculatorPage() {
         <h2 className="font-semibold text-md md:text-2xl">
           Daftar Harga dan Kalkulator GPM
         </h2>
-        <div className="flex flex-col lg:flex-row gap-1 md:gap-6 w-full overflow-y-auto h-[77vh] md:h-full">
+        <div className="flex flex-col md:flex-row lg:flex-row gap-1 md:gap-6 w-full overflow-y-auto h-[77vh] lg:h-full">
           {/* Daftar Produk dengan qty input */}
-          <div className="flex flex-col flex-wrap gap-1 md:gap-4 w-full lg:w-3/5">
+          <div className="flex flex-col gap-1 md:gap-4 w-full lg:w-3/5 md:overflow-y-auto md:h-[80vh]">
             {items.map((item) => (
               <div
                 key={item.id}
