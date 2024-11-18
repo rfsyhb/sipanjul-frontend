@@ -6,6 +6,7 @@ import { storeStatus } from './dummy/kantor';
 import { userData } from './dummy/user';
 import { gpmItems } from './dummy/gpm/gpmItem';
 import { salesReport } from './dummy/report/salesReport';
+import { changedDataReport } from './dummy/report/changedDataReport';
 
 export {
   bestSellingList,
@@ -17,5 +18,6 @@ export {
   storeStatus,
   userData,
   gpmItems,
-  salesReport
+  salesReport,
+  changedDataReport
 }
