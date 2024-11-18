@@ -38,30 +38,31 @@ export default function Header() {
   const formattedDate = date.toLocaleDateString('id-ID', options);
 
   return (
-    <header className="w-full px-4 pt-2 flex items-center justify-between">
-      <div className="flex flex-row items-center gap-4">
-        {/* on off toko */}
-        <div className="flex flex-row p-1 bg-white rounded-full">
-          <div
-            className={`p-4 px-6 ${!isLocked ? 'bg-green-400' : ''} rounded-full cursor-pointer`}
-            onClick={!isLocked ? undefined : openModal}
-          >
-            <BsUnlockFill size={24} />
+    <>
+      <header className="w-full px-4 pt-2 flex items-center justify-between">
+        <div className="flex flex-row items-center gap-4">
+          {/* on off toko */}
+          <div className="flex flex-row p-1 bg-white rounded-full">
+            <div
+              className={`p-4 px-6 ${!isLocked ? 'bg-green-400' : ''} rounded-full cursor-pointer`}
+              onClick={!isLocked ? undefined : openModal}
+            >
+              <BsUnlockFill size={24} />
+            </div>
+            <div
+              className={`p-4 px-6 ${isLocked ? 'bg-red-400' : ''} rounded-full cursor-pointer`}
+              onClick={isLocked ? undefined : openModal}
+            >
+              <BsFillLockFill size={24} />
+            </div>
           </div>
-          <div
-            className={`p-4 px-6 ${isLocked ? 'bg-red-400' : ''} rounded-full cursor-pointer`}
-            onClick={isLocked ? undefined : openModal}
-          >
-            <BsFillLockFill size={24} />
+          <div>
+            <h1 className="text-2xl font-medium">Hello Operator!</h1>
+            <span>Hari ini, {formattedDate}</span>
           </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-medium">Hello Operator!</h1>
-          <span>Hari ini, {formattedDate}</span>
-        </div>
-      </div>
-      <img src="/assets/logobulog.png" alt="logobulog" className="w-32" />
-
+        <img src="/assets/logobulog.png" alt="logobulog" className="w-32" />
+      </header>
       {/* Confirmation Modal */}
       <Modal
         isOpen={isModalOpen}
@@ -101,6 +102,6 @@ export default function Header() {
 
       {/* Toast Container */}
       <ToastContainer />
-    </header>
+    </>
   );
 }
