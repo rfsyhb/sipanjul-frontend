@@ -1,69 +1,43 @@
 import { useState } from 'react';
 import FlexibleForm from '../components/reportpage/FlexibleForm';
+import FlexibleTable from '../components/reportpage/FlexibleTable';
+import { salesReport } from '../utils/dummyData';
 
 export default function ReportPage() {
-  const [formData, setFormData] = useState(null);
+  // State untuk menyimpan data form yang diambil dari FlexibleForm
+  const [tableData, setTableData] = useState([]);
+  const [selectedData, setSelectedData] = useState('');
 
-  // Fungsi yang diteruskan ke FlexibleForm untuk menerima data
-  const handleFormSearch = (data) => {
-    setFormData(data);
-    // Di sini, kamu juga bisa memanggil API atau memproses data lebih lanjut
-    console.log('Data diterima dari FlexibleForm:', data);
+  // Fungsi untuk menerima data dari FlexibleForm dan memperbarui state tableData
+  const handleFormSearch = (formData) => {
+    // Filter data dari salesReport berdasarkan input pengguna
+    setSelectedData(formData.data);
+    let filteredData =
+      salesReport.find((report) => report.period === formData.period)?.data ||
+      [];
+
+    // Filter berdasarkan divisi jika divisi yang dipilih adalah 'komersil'
+    if (formData.division === 'komersil') {
+      filteredData = filteredData.filter((item) => item.divisi === 'Komersil');
+    }
+
+    if (formData.division === 'supply') {
+      filteredData = filteredData.filter(
+        (item) => item.divisi === 'Supply Chain dan Pelayanan Publik'
+      );
+    }
+
+    setTableData(filteredData); // Update tableData dengan data yang sesuai
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 flex flex-col gap-4">
+      {/* FlexibleForm akan memanggil handleFormSearch ketika pengguna menekan tombol "Search" */}
       <FlexibleForm onSearch={handleFormSearch} />
 
-      {/* Jika ada data yang sudah diambil, tampilkan tabel */}
-      {formData && (
-        <div className="mt-6">
-          <h3 className="text-lg font-bold mb-4">Hasil Laporan</h3>
-          <table className="w-full border border-black">
-            <thead>
-              <tr>
-                <th className="border border-black p-2">Periode</th>
-                <th className="border border-black p-2">Divisi</th>
-                <th className="border border-black p-2">Data</th>
-                {
-                  /* Tampilkan kolom informasi jika data yang dipilih adalah 'detail' */
-                  formData.data === 'detail' && (
-                    <th className="border border-black p-2">Informasi</th>
-                  )
-                }
-                {
-                  /* Tampilkan kolom detail jika informasi yang dipilih adalah 'perubahan' */
-                  formData.information === 'perubahan' && (
-                    <th className="border border-black p-2">Detail</th>
-                  )
-                }
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-black p-2">{formData.period}</td>
-                <td className="border border-black p-2">{formData.division}</td>
-                <td className="border border-black p-2">{formData.data}</td>
-                {
-                  /* Tampilkan informasi jika data yang dipilih adalah 'detail' */
-                  formData.data === 'detail' && (
-                    <td className="border border-black p-2">
-                      {formData.information}
-                    </td>
-                  )
-                }
-                {
-                  /* Tampilkan detail jika informasi yang dipilih adalah 'perubahan' */
-                  formData.information === 'perubahan' && (
-                    <td className="border border-black p-2">
-                      {formData.detail}
-                    </td>
-                  )
-                }
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      {/* Jika ada data di tableData, tampilkan FlexibleTable */}
+      {tableData.length > 0 && (
+        <FlexibleTable data={tableData} selectedData={selectedData} />
       )}
     </div>
   );
