@@ -14,8 +14,6 @@ export default function FlexibleTable({ data, selectedData }) {
       { Header: 'Komoditi', accessor: 'komoditi' },
       { Header: 'Divisi', accessor: 'divisi' },
       { Header: 'Stok Awal', accessor: 'stok_awal' },
-      { Header: 'Stok Terjual', accessor: 'stok_terjual' },
-      { Header: 'Hasil Penjualan', accessor: 'hasil_penjualan' },
       { Header: 'Stok Akhir', accessor: 'stok_akhir' },
     ];
 
@@ -29,6 +27,17 @@ export default function FlexibleTable({ data, selectedData }) {
         accessor: 'stok_keluar',
       });
       columnsArray.push({ Header: 'Keterangan', accessor: 'keterangan' });
+    }
+
+    if (selectedData === 'penjualan') {
+      columnsArray.splice(3, 0, {
+        Header: 'Stok Terjual',
+        accessor: 'stok_terjual',
+      });
+      columnsArray.splice(4, 0, {
+        Header: 'Hasil Penjualan',
+        accessor: 'hasil_penjualan',
+      });
     }
 
     return columnsArray;

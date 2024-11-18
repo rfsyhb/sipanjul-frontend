@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import FlexibleForm from '../components/reportpage/FlexibleForm';
 import FlexibleTable from '../components/reportpage/FlexibleTable';
-import { salesReport } from '../utils/dummyData';
+import { salesReport, changedDataReport } from '../utils/dummyData';
 
 export default function ReportPage() {
   // State untuk menyimpan data form yang diambil dari FlexibleForm
@@ -12,8 +12,11 @@ export default function ReportPage() {
   const handleFormSearch = (formData) => {
     // Filter data dari salesReport berdasarkan input pengguna
     setSelectedData(formData.data);
+
+    const selectedReportData = formData.data === 'perubahan' ? changedDataReport : salesReport;
+    
     let filteredData =
-      salesReport.find((report) => report.period === formData.period)?.data ||
+      selectedReportData.find((report) => report.period === formData.period)?.data ||
       [];
 
     // Filter berdasarkan divisi jika divisi yang dipilih adalah 'komersil'
