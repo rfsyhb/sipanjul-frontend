@@ -69,8 +69,8 @@ export default function InventoryPage() {
           draft.splice(index, 1);
         }
       })
-    )
-  }
+    );
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -79,9 +79,7 @@ export default function InventoryPage() {
           className="bg-actionBtn text-white px-3 py-1 rounded-md hover:bg-activeBtn hover:text-bg border border-actionBtn"
           onClick={openModal} // Membuka modal untuk menambah item baru
         >
-          <span className='font-medium'>
-            Tambah Barang
-          </span>
+          <span className="font-medium">Tambah Barang</span>
         </button>
         <input
           type="text"
@@ -97,7 +95,11 @@ export default function InventoryPage() {
             item.name.toLowerCase().includes(searchInput.toLowerCase())
           )
           .map((item) => (
-            <InventoryItemCard key={item.id} item={item} onDelete={() => handleDeleteItem(item.id)} />
+            <InventoryItemCard
+              key={item.id}
+              item={item}
+              onDelete={() => handleDeleteItem(item.id)}
+            />
           ))}
       </div>
 
@@ -119,6 +121,7 @@ export default function InventoryPage() {
                 onChange={(e) => handleChange('name', e.target.value)}
                 className="border p-2 w-full"
                 required
+                placeholder='e.g. "Beras Manis Kita'
               />
             </label>
             <label>
@@ -156,11 +159,12 @@ export default function InventoryPage() {
             <label>
               URL Gambar:
               <input
-                type="text"
+                type="url"
                 value={newItem.imageUrl}
                 onChange={(e) => handleChange('imageUrl', e.target.value)}
                 className="border p-2 w-full"
                 required
+                placeholder='e.g. "https://via.placeholder.com/150"'
               />
             </label>
           </div>
