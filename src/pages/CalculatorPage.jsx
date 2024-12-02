@@ -51,7 +51,7 @@ export default function CalculatorPage() {
   };
 
   return (
-    <div className="flex flex-col items-center px-2 md:px-20 lg:px-32">
+    <div className="flex flex-col items-center px-2 py-4 md:px-20 lg:px-32">
       {/* Kalkulator dan Daftar Produk */}
       <div className="flex flex-col items-center gap-1 md:gap-4 w-full max-w-4xl">
         <h2 className="font-semibold text-md md:text-2xl">
