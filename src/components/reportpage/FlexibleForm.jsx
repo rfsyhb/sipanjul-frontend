@@ -2,14 +2,19 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function FlexibleForm({ onSearch }) {
-  const [selectedPeriod, setSelectedPeriod] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [selectedDivision, setSelectedDivision] = useState('');
   const [selectedData, setSelectedData] = useState('');
   const [selectedDetail, setSelectedDetail] = useState('');
 
-  // Handler untuk perubahan tiap dropdown
-  const handlePeriodChange = (e) => {
-    setSelectedPeriod(e.target.value);
+  // Handler for changes in each input field
+  const handleStartDateChange = (e) => {
+    setStartDate(e.target.value);
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
   };
 
   const handleDivisionChange = (e) => {
@@ -18,7 +23,7 @@ export default function FlexibleForm({ onSearch }) {
 
   const handleDataChange = (e) => {
     setSelectedData(e.target.value);
-    setSelectedDetail(''); // Reset opsi berikutnya agar tidak konflik
+    setSelectedDetail(''); // Reset next option to avoid conflicts
   };
 
   const handleDetailChange = (e) => {
@@ -28,7 +33,8 @@ export default function FlexibleForm({ onSearch }) {
   const handleSearch = (e) => {
     e.preventDefault();
     const objectToSent = {
-      period: selectedPeriod,
+      startDate,
+      endDate,
       division: selectedDivision,
       data: selectedData,
       ...(selectedData === 'perubahan' && {
@@ -36,27 +42,30 @@ export default function FlexibleForm({ onSearch }) {
       }),
     };
 
-    // Gunakan fungsi dari parent untuk update state dengan data yang dikumpulkan
+    // Use function from parent to update state with collected data
     onSearch(objectToSent);
   };
 
   return (
     <div className="flex flex-row justify-between">
       <form onSubmit={handleSearch} className="flex gap-4 flex-wrap">
-        {/* Select 1: Pilih Harian/Mingguan/Bulanan/Tahunan */}
-        <select
-          name="period"
-          value={selectedPeriod}
-          onChange={handlePeriodChange}
+        {/* Start Date Selector */}
+        <input
+          type="date"
+          value={startDate}
+          onChange={handleStartDateChange}
           className="p-2 border rounded"
           required
-        >
-          <option value="">Pilih Periode</option>
-          <option value="harian">Harian</option>
-          <option value="mingguan">Mingguan</option>
-          <option value="bulanan">Bulanan</option>
-          <option value="tahunan">Tahunan</option>
-        </select>
+        />
+
+        {/* End Date Selector */}
+        <input
+          type="date"
+          value={endDate}
+          onChange={handleEndDateChange}
+          className="p-2 border rounded"
+          required
+        />
 
         {/* Select 2: Semua Divisi/Supply Chain/Komersil */}
         <select
@@ -101,7 +110,7 @@ export default function FlexibleForm({ onSearch }) {
           </select>
         )}
 
-        {/* Tombol Search */}
+        {/* Search Button */}
         <button
           type="submit"
           className="p-2 bg-actionBtn border border-actionBtn hover:bg-activeBtn text-white rounded"
@@ -110,7 +119,7 @@ export default function FlexibleForm({ onSearch }) {
         </button>
       </form>
 
-      {/* Tombol Cetak */}
+      {/* Print Button */}
       <button className="p-2 bg-actionBtn border border-actionBtn hover:bg-activeBtn text-white rounded">
         Cetak
       </button>
