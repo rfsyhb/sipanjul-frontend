@@ -11,6 +11,7 @@ export default function ReportPage() {
 
   // Fungsi untuk menerima data dari FlexibleForm dan memperbarui state tableData
   const handleFormSearch = (formData) => {
+    console.log(formData)
     // Filter data dari salesReport berdasarkan input pengguna
     setSelectedData(formData.data);
 
