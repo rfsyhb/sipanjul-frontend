@@ -9,16 +9,26 @@ import ChartPage from './pages/ChartPage';
 import CalculatorPage from './pages/CalculatorPage';
 import useIsMobile from './hooks/useIsMobile';
 import { ToastContainer } from 'react-toastify';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   const isMobile = useIsMobile(768);
   const location = useLocation();
 
+  const isLoginPage = location.pathname === '/login';
+  const isLandingPage = location.pathname === '/';
+
   return (
     <>
       <ToastContainer />
-      {location.pathname === '/' ? (
-        <p>Landing Page</p>
+      {isLoginPage ? (
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      ) : isLandingPage ? (
+        <Routes>
+          <Route path="/" element={<p>Landing Page</p>} />
+        </Routes>
       ) : (
         <div className="overflow-hidden font-poppins bg-text text-bg min-h-screen w-full transition-all duration-500 ease-in-out flex flex-col h-screen">
           {isMobile ? (
@@ -39,7 +49,6 @@ function App() {
                 <Route path="/laporan" element={<ReportPage />} />
                 <Route path="/grafik" element={<ChartPage />} />
                 <Route path="/gpm" element={<CalculatorPage />} />
-                <Route path="/test" element={<h1>test</h1>} />
                 <Route path="*" element={<h1>404 Not Found</h1>} />
               </Routes>
             </div>
