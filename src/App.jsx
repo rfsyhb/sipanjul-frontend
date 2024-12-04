@@ -4,7 +4,7 @@ import Sidebar from './components/common/Sidebar';
 import Header from './components/common/Header';
 import CashierPage from './pages/CashierPage';
 import InventoryPage from './pages/InventoryPage';
-import LandingPage from './user/Landingpage';
+import LandingPage from './pages/guest/LandingpPage';
 import ReportPage from './pages/ReportPage';
 import ChartPage from './pages/ChartPage';
 import CalculatorPage from './pages/CalculatorPage';
