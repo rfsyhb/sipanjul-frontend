@@ -4,7 +4,7 @@ import Sidebar from './components/common/Sidebar';
 import Header from './components/common/Header';
 import CashierPage from './pages/CashierPage';
 import InventoryPage from './pages/InventoryPage';
-import LandingPage from './pages/guest/LandingpPage';
+import LandingPage from './pages/guest/LandingPage';
 import ReportPage from './pages/ReportPage';
 import ChartPage from './pages/ChartPage';
 import CalculatorPage from './pages/CalculatorPage';
@@ -27,7 +27,7 @@ function App() {
         </Routes>
       ) : isLandingPage ? (
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<LandingPage />} />
         </Routes>
       ) : (
         <div className="overflow-hidden font-poppins bg-text text-bg min-h-screen w-full transition-all duration-500 ease-in-out flex flex-col h-screen">
