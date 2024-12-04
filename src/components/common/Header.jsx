@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { BsFillLockFill, BsUnlockFill } from 'react-icons/bs';
 import Modal from 'react-modal';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Setting the app element for accessibility
 Modal.setAppElement('#root');
@@ -8,10 +10,21 @@ Modal.setAppElement('#root');
 export default function Header() {
   const [isLocked, setIsLocked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const toastOptions = {
+    autoClose: 2000,
+    hideProgressBar: true,
+    pauseOnHover: false,
+    theme: 'colored',
+  };
 
   const toggleLock = () => {
     setIsLocked((prevState) => !prevState);
     setIsModalOpen(false);
+    if (isLocked) {
+      toast.success('Toko telah dibuka!', toastOptions);
+    } else {
+      toast.error('Toko telah ditutup!', toastOptions);
+    }
   };
 
   const openModal = () => {
@@ -31,30 +44,31 @@ export default function Header() {
   const formattedDate = date.toLocaleDateString('id-ID', options);
 
   return (
-    <header className="w-full px-4 pt-2 flex items-center justify-between">
-      <div className="flex flex-row items-center gap-4">
-        {/* on off toko */}
-        <div className="flex flex-row p-1 bg-white rounded-full">
-          <div
-            className={`p-4 px-6 ${!isLocked ? 'bg-green-400' : ''} rounded-full cursor-pointer`}
-            onClick={!isLocked ? undefined : openModal}
-          >
-            <BsUnlockFill size={24} />
+    <>
+      <header className="w-full gap-2 md:gap-0 md:px-4 md:pt-2 flex items-center md:justify-between">
+        <div className="flex flex-row items-center gap-1 md:gap-4">
+          {/* on off toko */}
+          <div className="flex flex-row p-1 bg-white rounded-full">
+            <div
+              className={`p-1 px-2 md:p-4 md:px-6 ${!isLocked ? 'bg-green-400' : ''} rounded-full cursor-pointer`}
+              onClick={!isLocked ? undefined : openModal}
+            >
+              <BsUnlockFill size={24} />
+            </div>
+            <div
+              className={`p-1 px-2 md:p-4 md:px-6 ${isLocked ? 'bg-red-400' : ''} rounded-full cursor-pointer`}
+              onClick={isLocked ? undefined : openModal}
+            >
+              <BsFillLockFill size={24} />
+            </div>
           </div>
-          <div
-            className={`p-4 px-6 ${isLocked ? 'bg-red-400' : ''} rounded-full cursor-pointer`}
-            onClick={isLocked ? undefined : openModal}
-          >
-            <BsFillLockFill size={24} />
+          <div className='flex flex-col'>
+            <h1 className="text-sm md:text-2xl font-medium">Hello Operator!</h1>
+            <span className='text-xs md:text-base'>Hari ini, {formattedDate}</span>
           </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-medium">Hello Operator!</h1>
-          <span>Hari ini, {formattedDate}</span>
-        </div>
-      </div>
-      <img src="/assets/logobulog.png" alt="logobulog" className="w-32" />
-
+        <img src="/assets/logobulog.png" alt="logobulog" className="w-16 md:w-32" />
+      </header>
       {/* Confirmation Modal */}
       <Modal
         isOpen={isModalOpen}
@@ -66,9 +80,13 @@ export default function Header() {
         <h2 className="text-lg font-semibold mb-4">
           Apakah anda ingin{' '}
           {isLocked ? (
-            <span className="font-bold text-green-800 bg-green-200 px-1 rounded-sm">membuka</span>
+            <span className="font-bold text-green-800 bg-green-200 px-1 rounded-sm">
+              membuka
+            </span>
           ) : (
-            <span className="font-bold text-red-800 bg-red-200 px-1 rounded-sm">menutup</span>
+            <span className="font-bold text-red-800 bg-red-200 px-1 rounded-sm">
+              menutup
+            </span>
           )}{' '}
           toko?
         </h2>
@@ -87,6 +105,6 @@ export default function Header() {
           </button>
         </div>
       </Modal>
-    </header>
+    </>
   );
 }

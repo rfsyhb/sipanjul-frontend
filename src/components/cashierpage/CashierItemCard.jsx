@@ -8,8 +8,10 @@ export default function CashierItemCard({
   removeFromCart,
   setQuantity,
 }) {
+  const isDisabled = quantity >= item.stock; // Disable button if quantity meets or exceeds stock
+
   return (
-    <div className="flex flex-row gap-2 max-h-40 w-80">
+    <div className={`flex flex-row gap-2 max-h-40 w-80 border ${quantity > 0 ? 'border-black bg-gray-100' : ''} rounded-lg`}>
       <ItemCard
         imageUrl={item.imageUrl}
         name={item.name}
@@ -29,8 +31,9 @@ export default function CashierItemCard({
             onChange={(e) => setQuantity(Number(e.target.value))}
           />
           <button
-            className="bg-blue-500 text-white text-xs py-1 px-2 rounded"
+            className={`bg-blue-500 text-white text-xs py-1 px-2 rounded ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             onClick={addToCart}
+            disabled={isDisabled} // Disable add button when stock limit is reached
           >
             +
           </button>
