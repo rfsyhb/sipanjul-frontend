@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { gpmItems as initialGpmItemList } from '../utils/dummyData';
 import { produce } from 'immer';
+import useIsMobile from '../hooks/useIsMobile';
 
 export default function CalculatorPage() {
+  const isMobile = useIsMobile(768);
   const [items, setItems] = useState(initialGpmItemList);
   const [quantities, setQuantities] = useState(
     initialGpmItemList.reduce((acc, item) => {
@@ -10,7 +12,7 @@ export default function CalculatorPage() {
       return acc;
     }, {})
   );
-  const [cashGiven, setCashGiven] = useState("");
+  const [cashGiven, setCashGiven] = useState('');
 
   const onChangePrice = (id, price) => {
     setItems((prevItems) =>
@@ -51,15 +53,19 @@ export default function CalculatorPage() {
   };
 
   return (
-    <div className="flex flex-col items-center px-2 py-4 md:px-20 lg:px-32">
+    <div
+      className={`flex flex-col items-center px-2 py-4 md:px-20 lg:px-32 ${isMobile ? 'h-screen' : ''}`}
+    >
       {/* Kalkulator dan Daftar Produk */}
-      <div className="flex flex-col items-center gap-1 md:gap-4 w-full max-w-4xl px-2 lg:px-0">
+      <div
+        className={`flex flex-col items-center gap-1 md:gap-4 w-full max-w-4xl px-2 lg:px-0 ${isMobile ? 'h-[86vh]' : ''}`}
+      >
         <h2 className="font-semibold text-md md:text-2xl">
           Daftar Harga dan Kalkulator GPM
         </h2>
-        <div className="flex flex-col md:flex-row lg:flex-row gap-1 md:gap-6 w-full overflow-y-auto h-[87vh] lg:h-full">
+        <div className="flex flex-col md:flex-row lg:flex-row gap-1 md:gap-6 w-full overflow-y-auto h-full lg:h-full">
           {/* Daftar Produk dengan qty input */}
-          <div className="flex flex-col gap-1 md:gap-4 w-full lg:w-3/5 md:overflow-y-auto md:h-[80vh]">
+          <div className="flex flex-col gap-1 md:gap-4 w-full lg:w-3/5 overflow-y-auto md:h-[80vh] flex-grow">
             {items.map((item) => (
               <div
                 key={item.id}
@@ -103,7 +109,9 @@ export default function CalculatorPage() {
             ))}
           </div>
           {/* Total price, cash input, change, and reset button */}
-          <div className="flex flex-col items-center justify-center lg:w-2/5 gap-1 md:gap-4 p-1 md:p-4">
+          <div
+            className={`flex flex-col ${isMobile ? 'border-t border-gray-300' : ''}  items-center justify-center lg:w-2/5 gap-1 md:gap-4 p-1 md:p-4`}
+          >
             <div className="flex flex-row justify-between w-full">
               <p className="text-sm md:text-lg font-bold">Total Harga</p>
               <p className="text-md md:text-2xl font-bold">
@@ -111,7 +119,10 @@ export default function CalculatorPage() {
               </p>
             </div>
             <div className="flex flex-row justify-between w-full items-center">
-              <label htmlFor="cashGiven" className="text-sm md:text-lg font-bold">
+              <label
+                htmlFor="cashGiven"
+                className="text-sm md:text-lg font-bold"
+              >
                 Uang Diterima:
               </label>
               <input
@@ -146,5 +157,3 @@ export default function CalculatorPage() {
     </div>
   );
 }
-
-// nanti coba buat list itemnya yang scroll jadi total harga tetap di bawah
