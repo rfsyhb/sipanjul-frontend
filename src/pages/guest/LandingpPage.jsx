@@ -1,14 +1,14 @@
 import React from 'react';
 import bulogImage from '../../assets/BULOG.jpeg';
-import bulogLogo from '../../assets/bulog Kalteng.png';
+import bulogLogo from '../../assets/bulogKalteng.png';
 import mediumsphp from '../../assets/sphp_medium.png';
 import setra from '../../assets/setraramos.png';
 import Slyp from '../../assets/sylp_super.png';
 import siam from '../../assets/siam_kahayan.png';
 import Gula from '../../assets/gula.png';
 import Minyak from '../../assets/minyak.png';
-import rizki from '../../assets/minyak rizki.png';
-import bawang from '../../assets/bawang putih.png';
+import rizki from '../../assets/minyakrizki.png';
+import bawang from '../../assets/bawangputih.png';
 
 function Card({ name, imageUrl, isOutOfStock }) {
   return (
