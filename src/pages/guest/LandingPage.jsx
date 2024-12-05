@@ -1,10 +1,16 @@
 import GuestItemCard from '../../components/landingpage/GuestItemCard';
 import { guestItemList } from '../../utils/dummyData';
+import { useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
   const riceList = guestItemList.filter((item) => item.type === 'beras');
   const otherList = guestItemList.filter((item) => item.type === 'lainnya');
   const storeStatus = true;
+  const navigate = useNavigate();
+
+  const onClick = () => {
+    navigate('/login');
+  }
 
   return (
     <div className="h-screen flex flex-col gap-4 w-full">
@@ -83,6 +89,12 @@ export default function LandingPage() {
             );
           })}
         </div>
+      </div>
+
+      <div className='absolute mt-2 bg-blue-300 p-2 group'>
+        <button className='hidden group-hover:block' onClick={onClick}>
+          <p className='text-bg hover:font-semibold'>an admin?</p>
+        </button>
       </div>
     </div>
   );
