@@ -7,7 +7,7 @@ export default function ItemCard({ imageUrl, name }) {
       <img
         src={imageUrl}
         alt={imageUrl}
-        className="hover:shadow-md object-cover overflow-hidden outline outline-2 outline-textP h-40 rounded-md"
+        className="hover:shadow-md object-cover overflow-hidden outline h-32 lg:h-40 rounded-md"
       />
       <p>{name}</p>
     </div>
