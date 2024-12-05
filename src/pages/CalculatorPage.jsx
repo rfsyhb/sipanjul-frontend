@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { gpmItems as initialGpmItemList } from '../utils/dummyData';
 import { produce } from 'immer';
 import useIsMobile from '../hooks/useIsMobile';
@@ -48,10 +48,23 @@ export default function CalculatorPage() {
     setCashGiven(null);
   };
 
+  const handleSave = () => {
+    // save items with prices to local storage
+    localStorage.setItem('gpmItems', JSON.stringify(items));
+    alert('Data berhasil disimpan');
+  }
+
   const calculateChange = () => {
     return Math.max(cashGiven - calculateTotalPrice(), 0);
   };
 
+  useEffect(() => {
+    const savedItems = localStorage.getItem('gpmItems');
+    if (savedItems) {
+      setItems(JSON.parse(savedItems));
+    }
+  }, [])
+  
   return (
     <div
       className={`flex flex-col items-center px-2 py-4 md:px-20 lg:px-32 ${isMobile ? 'h-screen' : ''}`}
@@ -145,12 +158,20 @@ export default function CalculatorPage() {
                   : `Rp. ${calculateChange().toLocaleString()}`}
               </p>
             </div>
-            <button
-              onClick={handleReset}
-              className="bg-red-500 text-white font-medium py-1 lg:py-3 px-6 rounded-md hover:bg-red-600 transition-colors duration-300 w-full"
-            >
-              Reset
-            </button>
+            <div className='flex flex-row w-full gap-2'>
+              <button
+                onClick={handleSave}
+                className='bg-text text-bg font-medium px-6 w-full rounded-md hover:bg-green-300 transition-colors duration-300 border border-bg'
+              >
+                Save
+              </button>
+              <button
+                onClick={handleReset}
+                className="bg-red-500 text-white font-medium py-1 lg:py-3 px-6 rounded-md hover:bg-red-600 transition-colors duration-300 w-full"
+              >
+                Reset
+              </button>
+            </div>
           </div>
         </div>
       </div>
