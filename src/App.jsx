@@ -32,7 +32,7 @@ function App() {
       ) : (
         <div className="overflow-hidden font-poppins bg-text text-bg min-h-screen w-full transition-all duration-500 ease-in-out flex flex-col h-screen">
           {isMobile ? (
-            <div className="flex flex-row items-center p-1 pt-2 w-full fixed top-0 z-49 bg-text">
+            <div className="flex flex-row items-center p-1 pt-2 w-full fixed top-0 z-50 bg-text">
               <Header />
               <Sidebar currentPath={location.pathname} />
             </div>

@@ -5,7 +5,8 @@ import { itemList } from '../utils/dummyData';
 
 export default function CashierPage() {
   const [cart, setCart] = useState([]);
-  const [receivedMoney, setReceivedMoney] = useState(0);
+  const [receivedMoney, setReceivedMoney] = useState('');
+  const isEnoughMoney = receivedMoney >= cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
   const addToCart = (item) => {
     setCart((prevCart) => {
@@ -60,13 +61,13 @@ export default function CashierPage() {
     const money =
       receivedMoney -
       cart.reduce((total, item) => total + item.price * item.quantity, 0);
-    return money < 0 ? 'Uang tidak cukup' : `Rp. ${money.toLocaleString()}`;
+    return money < 0 ? 'Uang tidak cukup!' : `Rp. ${money.toLocaleString()}`;
   };
 
   return (
-    <div className="flex flex-row justify-between p-4">
+    <div className="flex flex-col gap-2 lg:flex-row justify-between p-2 lg:p-4">
       {/* item list */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-1 lg:gap-4 h-[55vh] lg:h-full overflow-y-auto">
         {itemList.map((item) => {
           const cartItem = cart.find((cartItem) => cartItem.id === item.id);
           const quantity = cartItem ? cartItem.quantity : 0;
@@ -89,7 +90,7 @@ export default function CashierPage() {
 
       {/* cashier */}
       <div
-        className={`w-1/2 h-[60vh] p-4 border rounded-md bg-white shadow-md overflow-hidden flex flex-col ${cart.every((item) => item.quantity === 0) ? 'justify-center' : 'justify-between'}`}
+        className={`lg:w-1/2 h-[35vh] lg:h-[60vh] px-2 py-1 lg:p-4 border rounded-md bg-white shadow-md overflow-hidden flex flex-col ${cart.every((item) => item.quantity === 0) ? 'justify-center' : 'justify-between'}`}
       >
         {cart.length === 0 || cart.every((item) => item.quantity === 0) ? (
           <div className="flex flex-col items-center">
@@ -127,7 +128,7 @@ export default function CashierPage() {
                   </div>
                 ))}
             </div>
-            <div className="font-medium text-lg py-1 flex flex-col gap-2">
+            <div className="font-medium text-base lg:text-lg py-1 flex flex-col gap-2">
               <div>
                 <div className="flex flex-row justify-between">
                   <h3>Total</h3>
@@ -148,11 +149,12 @@ export default function CashierPage() {
                     value={receivedMoney}
                     className=" px-1 border rounded w-1/3"
                     onChange={(e) => setReceivedMoney(Number(e.target.value))}
+                    placeholder='uang'
                   />
                 </div>
                 <div className="flex flex-row justify-between">
                   <h3>Kembalian</h3>
-                  <p>{changeMoney(receivedMoney)}</p>
+                  <p className={`${!isEnoughMoney && 'text-red-600'}`}>{changeMoney(receivedMoney)}</p>
                 </div>
               </div>
               {/* Check out button to alert object of cart */}

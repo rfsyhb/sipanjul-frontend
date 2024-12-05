@@ -18,13 +18,16 @@ export default function Header() {
   };
 
   const toggleLock = () => {
-    setIsLocked((prevState) => !prevState);
+    setIsLocked((prevState) => {
+      const newState = !prevState;
+      if (newState) {
+        toast.error('Toko telah ditutup!', toastOptions);
+      } else {
+        toast.success('Toko telah dibuka!', toastOptions);
+      }
+      return newState;
+    });
     setIsModalOpen(false);
-    if (isLocked) {
-      toast.success('Toko telah dibuka!', toastOptions);
-    } else {
-      toast.error('Toko telah ditutup!', toastOptions);
-    }
   };
 
   const openModal = () => {
