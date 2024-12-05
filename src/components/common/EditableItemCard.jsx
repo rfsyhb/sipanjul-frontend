@@ -10,6 +10,7 @@ export default function EditableItemCard({
   name,
   stock,
   price,
+  type,
   packageSize,
   onDelete,
 }) {
@@ -19,10 +20,12 @@ export default function EditableItemCard({
   const [editedName, setEditedName] = useState(name);
   const [editedStock, setEditedStock] = useState(stock);
   const [editedPrice, setEditedPrice] = useState(price);
+  const [editedType, setEditedType] = useState(type);
   const [editedPackageSize, setEditedPackageSize] = useState(packageSize);
   const [addStock, setAddStock] = useState(0);
   const [reduceStock, setReduceStock] = useState(0);
   const [finalStock, setFinalStock] = useState(0);
+  const [descEdit, setDescEdit] = useState('');
 
   // Fungsi untuk membuka dan menutup modal edit item
   const openEditModal = () => {
@@ -165,6 +168,17 @@ export default function EditableItemCard({
               />
             </label>
             <label>
+              Tipe Barang:
+              <select
+                className="border p-2 w-full"
+                value={editedType}
+                onChange={(e) => setEditedType(e.target.value)}
+              >
+                <option value="beras">Beras</option>
+                <option value="lainnya">Lainnya</option>
+              </select>
+            </label>
+            <label>
               Ukuran Paket:
               <input
                 type="text"
@@ -183,7 +197,7 @@ export default function EditableItemCard({
               />
             </label>
           </div>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between gap-4 lg:gap0">
             <div className="flex gap-2">
               <button
                 type="button"
@@ -241,6 +255,16 @@ export default function EditableItemCard({
                 min="0"
               />
             </label>
+            <label>
+              Deskripsi:
+              <input
+                type="text"
+                value={descEdit}
+                onChange={(e) => setDescEdit(e.target.value)}
+                className="border p-2 w-full"
+                placeholder="diambil untuk paket"
+              />
+            </label>
           </div>
           <div className="flex gap-2 mt-4">
             <button
@@ -268,6 +292,7 @@ EditableItemCard.propTypes = {
   name: PropTypes.string.isRequired,
   stock: PropTypes.number.isRequired,
   price: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
   packageSize: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
 };

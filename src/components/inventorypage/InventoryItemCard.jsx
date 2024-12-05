@@ -9,6 +9,7 @@ export default function InventoryItemCard({ item, onDelete }) {
         name={item.name}
         stock={item.stock}
         price={item.price}
+        type={item.type}
         packageSize={item.packageSize}
         onDelete={() => onDelete(item.id)}
       />
