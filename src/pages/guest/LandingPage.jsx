@@ -13,21 +13,21 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col gap-4 w-full">
+    <div className="h-screen flex flex-col gap-3 lg:gap-4 w-full">
       {/* header section */}
       <header className="flex justify-center border-2 border-gray-300 w-full">
         <div className="flex flex-row items-center justify-between max-w-[85vw] w-full py-2">
-          <h2 className="text-2xl">
+          <h2 className="text-lg lg:text-2xl">
             <span className="font-bold">Bulog</span> <span>Kalteng</span>
           </h2>
-          <div className="flex flex-row gap-2 items-center">
-            <p>status toko:</p>
+          <div className="flex flex-col lg:flex-row lg:gap-2 items-center">
+            <p className="text-xs lg:text-md">status toko:</p>
             {storeStatus ? (
-              <span className="px-4 py-2 rounded-full font-bold bg-green-600 text-white">
+              <span className="text-sm rounded-lg px-2 lg:px-4 lg:py-2 lg:rounded-full font-bold bg-green-600 text-white">
                 TOKO SEDANG BUKA
               </span>
             ) : (
-              <span className="px-3 py-1 rounded-full font-bold bg-red-600 text-white">
+              <span className="lg:px-4 lg:py-2 rounded-full font-bold bg-red-600 text-white">
                 TOKO TUTUP
               </span>
             )}
@@ -36,23 +36,23 @@ export default function LandingPage() {
       </header>
 
       {/* hero section */}
-      <div className="w-full flex justify-center flex-grow">
-        <div className="flex flex-row justify-between max-w-[85vw] w-full">
-          <div className="flex flex-col justify-between">
-            <h1 className="text-3xl font-bold mt-8">
+      <div className="w-full flex justify-center h-[30vh] lg:h-auto lg:flex-grow">
+        <div className="flex flex-row justify-center max-w-[85vw] w-full gap-2 lg:gap-0">
+          <div className="flex flex-col justify-between flex-1">
+            <h1 className="text-base lg:text-3xl font-bold lg:mt-8">
               Tim Pengendali Inflasi Daerah <br />
               <span className="font-normal">(TPID) Palangka Raya</span>
             </h1>
-            <p>
+            <p className="text-[0.6rem] lg:text-base">
               *Jadwal buka: Senin - Kamis 7-12 dan 13-18, Jumat 7-11 dan 13-16,
               dan Sabtu 7-12
             </p>
           </div>
-          <div className="">
+          <div className="flex-1 flex h-full">
             <img
-              src="/src/assets/BULOG.jpeg"
+              src="https://i.imgur.com/FmSVn5Z.jpeg"
               alt="foto_bulog"
-              className="w-full h-full max-w-[600px] max-h-[350px] rounded-lg object-cover"
+              className="w-full h-full lg:max-w-[600px] lg:max-h-[350px] rounded-lg object-cover"
             />
           </div>
         </div>
@@ -60,7 +60,7 @@ export default function LandingPage() {
 
       {/* itemlist section */}
       <div className="">
-        <h2 className="text-xl font-bold ml-2">Beras</h2>
+        <h2 className="lg:text-xl font-bold ml-2">Beras</h2>
         <div className="flex flex-row w-full max-w-full bg-gray-200 overflow-x-auto">
           {riceList.map((item) => {
             return (
@@ -76,7 +76,7 @@ export default function LandingPage() {
       </div>
 
       <div className=" mb-4">
-        <h2 className="font-bold text-xl ml-2">Lainnya</h2>
+        <h2 className="font-bold lg:text-xl ml-2">Lainnya</h2>
         <div className="flex flex-row w-full max-w-full bg-gray-200 overflow-x-auto">
           {otherList.map((item) => {
             return (
@@ -91,9 +91,9 @@ export default function LandingPage() {
         </div>
       </div>
 
-      <div className='absolute mt-2 bg-blue-300 p-2 group'>
-        <button className='hidden group-hover:block' onClick={onClick}>
-          <p className='text-bg hover:font-semibold'>an admin?</p>
+      <div className="absolute mt-2 bg-blue-300 p-2 group">
+        <button className="hidden group-hover:block" onClick={onClick}>
+          <p className="text-bg hover:font-semibold">an admin?</p>
         </button>
       </div>
     </div>
