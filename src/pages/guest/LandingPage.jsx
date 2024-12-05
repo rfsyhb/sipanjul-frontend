@@ -33,7 +33,7 @@ export default function LandingPage() {
       <div className="w-full flex justify-center flex-grow">
         <div className="flex flex-row justify-between max-w-[85vw] w-full">
           <div className="flex flex-col justify-between">
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-3xl font-bold mt-8">
               Tim Pengendali Inflasi Daerah <br />
               <span className="font-normal">(TPID) Palangka Raya</span>
             </h1>
