@@ -10,7 +10,7 @@ export default function LandingPage() {
     <div className="h-screen flex flex-col gap-4 w-full">
       {/* header section */}
       <header className="flex justify-center border-2 border-gray-300 w-full">
-        <div className="flex flex-row items-center justify-between max-w-[85vw] w-full py-4">
+        <div className="flex flex-row items-center justify-between max-w-[85vw] w-full py-2">
           <h2 className="text-2xl">
             <span className="font-bold">Bulog</span> <span>Kalteng</span>
           </h2>
@@ -31,7 +31,7 @@ export default function LandingPage() {
 
       {/* hero section */}
       <div className="w-full flex justify-center flex-grow">
-        <div className="flex flex-row justify-between max-w-[80vw] w-full">
+        <div className="flex flex-row justify-between max-w-[85vw] w-full">
           <div className="flex flex-col justify-between">
             <h1 className="text-3xl font-bold">
               Tim Pengendali Inflasi Daerah <br />
@@ -53,9 +53,9 @@ export default function LandingPage() {
       </div>
 
       {/* itemlist section */}
-      <div className="overflow-x-auto">
-        <h2 className="text-xl font-bold">Beras</h2>
-        <div className="flex flex-row w-full max-w-full">
+      <div className="">
+        <h2 className="text-xl font-bold ml-2">Beras</h2>
+        <div className="flex flex-row w-full max-w-full bg-gray-200 overflow-x-auto">
           {riceList.map((item) => {
             return (
               <GuestItemCard
@@ -69,9 +69,9 @@ export default function LandingPage() {
         </div>
       </div>
 
-      <div className="overflow-x-auto mb-4">
-        <h2 className="font-bold text-xl">Lainnya</h2>
-        <div className="flex flex-row w-full max-w-full">
+      <div className=" mb-4">
+        <h2 className="font-bold text-xl ml-2">Lainnya</h2>
+        <div className="flex flex-row w-full max-w-full bg-gray-200 overflow-x-auto">
           {otherList.map((item) => {
             return (
               <GuestItemCard

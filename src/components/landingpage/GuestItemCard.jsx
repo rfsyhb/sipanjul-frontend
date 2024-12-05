@@ -6,7 +6,7 @@ export default function GuestItemCard({ imageUrl, name, stock }) {
         <img
           src={imageUrl}
           alt={name}
-          className="object-cover overflow-hidden outline outline-2 outline-textP h-40 w-full rounded-md"
+          className="object-cover overflow-hidden outline h-32 w-full rounded-md"
         />
         {/* Overlay for out-of-stock */}
         {!stock && (
