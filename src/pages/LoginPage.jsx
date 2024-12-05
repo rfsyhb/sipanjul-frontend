@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -16,12 +18,13 @@ export default function LoginPage() {
     // Simulate login process (replace with actual login logic)
     alert(`Logging in as ${username}`);
     setError(''); // Reset error after successful login simulation
+    navigate('/home');
   };
 
   return (
-    <div className="w-full h-screen bg-text flex flex-row ">
+    <div className="w-full h-screen bg-text flex flex-col lg:flex-row ">
       {/* sisi kiri */}
-      <div className="bg-white flex flex-col items-center justify-center shadow-lg rounded-lg p-8 w-full max-w-md mx-4">
+      <div className="order-2 lg:order-1 bg-white flex flex-col items-center justify-center shadow-lg rounded-lg p-8 w-full max-w-md lg:mx-4 mb-[25vh] lg:mb-0">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Sign In</h2>
         {error && <p className="text-sm text-red-500 mb-4">{error}</p>}
         <form className="flex flex-col w-full" onSubmit={handleLogin}>
@@ -48,9 +51,9 @@ export default function LoginPage() {
         </form>
       </div>
       {/* sisi kanan */}
-      <div className="flex-1 h-screen items-center flex justify-center">
+      <div className="flex-1 order-1 lg:order-2 h-screen items-center flex justify-center">
         <div className="bg-bg text-center p-2">
-          <h1 className="text-white text-3xl font-medium">
+          <h1 className="text-white text-xl lg:text-3xl font-medium">
             Sistem Pintar Penjualan
           </h1>
         </div>
