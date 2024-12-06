@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const BASE_URL = 'https://backend-sipanjul.vercel.app';
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!username || !password) {
@@ -15,11 +17,24 @@ export default function LoginPage() {
       return;
     }
 
-    // Simulate login process (replace with actual login logic)
-    alert(`Logging in as ${username}`);
-    setError(''); // Reset error after successful login simulation
-    navigate('/home');
+    try {
+      const response = await axios.post(`${BASE_URL}/login`, {
+        name: username,
+        password,
+      });
+      console.log(response.data); // Log the response data
+
+      // Simulate login process (replace with actual login logic)
+      alert(`Logging in as ${username}`);
+      setError(''); // Reset error after successful login
+      // navigate('/home');
+    } catch (error) {
+      // Handle errors from the API
+      console.error('Error during login:', error);
+      setError('Login failed. Please check your credentials.');
+    }
   };
+
 
   return (
     <div className="w-full h-screen bg-text flex flex-col lg:flex-row ">
