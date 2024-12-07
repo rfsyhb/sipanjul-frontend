@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api/api';
+import { useAuth } from '../utils/AuthContext';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Tambahkan state loading
+  const { setIsAuthed } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -16,20 +19,25 @@ export default function LoginPage() {
       return;
     }
 
+    setLoading(true);
+
     try {
       const token = await api.login({ name: username, password });
       api.putAccessToken(token); // Simpan token ke localStorage
+      setIsAuthed(true); // Set isAuthed menjadi true
       setError('');
-      alert(`Logged in as ${username}`);
+      alert(`Login success. Welcome, ${username}!`);
       navigate('/home'); // Arahkan pengguna ke halaman utama
     } catch (error) {
       console.error('Error during login:', error.message);
       setError('Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false); // Nonaktifkan loading
     }
   };
 
   return (
-    <div className="w-full h-screen bg-text flex flex-col lg:flex-row ">
+    <div className="w-full h-screen bg-text flex flex-col lg:flex-row">
       {/* sisi kiri */}
       <div className="order-2 lg:order-1 bg-white flex flex-col items-center justify-center shadow-lg rounded-lg p-8 w-full max-w-md lg:mx-4 mb-[25vh] lg:mb-0">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Sign In</h2>
@@ -51,15 +59,18 @@ export default function LoginPage() {
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition"
+            className={`bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition ${
+              loading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            disabled={loading} // Nonaktifkan tombol saat loading
           >
-            Login
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
       </div>
       {/* sisi kanan */}
       <div className="flex-1 order-1 lg:order-2 h-screen items-center flex justify-center">
-        <div className="bg-bg text-center p-2">
+        <div className="bg-inactiveBtn text-center p-2 rounded-md">
           <h1 className="text-white text-xl lg:text-3xl font-medium">
             Sistem Pintar Penjualan
           </h1>
