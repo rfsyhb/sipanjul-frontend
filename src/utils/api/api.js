@@ -1,9 +1,6 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const navigate = useNavigate();
-
-const api = () => {
+const api = (() => {
   const BASE_URL = 'https://backend-sipanjul.vercel.app';
 
   const instance = axios.create({
@@ -24,7 +21,7 @@ const api = () => {
             data.message === 'Token is no longer valid' ||
             data.message === 'Invalid token')
         ) {
-          localStorage.removeItem('token');
+          clearAccessToken();
           navigate('/login');
         }
       }
@@ -41,6 +38,10 @@ const api = () => {
       });
 
       const responseData = response.data;
+
+      if (response.status === 202) {
+        return responseData;
+      }
       
       if (responseData.status !== 'success') {
         throw new Error(responseData.message);
@@ -50,5 +51,32 @@ const api = () => {
       throw new Error(error.message || "Something went wrong (throwed from apiRequest)");
     }
   }
-};
 
+  const getAccessToken = () => {
+    return localStorage.getItem('accessToken');
+  }
+
+  const putAccessToken = (accessToken) => {
+    localStorage.setItem('accessToken', accessToken);
+  }
+
+  const clearAccessToken = () => {
+    localStorage.removeItem('accessToken');
+  }
+
+  const login = async ({ name, password }) => {
+    const response = await apiRequest('POST', '/login', { name, password });
+    console.log(response);
+    
+    return response.data.token;
+  }
+
+  return {
+    getAccessToken,
+    putAccessToken,
+    clearAccessToken,
+    login,
+  }
+})();
+
+export default api;
