@@ -143,6 +143,7 @@ export default function Sidebar({ currentPath }) {
                     }
                   />
                 }
+                isLogout
                 to="/logout"
               />
               <SidebarItem
@@ -254,6 +255,7 @@ export default function Sidebar({ currentPath }) {
                   }
                 />
               }
+              isLogout
               to="/logout"
             />
             <SidebarItem

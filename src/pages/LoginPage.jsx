@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api/api';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const BASE_URL = 'https://backend-sipanjul.vercel.app';
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,23 +17,16 @@ export default function LoginPage() {
     }
 
     try {
-      const response = await axios.post(`${BASE_URL}/login`, {
-        name: username,
-        password,
-      });
-      console.log(response.data); // Log the response data
-
-      // Simulate login process (replace with actual login logic)
-      alert(`Logging in as ${username}`);
-      setError(''); // Reset error after successful login
-      // navigate('/home');
+      const token = await api.login({ name: username, password });
+      api.putAccessToken(token); // Simpan token ke localStorage
+      setError('');
+      alert(`Logged in as ${username}`);
+      navigate('/home'); // Arahkan pengguna ke halaman utama
     } catch (error) {
-      // Handle errors from the API
-      console.error('Error during login:', error);
+      console.error('Error during login:', error.message);
       setError('Login failed. Please check your credentials.');
     }
   };
-
 
   return (
     <div className="w-full h-screen bg-text flex flex-col lg:flex-row ">
