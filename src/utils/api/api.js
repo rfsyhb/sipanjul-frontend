@@ -71,11 +71,19 @@ const api = (() => {
     return response.data.token;
   }
 
+  const getItems = async () => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('GET', '/opr/inventory')
+
+    return response.data;
+  }
+
   return {
     getAccessToken,
     putAccessToken,
     clearAccessToken,
     login,
+    getItems,
   }
 })();
 
