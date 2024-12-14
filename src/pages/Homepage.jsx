@@ -7,7 +7,8 @@ import { dailySales, monthlySales, weeklySales } from '../utils/dummyData';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useIsMobile from '../hooks/useIsMobile';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import api from '../utils/api/api';
 
 export default function Homepage() {
   const isMobile = useIsMobile(768);
@@ -33,16 +34,18 @@ export default function Homepage() {
 
   const salesData = salesDataMap[selectedPeriod];
 
+  useEffect(() => {
+    console.log(api.getItems())
+  }, [])
+
   return (
-    <div className="flex flex-col h-[88vh] p-4 max-h-screen gap-2 pr-4">
+    <div className="flex flex-col flex-grow h-full w-full gap-2 p-4">
       {!isMobile && (
-        <section
-          className={`flex flex-row lg:flex-row gap-2 lg:gap-4 ${isMobile && 'overflow-x-scroll h-auto'}`}
-        >
+        <section className="flex flex-row gap-2 lg:gap-4">
           {[dailySales, weeklySales, monthlySales].map((sales, index) => (
             <div
               key={index}
-              className="flex flex-col w-72 h-36 p-4 rounded-2xl bg-white gap-3"
+              className="flex flex-col w-72 h-36 p-4 rounded-2xl bg-white gap-3 flex-shrink-0"
             >
               <div className="flex flex-row gap-2 items-center w-full justify-between">
                 <h2 className="text-lg">
@@ -68,7 +71,9 @@ export default function Homepage() {
                       <FaArrowUp className="text-green-700" size={14} />
                     )}
                     <p
-                      className={`font-medium ${sales.isNegative ? 'text-red-700' : 'text-green-700'}`}
+                      className={`font-medium ${
+                        sales.isNegative ? 'text-red-700' : 'text-green-700'
+                      }`}
                     >
                       {Math.abs(sales.percentage).toFixed(1)}%
                     </p>

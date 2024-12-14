@@ -31,18 +31,20 @@ function App() {
           <Route path="/" element={<LandingPage />} />
         </Routes>
       ) : (
-        <div className="overflow-hidden font-poppins bg-text text-bg min-h-screen w-full transition-all duration-500 ease-in-out flex flex-col h-screen">
+        <div className="overflow-hidden font-poppins bg-text text-bg w-full transition-all duration-500 ease-in-out flex flex-col h-screen">
           {isMobile ? (
             <div className="flex flex-row items-center p-1 pt-2 w-full fixed top-0 z-50 bg-text">
               <Header />
               <Sidebar currentPath={location.pathname} />
             </div>
           ) : (
-            <Header />
+            <div className="flex flex-shrink-0">
+              <Header />
+            </div>
           )}
-          <div className={`flex flex-1 ${isMobile ? 'pt-8' : ''}`}>
+          <div className={`flex flex-1 flex-grow ${isMobile ? 'pt-8' : ''} overflow-hidden`}>
             {!isMobile && <Sidebar currentPath={location.pathname} />}
-            <div className="flex-1 flex flex-col py-2">
+            <div className={`flex-1 flex flex-col overflow-hidden ${isMobile ? 'py-2' : ''}`}>
               <Routes>
                 <Route
                   path="/home"
@@ -52,36 +54,54 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-                    <Route path="/kasir" element={
-                      <ProtectedRoute>
-                        <CashierPage />
-                      </ProtectedRoute>
-                } />
-                    <Route path="/stok" element={
-                      <ProtectedRoute>
-                        <InventoryPage />
-                      </ProtectedRoute>
-                } />
-                    <Route path="/laporan" element={
-                      <ProtectedRoute>
-                        <ReportPage />
-                      </ProtectedRoute>
-                } />
-                    <Route path="/grafik" element={
-                      <ProtectedRoute>
-                        <ChartPage />
-                      </ProtectedRoute>
-                } />
-                    <Route path="/gpm" element={
-                      <ProtectedRoute>
-                        <CalculatorPage />
-                      </ProtectedRoute>
-                } />
-                    <Route path="*" element={
-                      <ProtectedRoute>
-                        <h1>Not Found</h1>
-                      </ProtectedRoute>
-                } />
+                <Route
+                  path="/kasir"
+                  element={
+                    <ProtectedRoute>
+                      <CashierPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/stok"
+                  element={
+                    <ProtectedRoute>
+                      <InventoryPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/laporan"
+                  element={
+                    <ProtectedRoute>
+                      <ReportPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/grafik"
+                  element={
+                    <ProtectedRoute>
+                      <ChartPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/gpm"
+                  element={
+                    <ProtectedRoute>
+                      <CalculatorPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="*"
+                  element={
+                    <ProtectedRoute>
+                      <h1>Not Found</h1>
+                    </ProtectedRoute>
+                  }
+                />
               </Routes>
             </div>
           </div>
