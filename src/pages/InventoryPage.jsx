@@ -3,7 +3,7 @@ import { produce } from 'immer';
 import Modal from 'react-modal';
 import InventoryItemCard from '../components/inventorypage/InventoryItemCard';
 import useIsMobile from '../hooks/useIsMobile';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import api from '../utils/api/api';
 import { itemList } from '../utils/dummyData';
 
@@ -36,12 +36,24 @@ export default function InventoryPage() {
   });
 
   // Gunakan dummy data jika items API kurang dari 2
-  const items = itemsFromApi.length >= 3 ? itemsFromApi : itemList;
+  const items = itemsFromApi.length >= 2 ? itemsFromApi : itemList;
 
   const refetchItems = () => {
     console.log('Refetching items...');
     queryClient.invalidateQueries(['adminInventory']);
-  }
+  };
+
+  const mutation = useMutation({
+    mutationFn: api.addProduct, // Fungsi untuk menambahkan item
+    onSuccess: () => {
+      // Invalidasi query agar data terbaru di-refetch
+      refetchItems();
+      console.log('Product added successfully!');
+    },
+    onError: (error) => {
+      console.error('Error adding product:', error.message);
+    },
+  });
 
   const handleSearch = (e) => {
     setSearchInput(e.target.value);
@@ -65,9 +77,16 @@ export default function InventoryPage() {
 
   const handleAddItem = (e) => {
     e.preventDefault();
-    // TODO: Tambahkan logika untuk menyinkronkan item baru dengan API (jika diperlukan)
-    console.log('New Item Added:', newItem);
+    mutation.mutate(newItem);
     closeModal();
+  };
+
+  const handleChange = (field, value) => {
+    setNewItem(
+      produce((draft) => {
+        draft[field] = value;
+      })
+    );
   };
 
   const handleDeleteItem = (id) => {

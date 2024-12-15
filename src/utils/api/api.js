@@ -81,6 +81,11 @@ const api = (() => {
     return response.data;
   };
 
+  // Placeholder
+  const addProduct = async (product) => {
+    console.log(product);
+  }
+
   return {
     getAccessToken,
     putAccessToken,
@@ -88,6 +93,7 @@ const api = (() => {
     login,
     getGuestItems,
     getItems,
+    addProduct,
   };
 })();
 
