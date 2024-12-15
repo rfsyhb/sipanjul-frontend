@@ -2,16 +2,17 @@ import { useState } from 'react';
 import { produce } from 'immer';
 import Modal from 'react-modal';
 import InventoryItemCard from '../components/inventorypage/InventoryItemCard';
-import { itemList as initialItemList } from '../utils/dummyData';
 import useIsMobile from '../hooks/useIsMobile';
+import { useQuery } from '@tanstack/react-query';
+import api from '../utils/api/api';
+import { itemList } from '../utils/dummyData';
 
 // Atur root element untuk modal agar rendering benar
 Modal.setAppElement('#root');
 
 export default function InventoryPage() {
-  const [searchInput, setSearchInput] = useState('');
-  const [items, setItems] = useState(initialItemList);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState(''); // Untuk pencarian
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const [newItem, setNewItem] = useState({
     name: '',
     stock: '',
@@ -21,6 +22,20 @@ export default function InventoryPage() {
     imageUrl: '',
   });
   const isMobile = useIsMobile(768);
+
+  // Fetch data dari API menggunakan Tanstack Query
+  const {
+    data: itemsFromApi = [], // Default ke array kosong jika data belum ada
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['adminInventory'], // Key unik untuk query ini
+    queryFn: api.getItems, // Fungsi untuk fetch data
+  });
+
+  // Gunakan dummy data jika items API kurang dari 2
+  const items = itemsFromApi.length >= 0 ? itemsFromApi : itemList;
 
   const handleSearch = (e) => {
     setSearchInput(e.target.value);
@@ -44,44 +59,37 @@ export default function InventoryPage() {
 
   const handleAddItem = (e) => {
     e.preventDefault();
-    // Tambah item baru ke dalam daftar
-    setItems(
-      produce((draft) => {
-        draft.push({
-          ...newItem,
-          id: `item-${items.length + 1}`,
-          imageUrl: newItem.imageUrl || 'https://via.placeholder.com/150',
-        });
-      })
-    );
+    // TODO: Tambahkan logika untuk menyinkronkan item baru dengan API (jika diperlukan)
+    console.log('New Item Added:', newItem);
     closeModal();
   };
 
-  const handleChange = (field, value) => {
-    setNewItem(
-      produce((draft) => {
-        draft[field] = value;
-      })
-    );
+  const handleDeleteItem = (id) => {
+    // TODO: Tambahkan logika untuk menyinkronkan penghapusan dengan API (jika diperlukan)
+    console.log('Item Deleted:', id);
   };
 
-  const handleDeleteItem = (id) => {
-    setItems(
-      produce((draft) => {
-        const index = draft.findIndex((item) => item.id === id);
-        if (index !== -1) {
-          draft.splice(index, 1);
-        }
-      })
-    );
-  };
+  // Saat data sedang dimuat
+  if (isLoading) {
+    return <div>Loading inventory data...</div>;
+  }
+
+  // Saat terjadi error
+  if (isError) {
+    return <div>Error fetching inventory: {error.message}</div>;
+  }
+
+  // Filter data berdasarkan input pencarian
+  const filteredItems = items.filter((item) =>
+    item.name.toLowerCase().includes(searchInput.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col gap-1 lg:gap-3 p-4">
       <div className="flex flex-row justify-between lg:px-4 w-full">
         <button
           className="bg-actionBtn text-white px-3 py-1 rounded-md hover:bg-activeBtn hover:text-bg border border-actionBtn"
-          onClick={openModal} // Membuka modal untuk menambah item baru
+          onClick={openModal}
         >
           <span className="font-medium lg:text-base text-sm">
             Tambah {!isMobile && 'Barang'}
@@ -95,19 +103,14 @@ export default function InventoryPage() {
           placeholder="Cari barang..."
         />
       </div>
-      <div className="flex flex-wrap gap-6 lg:gap-8 justify-center h-[84vh] lg:h-auto overflow-y-auto ">
-        {items
-          .filter((item) =>
-            item.name.toLowerCase().includes(searchInput.toLowerCase())
-          )
-          .map((item) => (
-            // console.log(item),
-            <InventoryItemCard
-              key={item.id}
-              item={item}
-              onDelete={() => handleDeleteItem(item.id)}
-            />
-          ))}
+      <div className="flex flex-wrap gap-6 lg:gap-8 justify-center h-[84vh] lg:h-auto overflow-y-auto">
+        {filteredItems.map((item) => (
+          <InventoryItemCard
+            key={item.id}
+            item={item}
+            onDelete={() => handleDeleteItem(item.id)}
+          />
+        ))}
       </div>
 
       <Modal
@@ -128,11 +131,10 @@ export default function InventoryPage() {
                 onChange={(e) => handleChange('name', e.target.value)}
                 className="border p-2 w-full"
                 required
-                placeholder='e.g. "Beras Manis Kita"'
               />
             </label>
             <div className="flex flex-row gap-2">
-              <label className='flex-1'>
+              <label className="flex-1">
                 Stok:
                 <input
                   type="number"
@@ -142,11 +144,10 @@ export default function InventoryPage() {
                   }
                   className="border p-2 w-full"
                   min={0}
-                  placeholder='e.g. "10"'
                   required
                 />
               </label>
-              <label className='w-2/3'>
+              <label className="w-2/3">
                 Harga:
                 <input
                   type="number"
@@ -156,10 +157,9 @@ export default function InventoryPage() {
                   }
                   className="border p-2 w-full"
                   min={1000}
-                  placeholder='e.g. "10000"'
                 />
               </label>
-            </div>  
+            </div>
             <label>
               Ukuran Paket:
               <input
@@ -168,7 +168,6 @@ export default function InventoryPage() {
                 onChange={(e) => handleChange('packageSize', e.target.value)}
                 className="border p-2 w-full"
                 required
-                placeholder='e.g. "1kg", "500gr", "1lt"'
               />
             </label>
             <label>
@@ -192,7 +191,6 @@ export default function InventoryPage() {
                 onChange={(e) => handleChange('imageUrl', e.target.value)}
                 className="border p-2 w-full"
                 required
-                placeholder='e.g. "https://via.placeholder.com/150"'
               />
             </label>
           </div>
