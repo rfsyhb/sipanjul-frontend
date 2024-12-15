@@ -3,7 +3,7 @@ import { produce } from 'immer';
 import Modal from 'react-modal';
 import InventoryItemCard from '../components/inventorypage/InventoryItemCard';
 import useIsMobile from '../hooks/useIsMobile';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import api from '../utils/api/api';
 import { itemList } from '../utils/dummyData';
 
@@ -11,6 +11,7 @@ import { itemList } from '../utils/dummyData';
 Modal.setAppElement('#root');
 
 export default function InventoryPage() {
+  const queryClient = useQueryClient();
   const [searchInput, setSearchInput] = useState(''); // Untuk pencarian
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const [newItem, setNewItem] = useState({
@@ -35,7 +36,12 @@ export default function InventoryPage() {
   });
 
   // Gunakan dummy data jika items API kurang dari 2
-  const items = itemsFromApi.length >= 0 ? itemsFromApi : itemList;
+  const items = itemsFromApi.length >= 3 ? itemsFromApi : itemList;
+
+  const refetchItems = () => {
+    console.log('Refetching items...');
+    queryClient.invalidateQueries(['adminInventory']);
+  }
 
   const handleSearch = (e) => {
     setSearchInput(e.target.value);

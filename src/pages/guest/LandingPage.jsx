@@ -1,16 +1,30 @@
 import GuestItemCard from '../../components/landingpage/GuestItemCard';
 import { guestItemList } from '../../utils/dummyData';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import api from '../../utils/api/api';
 
 export default function LandingPage() {
-  const riceList = guestItemList.filter((item) => item.type === 'beras');
-  const otherList = guestItemList.filter((item) => item.type === 'lainnya');
+  const {
+    data: itemsFromApi = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['guestInventory'],
+    queryFn: api.getGuestItems,
+  });
+
+  const items = itemsFromApi.length >= 3 ? itemsFromApi : guestItemList;
+
+  const riceList = items.filter((item) => item.type === 'beras');
+  const otherList = items.filter((item) => item.type === 'lainnya');
   const storeStatus = true;
   const navigate = useNavigate();
 
   const onClick = () => {
     navigate('/login');
-  }
+  };
 
   return (
     <div className="h-screen flex flex-col gap-3 lg:gap-4 w-full">
@@ -61,34 +75,42 @@ export default function LandingPage() {
       {/* itemlist section */}
       <div className="">
         <h2 className="lg:text-xl font-bold ml-2">Beras</h2>
-        <div className="flex flex-row w-full max-w-full bg-gray-200 overflow-x-auto">
-          {riceList.map((item) => {
-            return (
-              <GuestItemCard
-                key={item.id}
-                imageUrl={item.imageUrl}
-                name={item.name}
-                stock={item.stock}
-              />
-            );
-          })}
-        </div>
+        {isLoading && <div>Loading inventory data...</div>}
+        {isError && <div>Error fetching inventory: {error.message}</div>}
+        {!isError && !isLoading && (
+          <div className="flex flex-row w-full max-w-full bg-gray-200 overflow-x-auto">
+            {riceList.map((item) => {
+              return (
+                <GuestItemCard
+                  key={item.id}
+                  imageUrl={item.image_url}
+                  name={item.name}
+                  stock={item.stock}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <div className=" mb-4">
         <h2 className="font-bold lg:text-xl ml-2">Lainnya</h2>
-        <div className="flex flex-row w-full max-w-full bg-gray-200 overflow-x-auto">
-          {otherList.map((item) => {
-            return (
-              <GuestItemCard
-                key={item.id}
-                imageUrl={item.imageUrl}
-                name={item.name}
-                stock={item.stock}
-              />
-            );
-          })}
-        </div>
+        {isLoading && <div>Loading inventory data...</div>}
+        {isError && <div>Error fetching inventory: {error.message}</div>}
+        {!isError && !isLoading && (
+          <div className="flex flex-row w-full max-w-full bg-gray-200 overflow-x-auto">
+            {otherList.map((item) => {
+              return (
+                <GuestItemCard
+                  key={item.id}
+                  imageUrl={item.image_url}
+                  name={item.name}
+                  stock={item.stock}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <div className="absolute mt-2 bg-blue-300 p-2 group">

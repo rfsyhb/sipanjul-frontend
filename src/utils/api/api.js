@@ -71,7 +71,7 @@ const api = (() => {
   const getGuestItems = async () => {
     const response = await apiRequest('GET', '/inventory');
     return response.data;
-}
+  };
 
   const getItems = async () => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;

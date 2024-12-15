@@ -13,11 +13,11 @@ export default function CashierItemCard({
   return (
     <div className={`flex flex-row gap-2 max-h-40 w-full lg:w-80 border ${quantity > 0 ? 'border-black bg-gray-100' : ''} rounded-lg`}>
       <ItemCard
-        imageUrl={item.imageUrl}
+        imageUrl={item.image_url}
         name={item.name}
         stock={item.stock}
         price={item.price}
-        packageSize={item.packageSize}
+        packageSize={item.packagesize}
       />
       <div className="flex flex-col justify-center gap-2 w-40">
         <h3 className="text-sm font-semibold">{item.name}</h3>
@@ -51,12 +51,12 @@ export default function CashierItemCard({
 
 CashierItemCard.propTypes = {
   item: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     stock: PropTypes.number.isRequired,
-    packageSize: PropTypes.string.isRequired,
+    packagesize: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    imageUrl: PropTypes.string.isRequired,
+    image_url: PropTypes.string.isRequired,
   }).isRequired,
   quantity: PropTypes.number.isRequired,
   addToCart: PropTypes.func.isRequired,

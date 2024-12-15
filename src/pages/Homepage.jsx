@@ -34,10 +34,6 @@ export default function Homepage() {
 
   const salesData = salesDataMap[selectedPeriod];
 
-  useEffect(() => {
-    console.log(api.getItems())
-  }, [])
-
   return (
     <div className="flex flex-col flex-grow h-full w-full gap-2 p-4">
       {!isMobile && (
