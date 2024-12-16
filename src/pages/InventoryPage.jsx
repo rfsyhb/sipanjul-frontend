@@ -36,7 +36,7 @@ export default function InventoryPage() {
   });
 
   // Gunakan dummy data jika items API kurang dari 2
-  const items = itemsFromApi.length >= 2 ? itemsFromApi : itemList;
+  const items = itemsFromApi.length >= 3 ? itemsFromApi : itemList;
 
   const refetchItems = () => {
     console.log('Refetching items...');

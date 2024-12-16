@@ -64,6 +64,19 @@ export default function CashierPage() {
     return money < 0 ? 'Uang tidak cukup!' : `Rp. ${money.toLocaleString()}`;
   };
 
+  // Menyiapkan data untuk Checkout
+  const cartData = cart.filter((item) => item.quantity > 0).map((item) => ({
+    id: item.id,
+    name: item.name,
+    quantity: item.quantity,
+    price: item.price,
+  }));
+
+  const payload = {
+    items: cartData,
+    totalAmount: cartData.reduce((total, item) => total + item.price * item.quantity, 0),
+  }
+
   return (
     <div className="flex flex-col gap-2 lg:flex-row justify-between p-2 lg:p-4">
       {/* item list */}
@@ -109,7 +122,7 @@ export default function CashierPage() {
                   >
                     <div className="flex flex-row items-center gap-2">
                       <img
-                        src={item.imageUrl}
+                        src={item.image_url}
                         alt={item.name}
                         className="w-20 h-20 object-cover rounded-lg shadow-md p-1 border"
                       />
@@ -162,16 +175,7 @@ export default function CashierPage() {
                 <button
                   className="bg-actionBtn text-white text-xs py-1 px-2 rounded w-full hover:bg-activeBtn group"
                   onClick={() => {
-                    const selectedCartItemsData = cart.map((item) => ({
-                      id: item.id,
-                      name: item.name,
-                      quantity: item.quantity,
-                      price: item.price,
-                    }));
-                    const filteredCartItemsData = selectedCartItemsData.filter(
-                      (item) => item.quantity > 0
-                    );
-                    alert(JSON.stringify(filteredCartItemsData, null));
+                    alert(JSON.stringify(payload, null, 2));
                   }}
                 >
                   <span className="font-medium text-lg group-hover:text-inactiveBtn">
