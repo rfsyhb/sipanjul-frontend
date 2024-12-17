@@ -51,19 +51,29 @@
 
 `GET` /opr/bestselling-product *received*
 {
-  [
-    {
-      "id": Number,
-      "name": String,
-      "stock": Boolean,
-      "packagesize": String,
-      "type": String,
-      "image_url": String
-    },
-    {
-      ...
-    }
-  ]
+  { 
+    "weekly": [
+      {
+        "id": Number,
+        "name": String,
+        "stock": Boolean,
+        "packagesize": String,
+        "type": String,
+        "image_url": String
+      },
+      {
+        ...
+      }
+    ],
+    "monthly": [
+      {
+        ...
+      },
+      {
+        ...
+      }
+    ]
+  }
 }
 
 `GET` /opr/recent-transaction *received*
