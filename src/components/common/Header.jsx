@@ -3,31 +3,41 @@ import { BsFillLockFill, BsUnlockFill } from 'react-icons/bs';
 import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useStoreStatus } from '../../hooks/useStoreStatus.';
+import { useUpdateStoreStatus } from '../../hooks/useUpdateStoreStatus';
 
 // Setting the app element for accessibility
 Modal.setAppElement('#root');
 
 export default function Header() {
-  const [isLocked, setIsLocked] = useState(false);
+  const {
+    data: storeStatus,
+    isStoreStatusLoading,
+    isStoreStatusError,
+    storeStatusError,
+  } = useStoreStatus();
+  const { mutate: updateStatus, isLoading: isUpdating } =
+    useUpdateStoreStatus();
+
+  const toggleStoreStatus = () => {
+    console.log('Current status:', storeStatus);
+    updateStatus(storeStatus);
+
+    if (storeStatus) {
+      toast.success('Toko telah dibuka!', toastOptions);
+    } else {
+      toast.error('Toko telah ditutup!', toastOptions);
+    }
+
+    setIsModalOpen(false);
+  };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toastOptions = {
     autoClose: 2000,
     hideProgressBar: true,
     pauseOnHover: false,
     theme: 'colored',
-  };
-
-  const toggleLock = () => {
-    setIsLocked((prevState) => {
-      const newState = !prevState;
-      if (newState) {
-        toast.error('Toko telah ditutup!', toastOptions);
-      } else {
-        toast.success('Toko telah dibuka!', toastOptions);
-      }
-      return newState;
-    });
-    setIsModalOpen(false);
   };
 
   const openModal = () => {
@@ -53,24 +63,30 @@ export default function Header() {
           {/* on off toko */}
           <div className="flex flex-row p-1 bg-white rounded-full">
             <div
-              className={`p-1 px-2 md:p-4 md:px-6 ${!isLocked ? 'bg-green-400' : ''} rounded-full cursor-pointer`}
-              onClick={!isLocked ? undefined : openModal}
+              className={`p-1 px-2 md:p-4 md:px-6 ${storeStatus ? 'bg-green-400' : ''} rounded-full cursor-pointer`}
+              onClick={storeStatus ? undefined : openModal}
             >
               <BsUnlockFill size={24} />
             </div>
             <div
-              className={`p-1 px-2 md:p-4 md:px-6 ${isLocked ? 'bg-red-400' : ''} rounded-full cursor-pointer`}
-              onClick={isLocked ? undefined : openModal}
+              className={`p-1 px-2 md:p-4 md:px-6 ${!storeStatus ? 'bg-red-400' : ''} rounded-full cursor-pointer`}
+              onClick={!storeStatus ? undefined : openModal}
             >
               <BsFillLockFill size={24} />
             </div>
           </div>
-          <div className='flex flex-col'>
+          <div className="flex flex-col">
             <h1 className="text-sm md:text-2xl font-medium">Hello Operator!</h1>
-            <span className='text-xs md:text-base'>Hari ini, {formattedDate}</span>
+            <span className="text-xs md:text-base">
+              Hari ini, {formattedDate}
+            </span>
           </div>
         </div>
-        <img src="/assets/logobulog.png" alt="logobulog" className="w-16 md:w-32" />
+        <img
+          src="/assets/logobulog.png"
+          alt="logobulog"
+          className="w-16 md:w-32"
+        />
       </header>
       {/* Confirmation Modal */}
       <Modal
@@ -82,7 +98,7 @@ export default function Header() {
       >
         <h2 className="text-lg font-semibold mb-4">
           Apakah anda ingin{' '}
-          {isLocked ? (
+          {storeStatus ? (
             <span className="font-bold text-green-800 bg-green-200 px-1 rounded-sm">
               membuka
             </span>
@@ -95,7 +111,7 @@ export default function Header() {
         </h2>
         <div className="flex gap-4 mt-4">
           <button
-            onClick={toggleLock}
+            onClick={toggleStoreStatus}
             className="bg-blue-500 text-white p-2 rounded"
           >
             Yes

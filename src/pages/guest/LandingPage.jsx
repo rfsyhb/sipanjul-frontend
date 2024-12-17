@@ -3,6 +3,7 @@ import { guestItemList } from '../../utils/dummyData';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../utils/api/api';
+import { useStoreStatus } from '../../hooks/useStoreStatus.';
 
 export default function LandingPage() {
   const {
@@ -15,11 +16,17 @@ export default function LandingPage() {
     queryFn: api.getGuestItems,
   });
 
+  const {
+    data: storeStatus = false,
+    isStoreStatusLoading,
+    isStoreStatusError,
+    storeStatusError,
+  } = useStoreStatus();
+
   const items = itemsFromApi.length >= 3 ? itemsFromApi : guestItemList;
 
   const riceList = items.filter((item) => item.type === 'beras');
   const otherList = items.filter((item) => item.type === 'lainnya');
-  const storeStatus = true;
   const navigate = useNavigate();
 
   const onClick = () => {
@@ -36,15 +43,21 @@ export default function LandingPage() {
           </h2>
           <div className="flex flex-col lg:flex-row lg:gap-2 items-center">
             <p className="text-xs lg:text-md">status toko:</p>
-            {storeStatus ? (
-              <span className="text-sm rounded-lg px-2 lg:px-4 lg:py-2 lg:rounded-full font-bold bg-green-600 text-white">
-                TOKO SEDANG BUKA
-              </span>
-            ) : (
-              <span className="lg:px-4 lg:py-2 rounded-full font-bold bg-red-600 text-white">
-                TOKO TUTUP
-              </span>
+            {isStoreStatusLoading && <div>Loading store status...</div>}
+            {isStoreStatusError && (
+              <div>Error fetching store status: {storeStatusError.message}</div>
             )}
+            {!isStoreStatusError &&
+              !isStoreStatusLoading &&
+              (storeStatus ? (
+                <span className="text-sm rounded-lg px-2 lg:px-4 lg:py-2 lg:rounded-full font-bold bg-green-600 text-white">
+                  TOKO SEDANG BUKA
+                </span>
+              ) : (
+                <span className="lg:px-4 lg:py-2 rounded-full font-bold bg-red-600 text-white">
+                  TOKO TUTUP
+                </span>
+              ))}
           </div>
         </div>
       </header>

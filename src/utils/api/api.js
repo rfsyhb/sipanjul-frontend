@@ -82,9 +82,32 @@ const api = (() => {
   };
 
   // Placeholder
+  const getStoreStatus = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const storeStatus = true; // Placeholder status toko
+        console.log('Fetched store status:', storeStatus);
+        resolve(storeStatus);
+      }, 2000); // Simulasi delay 500ms
+    });
+  };
+
+  const toggleStoreStatus = async (currentStatus) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const updatedStatus = !currentStatus; // Toggle status
+        console.log('Toggled store status:', updatedStatus);
+        resolve({
+          status: updatedStatus,
+          message: 'Store status updated successfully',
+        });
+      }, 500); // Simulasi delay 500ms
+    });
+  };
+
   const addProduct = async (product) => {
     console.log(product);
-  }
+  };
 
   return {
     getAccessToken,
@@ -93,6 +116,8 @@ const api = (() => {
     login,
     getGuestItems,
     getItems,
+    getStoreStatus,
+    toggleStoreStatus,
     addProduct,
   };
 })();
