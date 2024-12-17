@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import Modal from 'react-modal';
+import { useEditProductStock } from '../../hooks/useEditProductStock';
+import { useEditProductData } from '../../hooks/useEditProductData';
 
 // Atur root element untuk modal agar rendering benar
 Modal.setAppElement('#root');
@@ -24,8 +26,9 @@ export default function EditableItemCard({
   const [editedPackageSize, setEditedPackageSize] = useState(packageSize);
   const [addStock, setAddStock] = useState(0);
   const [reduceStock, setReduceStock] = useState(0);
-  const [finalStock, setFinalStock] = useState(0);
   const [descEdit, setDescEdit] = useState('');
+  const { mutate: editProductData } = useEditProductData();
+  const { mutate: editProductStock } = useEditProductStock();
 
   // Fungsi untuk membuka dan menutup modal edit item
   const openEditModal = () => {
@@ -46,39 +49,37 @@ export default function EditableItemCard({
     setIsStockModalOpen(false);
   };
 
-  const handleSave = (e) => {
+  const handleEditData = (e) => {
     e.preventDefault();
     const editedData = {
-      editedName,
-      stock: finalStock,
-      editedPrice,
-      editedPackageSize,
+      name: editedName,
+      price: editedPrice,
+      type: editedType,
+      packagesize: editedPackageSize,
+      image_url: editedImageUrl,
     };
-    alert(JSON.stringify(editedData, null));
+    editProductData(editedData);
     closeEditModal();
-  };
+  }
 
-  const handleStockUpdate = (e) => {
+  const handleEditStock = (e) => {
     e.preventDefault();
-    if (addStock > 0 && reduceStock === 0) {
-      setEditedStock(editedStock + addStock);
-      setFinalStock(addStock);
-      alert(`Stock increased by ${addStock}`);
-    } else if (reduceStock > 0 && addStock === 0) {
-      if (reduceStock <= editedStock) {
-        setEditedStock(editedStock - reduceStock);
-        setFinalStock(-reduceStock);
-        alert(`Stock reduced by ${reduceStock}`);
-      } else {
-        alert('Cannot reduce stock more than available');
-      }
-    } else {
-      alert('Please fill either add or reduce stock, but not both');
-    }
+    const editedStockData = {
+      stock: reduceStock > 0 ? -reduceStock : addStock,
+      description: descEdit,
+      isNegative: reduceStock > 0,
+    };
+    editProductStock(editedStockData);
     setAddStock(0);
     setReduceStock(0);
     closeStockModal();
-  };
+    closeEditModal();
+  }
+
+  const handleDeleteProduct = (id) => {
+    onDelete(id);
+    closeEditModal();
+  }
 
   return (
     <div
@@ -127,7 +128,7 @@ export default function EditableItemCard({
         overlayClassName="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center"
       >
         <h2 className="text-lg font-bold mb-4">Edit Barang</h2>
-        <form onSubmit={handleSave} className="flex flex-col gap-4">
+        <form onSubmit={handleEditData} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label>
               Nama Barang:
@@ -216,7 +217,7 @@ export default function EditableItemCard({
             <button
               type="button"
               className="bg-red-500 text-white px-4 py-2 rounded"
-              onClick={onDelete}
+              onClick={handleDeleteProduct}
             >
               Delete
             </button>
@@ -233,7 +234,7 @@ export default function EditableItemCard({
         overlayClassName="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center"
       >
         <h2 className="text-lg font-bold mb-4">Update Stok</h2>
-        <form onSubmit={handleStockUpdate} className="flex flex-col gap-4">
+        <form onSubmit={handleEditStock} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label>
               Tambah Stok:

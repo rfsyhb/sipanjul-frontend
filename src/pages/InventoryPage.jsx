@@ -6,6 +6,8 @@ import useIsMobile from '../hooks/useIsMobile';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import api from '../utils/api/api';
 import { itemList } from '../utils/dummyData';
+import { useAddNewProduct } from '../hooks/useAddNewProduct';
+import { useDeleteProduct } from '../hooks/useDeleteProduct';
 
 // Atur root element untuk modal agar rendering benar
 Modal.setAppElement('#root');
@@ -26,34 +28,20 @@ export default function InventoryPage() {
 
   // Fetch data dari API menggunakan Tanstack Query
   const {
-    data: itemsFromApi = [], // Default ke array kosong jika data belum ada
-    isLoading,
-    isError,
-    error,
+    data: adminInventories = [], // Default ke array kosong jika data belum ada
+    isLoading: isAdminInventoryLoading,
+    isError: isAdminInventoryError,
+    isRefetching: isAdminInventoryRefetching,
   } = useQuery({
     queryKey: ['adminInventory'], // Key unik untuk query ini
-    queryFn: api.getItems, // Fungsi untuk fetch data
+    queryFn: api.getInventories, // Fungsi untuk fetch data
   });
 
   // Gunakan dummy data jika items API kurang dari 2
-  const items = itemsFromApi.length >= 3 ? itemsFromApi : itemList;
+  const items = adminInventories.length >= 3 ? adminInventories : itemList;
 
-  const refetchItems = () => {
-    console.log('Refetching items...');
-    queryClient.invalidateQueries(['adminInventory']);
-  };
-
-  const mutation = useMutation({
-    mutationFn: api.addProduct, // Fungsi untuk menambahkan item
-    onSuccess: () => {
-      // Invalidasi query agar data terbaru di-refetch
-      refetchItems();
-      console.log('Product added successfully!');
-    },
-    onError: (error) => {
-      console.error('Error adding product:', error.message);
-    },
-  });
+  const { mutate: addProduct } = useAddNewProduct();
+  const { mutate: deleteProduct } = useDeleteProduct();
 
   const handleSearch = (e) => {
     setSearchInput(e.target.value);
@@ -77,7 +65,7 @@ export default function InventoryPage() {
 
   const handleAddItem = (e) => {
     e.preventDefault();
-    mutation.mutate(newItem);
+    addProduct(newItem);
     closeModal();
   };
 
@@ -90,19 +78,8 @@ export default function InventoryPage() {
   };
 
   const handleDeleteItem = (id) => {
-    // TODO: Tambahkan logika untuk menyinkronkan penghapusan dengan API (jika diperlukan)
-    console.log('Item Deleted:', id);
+    deleteProduct(id);
   };
-
-  // Saat data sedang dimuat
-  if (isLoading) {
-    return <div>Loading inventory data...</div>;
-  }
-
-  // Saat terjadi error
-  if (isError) {
-    return <div>Error fetching inventory: {error.message}</div>;
-  }
 
   // Filter data berdasarkan input pencarian
   const filteredItems = items.filter((item) =>
@@ -129,13 +106,21 @@ export default function InventoryPage() {
         />
       </div>
       <div className="flex flex-wrap gap-6 lg:gap-8 justify-center h-[84vh] lg:h-auto overflow-y-auto">
-        {filteredItems.map((item) => (
-          <InventoryItemCard
-            key={item.id}
-            item={item}
-            onDelete={() => handleDeleteItem(item.id)}
-          />
-        ))}
+        {isAdminInventoryLoading && <div>Loading...</div>}
+        {isAdminInventoryError && (
+          <div>Error fetching inventory: {isAdminInventoryError.message}</div>
+        )}
+        {isAdminInventoryRefetching && <div>Refetching...</div>}
+        {!isAdminInventoryLoading &&
+          !isAdminInventoryError &&
+          !isAdminInventoryRefetching &&
+          filteredItems.map((item) => (
+            <InventoryItemCard
+              key={item.id}
+              item={item}
+              onDelete={() => handleDeleteItem(item.id)}
+            />
+          ))}
       </div>
 
       <Modal
