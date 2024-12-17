@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   bestSellingList,
   dailySales,
+  guestItemList,
   itemList,
   monthlySales,
   recentTransactionList,
@@ -99,6 +100,15 @@ const api = (() => {
       }, 2000); // Simulasi delay 500ms
     });
   };
+
+  const getPublicItems = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const items = guestItemList;
+        resolve(items);
+      }, 2000);
+    });
+  }
 
   const toggleStoreStatus = async (currentStatus) => {
     return new Promise((resolve) => {
@@ -222,6 +232,7 @@ const api = (() => {
     getGuestItems,
     getItems,
     getStoreStatus,
+    getPublicItems,
     toggleStoreStatus,
     getSalesReport,
     getBestSellingItems,

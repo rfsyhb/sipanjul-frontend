@@ -7,13 +7,13 @@ import { useStoreStatus } from '../../hooks/useStoreStatus.';
 
 export default function LandingPage() {
   const {
-    data: itemsFromApi = [],
+    data: publicItems = [],
     isLoading,
     isError,
     error,
   } = useQuery({
     queryKey: ['guestInventory'],
-    queryFn: api.getGuestItems,
+    queryFn: api.getPublicItems,
   });
 
   const {
@@ -23,7 +23,7 @@ export default function LandingPage() {
     storeStatusError,
   } = useStoreStatus();
 
-  const items = itemsFromApi.length >= 3 ? itemsFromApi : guestItemList;
+  const items = publicItems;
 
   const riceList = items.filter((item) => item.type === 'beras');
   const otherList = items.filter((item) => item.type === 'lainnya');
