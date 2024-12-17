@@ -11,7 +11,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1, // Jumlah percobaan ulang
-      refetchOnWindowFocus: false, // Tidak refetch otomatis saat fokus ke window
+      refetchOnWindowFocus: true, // Tidak refetch otomatis saat fokus ke window
       staleTime: 5 * 60 * 1000, // Data fresh selama 5 menit
     },
   },
