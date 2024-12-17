@@ -120,7 +120,7 @@ const api = (() => {
         const salesData = {
           daily: dailySales,
           weekly: weeklySales,
-          monthly: monthlySales
+          monthly: monthlySales,
         };
         resolve(salesData);
       }, 2000);
@@ -140,10 +140,10 @@ const api = (() => {
     return new Promise((resolve) => {
       setTimeout(() => {
         const recentTransactions = recentTransactionList;
-        resolve(recentTransactions)
-      }, 2000)
-    })
-  }
+        resolve(recentTransactions);
+      }, 2000);
+    });
+  };
 
   // Cashier
   const getProducts = async () => {
@@ -152,17 +152,63 @@ const api = (() => {
         const products = itemList;
         resolve(products);
       }, 2000);
-    })
-  }
+    });
+  };
 
   const checkout = async (cartPayload) => {
     return new Promise((resolve) => {
       setTimeout(() => {
         console.log('Checkout:', cartPayload);
         resolve({ message: 'Checkout success' });
-      }, 2000)
-    })
-  }
+      }, 2000);
+    });
+  };
+
+  // Inventory
+  const getInventories = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const inventories = itemList;
+        resolve(inventories);
+      }, 2000);
+    });
+  };
+
+  const addNewProduct = async (newProduct) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log('Add product:', newProduct);
+        resolve({ message: 'Product added' });
+      }, 2000);
+    });
+  };
+
+  const editProductData = async (payload) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log('Edit product:', payload);
+        resolve({ message: 'Product updated' });
+      }, 2000);
+    });
+  };
+
+  const editProductStock = async (payload) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log('Edit product stock:', payload);
+        resolve({ message: 'Product stock updated' });
+      }, 2000);
+    });
+  };
+
+  const deleteProduct = async (productId) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log('Delete product:', productId);
+        resolve({ message: 'Product deleted' });
+      }, 2000);
+    });
+  };
 
   const addProduct = async (product) => {
     console.log(product);
@@ -182,6 +228,11 @@ const api = (() => {
     getRecentTransactions,
     getProducts,
     checkout,
+    getInventories,
+    addNewProduct,
+    editProductData,
+    editProductStock,
+    deleteProduct,
     addProduct,
   };
 })();
