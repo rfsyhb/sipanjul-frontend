@@ -1,9 +1,22 @@
 import React, { useState } from 'react';
 import { FaRegFrownOpen } from 'react-icons/fa';
 import CashierItemCard from '../components/cashierpage/CashierItemCard';
-import { itemList } from '../utils/dummyData';
+import { useQuery } from '@tanstack/react-query';
+import api from '../utils/api/api';
+import { useCheckout } from '../hooks/useCheckout';
 
 export default function CashierPage() {
+  const {
+    data: items = [],
+    isLoading: isItemsLoading,
+    isError: isItemsError,
+    isRefetching: isItemsRefetching,
+  } = useQuery({
+    queryKey: ['items'],
+    queryFn: api.getProducts,
+  })
+
+  const { mutate: checkout, isLoading: isCheckoutLoading } = useCheckout();
   const [cart, setCart] = useState([]);
   const [receivedMoney, setReceivedMoney] = useState('');
   const isEnoughMoney = receivedMoney >= cart.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -77,28 +90,37 @@ export default function CashierPage() {
     totalAmount: cartData.reduce((total, item) => total + item.price * item.quantity, 0),
   }
 
+  const handleCheckout = () => {
+    checkout(payload);
+    setCart([]);
+  }
+
   return (
     <div className="flex flex-col gap-2 lg:flex-row justify-between p-2 lg:p-4">
       {/* item list */}
       <div className="flex flex-wrap gap-1 lg:gap-4 h-[55vh] lg:h-full overflow-y-auto">
-        {itemList.map((item) => {
-          const cartItem = cart.find((cartItem) => cartItem.id === item.id);
-          const quantity = cartItem ? cartItem.quantity : 0;
-          // Disable button if quantity exceeds stock
-          const isDisabled = quantity >= item.stock;
+        {(isItemsLoading || isItemsRefetching) && <p>Loading...</p>}
+        {isItemsError && <p>Error fetching items</p>}
+        {!isItemsLoading &&
+          !isItemsError && !isItemsRefetching &&
+          items.map((item) => {
+            const cartItem = cart.find((cartItem) => cartItem.id === item.id);
+            const quantity = cartItem ? cartItem.quantity : 0;
+            // Disable button if quantity exceeds stock
+            const isDisabled = quantity >= item.stock;
 
-          return (
-            <CashierItemCard
-              key={item.id}
-              item={item}
-              quantity={quantity}
-              addToCart={() => addToCart(item)}
-              removeFromCart={() => removeFromCart(item.id)}
-              setQuantity={(value) => setQuantity(item.id, value)}
-              isDisabled={isDisabled} // Pass disabled state
-            />
-          );
-        })}
+            return (
+              <CashierItemCard
+                key={item.id}
+                item={item}
+                quantity={quantity}
+                addToCart={() => addToCart(item)}
+                removeFromCart={() => removeFromCart(item.id)}
+                setQuantity={(value) => setQuantity(item.id, value)}
+                isDisabled={isDisabled} // Pass disabled state
+              />
+            );
+          })}
       </div>
 
       {/* cashier */}
@@ -162,21 +184,21 @@ export default function CashierPage() {
                     value={receivedMoney}
                     className=" px-1 border rounded w-1/3"
                     onChange={(e) => setReceivedMoney(Number(e.target.value))}
-                    placeholder='uang'
+                    placeholder="uang"
                   />
                 </div>
                 <div className="flex flex-row justify-between">
                   <h3>Kembalian</h3>
-                  <p className={`${!isEnoughMoney && 'text-red-600'}`}>{changeMoney(receivedMoney)}</p>
+                  <p className={`${!isEnoughMoney && 'text-red-600'}`}>
+                    {changeMoney(receivedMoney)}
+                  </p>
                 </div>
               </div>
               {/* Check out button to alert object of cart */}
               <div>
                 <button
                   className="bg-actionBtn text-white text-xs py-1 px-2 rounded w-full hover:bg-activeBtn group"
-                  onClick={() => {
-                    alert(JSON.stringify(payload, null, 2));
-                  }}
+                  onClick={handleCheckout}
                 >
                   <span className="font-medium text-lg group-hover:text-inactiveBtn">
                     Check Out

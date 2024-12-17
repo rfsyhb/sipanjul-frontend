@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   bestSellingList,
   dailySales,
+  itemList,
   monthlySales,
   recentTransactionList,
   weeklySales,
@@ -112,6 +113,7 @@ const api = (() => {
     });
   };
 
+  // Homepage
   const getSalesReport = async () => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -143,6 +145,25 @@ const api = (() => {
     })
   }
 
+  // Cashier
+  const getProducts = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const products = itemList;
+        resolve(products);
+      }, 2000);
+    })
+  }
+
+  const checkout = async (cartPayload) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log('Checkout:', cartPayload);
+        resolve({ message: 'Checkout success' });
+      }, 2000)
+    })
+  }
+
   const addProduct = async (product) => {
     console.log(product);
   };
@@ -159,6 +180,8 @@ const api = (() => {
     getSalesReport,
     getBestSellingItems,
     getRecentTransactions,
+    getProducts,
+    checkout,
     addProduct,
   };
 })();
