@@ -150,6 +150,7 @@
 `PUT` /opr/product/update-stock/:id __sent__
 {
   "stock": Number,
+  "desc": String,
   "isNegative": Boolean,
 }
 
