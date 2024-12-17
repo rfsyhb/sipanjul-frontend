@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   bestSellingList,
+  chartData,
   dailySales,
   guestItemList,
   itemList,
@@ -220,6 +221,16 @@ const api = (() => {
     });
   };
 
+  // Chart
+  const getSalesStatistic = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const salesStatistic = chartData;
+        resolve(salesStatistic);
+      }, 2000)
+    })
+  }
+
   const addProduct = async (product) => {
     console.log(product);
   };
@@ -244,6 +255,7 @@ const api = (() => {
     editProductData,
     editProductStock,
     deleteProduct,
+    getSalesStatistic,
     addProduct,
   };
 })();

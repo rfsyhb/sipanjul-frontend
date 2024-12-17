@@ -173,7 +173,7 @@
 {}
 
 `GET` /opr/sales-statistic *received*
-{
+[
   {
     period: "harian",
     data: [
@@ -222,7 +222,7 @@
       }
     ]
   },
-}
+]
 
 # Need update
 /opr/inventory
