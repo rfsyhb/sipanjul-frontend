@@ -1,4 +1,11 @@
 import axios from 'axios';
+import {
+  bestSellingList,
+  dailySales,
+  monthlySales,
+  recentTransactionList,
+  weeklySales,
+} from '../dummyData';
 
 const api = (() => {
   const BASE_URL = 'https://backend-sipanjul.vercel.app';
@@ -81,7 +88,7 @@ const api = (() => {
     return response.data;
   };
 
-  // Placeholder
+  // Mock API
   const getStoreStatus = async () => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -105,6 +112,37 @@ const api = (() => {
     });
   };
 
+  const getSalesReport = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const salesData = {
+          daily: dailySales,
+          weekly: weeklySales,
+          monthly: monthlySales
+        };
+        resolve(salesData);
+      }, 2000);
+    });
+  };
+
+  const getBestSellingItems = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const items = bestSellingList;
+        resolve(items);
+      }, 2000);
+    });
+  };
+
+  const getRecentTransactions = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const recentTransactions = recentTransactionList;
+        resolve(recentTransactions)
+      }, 2000)
+    })
+  }
+
   const addProduct = async (product) => {
     console.log(product);
   };
@@ -118,6 +156,9 @@ const api = (() => {
     getItems,
     getStoreStatus,
     toggleStoreStatus,
+    getSalesReport,
+    getBestSellingItems,
+    getRecentTransactions,
     addProduct,
   };
 })();
