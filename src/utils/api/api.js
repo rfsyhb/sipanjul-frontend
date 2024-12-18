@@ -109,7 +109,7 @@ const api = (() => {
         resolve(items);
       }, 2000);
     });
-  }
+  };
 
   const toggleStoreStatus = async (currentStatus) => {
     return new Promise((resolve) => {
@@ -227,9 +227,34 @@ const api = (() => {
       setTimeout(() => {
         const salesStatistic = chartData;
         resolve(salesStatistic);
-      }, 2000)
-    })
-  }
+      }, 2000);
+    });
+  };
+
+  // Report
+  const getReportData = async (payload) => {
+    if (payload.data === 'perubahan') {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          console.log('Get perubahan report:', payload);
+          resolve({ message: 'Report fetched for perubahan' });
+        }, 2000);
+      });
+    }
+
+    if (payload.data === 'penjualan') {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          console.log('Get penjualan report:', payload);
+          resolve({ message: 'Report fetched for penjualan' });
+        }, 2000);
+      });
+    }
+
+    return new Promise((resolve, reject) => {
+      reject(new Error('Invalid data type'));
+    });
+  };
 
   const addProduct = async (product) => {
     console.log(product);
@@ -256,6 +281,7 @@ const api = (() => {
     editProductStock,
     deleteProduct,
     getSalesStatistic,
+    getReportData,
     addProduct,
   };
 })();
