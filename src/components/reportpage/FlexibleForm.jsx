@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import api from '../../utils/api/api';
 
 export default function FlexibleForm({ onSearch }) {
   const [startDate, setStartDate] = useState('');
@@ -120,7 +121,10 @@ export default function FlexibleForm({ onSearch }) {
       </form>
 
       {/* Print Button */}
-      <button className="p-2 bg-actionBtn border border-actionBtn hover:bg-activeBtn text-white rounded">
+      <button
+        className="p-2 bg-actionBtn border border-actionBtn hover:bg-activeBtn text-white rounded"
+        onClick={api.customCetakExcel}
+      >
         Cetak
       </button>
     </div>

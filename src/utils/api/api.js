@@ -9,6 +9,7 @@ import {
   recentTransactionList,
   weeklySales,
 } from '../dummyData';
+import { saveAs } from 'file-saver';
 
 const api = (() => {
   const BASE_URL = 'https://backend-sipanjul.vercel.app';
@@ -260,6 +261,40 @@ const api = (() => {
     console.log(product);
   };
 
+  // test
+  const customCetakExcel = async () => {
+    const payload = {
+      startdate: '2024-12-18',
+      enddate: '2024-12-19',
+      divisi: 'Komersil',
+    }
+    
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/opr/print-report`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`,
+            'Content-Type': 'application/json',
+          },
+          responseType: 'blob',
+        }
+      );
+
+      // extract
+      const contentDisposition = response.headers['content-disposition'];
+      const filename = contentDisposition
+        ? contentDisposition.split('filename=')[1].replace(/"/g, '')
+        : `${payload.startdate} to ${payload.enddate} report.xlsx`;
+      
+      // save file
+      saveAs(response.data, filename);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   return {
     getAccessToken,
     putAccessToken,
@@ -283,6 +318,7 @@ const api = (() => {
     getSalesStatistic,
     getReportData,
     addProduct,
+    customCetakExcel
   };
 })();
 
