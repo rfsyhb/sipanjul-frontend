@@ -10,6 +10,7 @@ import {
   weeklySales,
 } from '../dummyData';
 import { saveAs } from 'file-saver';
+import axiosRetry from 'axios-retry';
 
 const api = (() => {
   const BASE_URL = 'https://backend-sipanjul.vercel.app';
@@ -21,27 +22,40 @@ const api = (() => {
     },
   });
 
-  instance.interceptors.request.use(
+  // Retry request jika gagal
+  axiosRetry(instance, {
+    retries: 3,
+    retryCondition: (error) => {
+      return (
+        axiosRetry.isNetworkOrIdempotentRequestError(error) ||
+        error.code === 'ECONNABORTED' ||
+        error.response?.data?.message === 'FUNCTION_INVOCATION_TIMEOUT'
+      );
+    },
+    retryDelay: (retryCount) => retryCount * 1000,
+  });
+
+  // Global interceptor untuk handle error
+  instance.interceptors.response.use(
     (response) => response,
     (error) => {
       if (error.response) {
         const { status, data } = error.response;
+
         if (
           status === 401 &&
-          [
-            'Token has expired',
-            'Token is no longer valid',
-            'Invalid token',
-          ].includes(data.message)
+          ['unauthorized'].includes(data.error) // Menyesuaikan dengan struktur JSON
         ) {
+          alert('Unauthorized, silahkan login ulang...');
           clearAccessToken();
-          navigate('/login'); // Sesuaikan `navigate` agar sesuai dengan context.
+          window.location.href = '/login';
         }
       }
       return Promise.reject(error);
     }
   );
 
+  // Fungsi untuk melakukan request ke API
   const apiRequest = async (method, endpoint, data) => {
     try {
       const response = await instance({
@@ -61,13 +75,19 @@ const api = (() => {
       }
       return responseData;
     } catch (error) {
-      throw new Error(
-        error.message || 'Something went wrong (throwed from apiRequest)'
-      );
+      if (error.response) {
+        throw new Error(
+          error.response.data.message || 'An error occurred on the server'
+        );
+      } else if (error.request) {
+        throw new Error('No response received from the server');
+      } else {
+        throw new Error(error.message || 'Unexpected error');
+      }
     }
   };
 
-  // Authorization
+  // Fungsi untuk mengelola access token di local storage
   const getAccessToken = () => localStorage.getItem('accessToken');
   const putAccessToken = (accessToken) =>
     localStorage.setItem('accessToken', accessToken);
@@ -84,25 +104,166 @@ const api = (() => {
     return response.data;
   };
 
-  const getItems = async () => {
-    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
-    const response = await apiRequest('GET', '/opr/inventory');
+  const getStoreStatus = async () => {
+    const response = await apiRequest('GET', '/store-status/1')
+    return response.storestatus;
+  }
 
-    // Return hanya data penting agar Tanstack Query langsung mendapatkan hasil yang dibutuhkan
-    return response.data;
+  // OPERATORS
+  const oprVerifyToken = async () => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('GET', '/opr/verify-token');
+    return response;
   };
+
+  const oprToggleStoreStatus = async (currentStatus) => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('POST', '/opr/store-status', {
+      storestatus: !currentStatus,
+    });
+
+    return response.status;
+  }
+
+  /**
+   * Page: Homepage
+   */
+  const oprGetSalesReport = async () => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('GET', '/opr/sales-report');
+
+    const payload = response.message?.bulanan ? response.message : response.data;
+    return payload;
+  }
+
+  const oprGetBestSellingItem = async () => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('GET', '/opr/best-selling-product');
+
+    const payload = response.message[0].id ? response.message : response.data;
+    return payload;
+  }
+
+  const oprGetRecentTransaction = async () => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('GET', '/opr/recent-transaction');
+
+    const payload = response.message[0]?.name ? response.message : response.data;
+    return payload;
+  }
+
+  /**
+   * Page: Cashier
+   */
+  const oprCheckout = async (cartPayload) => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('POST', '/opr/checkout', cartPayload);
+
+    return response.status;
+  }
+
+  /**
+   * Page: Inventory
+   */
+  const oprGetProduct = async () => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('GET', '/opr/product');
+
+    const payload = response.message[0]?.id ? response.message : response.data;
+    return payload;
+  }
+
+  const oprAddProduct = async (productData) => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('POST', '/opr/product', productData);
+
+    return response.status;
+  }
+
+  const oprEditProduct = async (productData) => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('PUT', `opr/product/${productData.id}`, productData);
+
+    return response.status;
+  }
+
+  const oprEditProductStock = async (productData) => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('PUT', `opr/product/update-stock/${productData.id}`, productData);
+
+    return response.status;
+  }
+
+  const oprDeleteProduct = async (productId) => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('DELETE', `opr/product/${productId}`);
+
+    return response.status;
+  }
+
+  /**
+   * Page: Report
+   */
+  const oprGetReport = async (reportPayload) => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const payload = {
+      data: reportPayload.data, // 'perubahan' atau 'penjualan'
+      startdate: reportPayload.startdate,
+      enddate: reportPayload.enddate,
+      divisi: reportPayload.divisi || "",
+      detail: reportPayload.detail || "",
+    }
+    
+    const response = await apiRequest('POST', '/opr/report', payload);
+    const responsePayload = response.message[0]?.id ? response.message : response.data;
+    return responsePayload;
+  }
+
+  const oprPrintReport = async (reportPayload) => {
+    const payload = {
+      startdate: reportPayload.startdate,
+      enddate: reportPayload.enddate
+    }
+    
+    try {
+      // Configure headers and make the request
+      const response = await axios.post(
+        `${BASE_URL}/opr/print-report`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`,
+            'Content-Type': 'application/json',
+          },
+          responseType: 'blob', // Expect a blob response
+        }
+      );
+
+      // Extract filename from Content-Disposition header
+      const contentDisposition = response.headers['content-disposition'];
+      const filename = contentDisposition
+        ? contentDisposition.split('filename=')[1].replace(/"/g, '')
+        : `${reportPayload.startdate} to ${reportPayload.enddate} report.xlsx`;
+
+      // Save the file using FileSaver
+      saveAs(response.data, filename);
+    } catch (error) {
+      console.error('Error while generating report:', error);
+    }
+  };
+
+  /**
+   * Page: Chart
+   */
+  const oprGetSalesStatistic = async () => {
+    instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const response = await apiRequest('GET', '/opr/sales-statistic');
+
+    const payload = response.message[0]?.bulanan ? response.message : response.data;
+    return payload;
+  }
 
   // Mock API
-  const getStoreStatus = async () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const storeStatus = true; // Placeholder status toko
-        console.log('Fetched store status:', storeStatus);
-        resolve(storeStatus);
-      }, 2000); // Simulasi delay 500ms
-    });
-  };
-
   const getPublicItems = async () => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -112,18 +273,18 @@ const api = (() => {
     });
   };
 
-  const toggleStoreStatus = async (currentStatus) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const updatedStatus = !currentStatus; // Toggle status
-        console.log('Toggled store status:', updatedStatus);
-        resolve({
-          status: updatedStatus,
-          message: 'Store status updated successfully',
-        });
-      }, 500); // Simulasi delay 500ms
-    });
-  };
+    const toggleStoreStatus = async (currentStatus) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const updatedStatus = !currentStatus; // Toggle status
+          console.log('Toggled store status:', updatedStatus);
+          resolve({
+            status: updatedStatus,
+            message: 'Store status updated successfully',
+          });
+        }, 500); // Simulasi delay 500ms
+      });
+    };
 
   // Homepage
   const getSalesReport = async () => {
@@ -267,8 +428,8 @@ const api = (() => {
       startdate: '2024-12-18',
       enddate: '2024-12-19',
       divisi: 'Komersil',
-    }
-    
+    };
+
     try {
       const response = await axios.post(
         `${BASE_URL}/opr/print-report`,
@@ -287,7 +448,7 @@ const api = (() => {
       const filename = contentDisposition
         ? contentDisposition.split('filename=')[1].replace(/"/g, '')
         : `${payload.startdate} to ${payload.enddate} report.xlsx`;
-      
+
       // save file
       saveAs(response.data, filename);
     } catch (error) {
@@ -296,13 +457,30 @@ const api = (() => {
   };
 
   return {
+    // Token management
     getAccessToken,
     putAccessToken,
     clearAccessToken,
+    // Public API
     login,
     getGuestItems,
-    getItems,
     getStoreStatus,
+    // OPERATORS
+    oprVerifyToken,
+    oprToggleStoreStatus,
+    oprGetSalesReport,
+    oprGetBestSellingItem,
+    oprGetRecentTransaction,
+    oprCheckout,
+    oprGetProduct,
+    oprAddProduct,
+    oprEditProduct,
+    oprEditProductStock,
+    oprDeleteProduct,
+    oprGetReport,
+    oprPrintReport,
+    oprGetSalesStatistic,
+    // Mock API
     getPublicItems,
     toggleStoreStatus,
     getSalesReport,
@@ -318,7 +496,7 @@ const api = (() => {
     getSalesStatistic,
     getReportData,
     addProduct,
-    customCetakExcel
+    customCetakExcel,
   };
 })();
 
