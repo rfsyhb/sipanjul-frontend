@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import api from '../../utils/api/api';
 
 export default function BestSellingCard({ notify }) {
-  const [activeButton, setActiveButton] = useState('Mingguan');
+  const [activeButton, setActiveButton] = useState('mingguan');
   const {
     data: bestSellingProducts = {},
     isLoading: isBestSellingLoading,
@@ -21,12 +21,10 @@ export default function BestSellingCard({ notify }) {
     notify(`${label} clicked`);
   };
 
-  // const selectedItems =
-  //   activeButton === 'Mingguan'
-  //     ? bestSellingProducts?.weekly || []
-  //     : bestSellingProducts?.monthly || [];
-
-  const selectedItems = bestSellingProducts
+  const selectedItems =
+    activeButton === 'mingguan'
+      ? bestSellingProducts?.mingguan || []
+      : bestSellingProducts?.bulanan || [];
 
   return (
     <section className="flex flex-col rounded-2xl bg-white w-auto p-2 lg:p-4 gap-2 flex-shrink-0">
@@ -34,23 +32,23 @@ export default function BestSellingCard({ notify }) {
       <div className="flex flex-row items-center justify-between w-full">
         <h2 className="text-base lg:text-lg font-medium">
           Barang Terlaris{' '}
-          {activeButton === 'Mingguan' ? (
-            <span className="text-xs lg:text-sm">(weekly)</span>
+          {activeButton === 'mingguan' ? (
+            <span className="text-xs lg:text-sm">(mingguan)</span>
           ) : (
-            <span className="text-sm">(monthly)</span>
+            <span className="text-sm">(bulanan)</span>
           )}
         </h2>
         {/* 2 button */}
         <div className="flex flex-row gap-2">
           <ToggleButton
-            label="Mingguan"
-            isActive={activeButton === 'Mingguan'}
-            onClick={() => handleClick('Mingguan')}
+            label="mingguan"
+            isActive={activeButton === 'mingguan'}
+            onClick={() => handleClick('mingguan')}
           />
           <ToggleButton
-            label="Bulanan"
-            isActive={activeButton === 'Bulanan'}
-            onClick={() => handleClick('Bulanan')}
+            label="bulanan"
+            isActive={activeButton === 'bulanan'}
+            onClick={() => handleClick('bulanan')}
           />
         </div>
       </div>
