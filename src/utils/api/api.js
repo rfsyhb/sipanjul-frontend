@@ -138,7 +138,7 @@ const api = (() => {
 
   const oprGetBestSellingItem = async () => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
-    const response = await apiRequest('GET', '/opr/best-selling-product');
+    const response = await apiRequest('GET', '/opr/bestselling-product');
 
     const payload = response.message[0].id ? response.message : response.data;
     return payload;

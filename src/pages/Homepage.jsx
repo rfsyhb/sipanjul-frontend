@@ -11,7 +11,7 @@ import api from '../utils/api/api';
 
 export default function Homepage() {
   const isMobile = useIsMobile(768);
-  const [selectedPeriod, setSelectedPeriod] = useState('daily');
+  const [selectedPeriod, setSelectedPeriod] = useState('harian');
 
   // Fetch sales data
   const {
@@ -20,7 +20,7 @@ export default function Homepage() {
     isError: isSalesDataError,
   } = useQuery({
     queryKey: ['salesData'],
-    queryFn: api.getSalesReport,
+    queryFn: api.oprGetSalesReport,
   });
 
   const toastOptions = {
@@ -42,7 +42,7 @@ export default function Homepage() {
       {/* Desktop View */}
       {!isMobile && (
         <section className="flex flex-row gap-2 lg:gap-4">
-          {['daily', 'weekly', 'monthly'].map((period, index) => {
+          {['harian', 'mingguan', 'bulanan'].map((period, index) => {
             const data = salesDataObject[period] || {};
             return (
               <div
@@ -101,9 +101,9 @@ export default function Homepage() {
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value)}
               >
-                <option value="daily">Penjualan Harian</option>
-                <option value="weekly">Penjualan Mingguan</option>
-                <option value="monthly">Penjualan Bulanan</option>
+                <option value="harian">Penjualan Harian</option>
+                <option value="mingguan">Penjualan Mingguan</option>
+                <option value="bulanan">Penjualan Bulanan</option>
               </select>
             </div>
             <div className="bg-green-300 p-1 rounded-full">

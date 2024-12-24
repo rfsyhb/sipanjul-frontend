@@ -13,7 +13,7 @@ export default function BestSellingCard({ notify }) {
     isError: isBestSellingError,
   } = useQuery({
     queryKey: ['bestSellingProducts'],
-    queryFn: api.getBestSellingItems,
+    queryFn: api.oprGetBestSellingItem,
   });
 
   const handleClick = (label) => {
@@ -21,10 +21,12 @@ export default function BestSellingCard({ notify }) {
     notify(`${label} clicked`);
   };
 
-  const selectedItems =
-    activeButton === 'Mingguan'
-      ? bestSellingProducts?.weekly || []
-      : bestSellingProducts?.monthly || [];
+  // const selectedItems =
+  //   activeButton === 'Mingguan'
+  //     ? bestSellingProducts?.weekly || []
+  //     : bestSellingProducts?.monthly || [];
+
+  const selectedItems = bestSellingProducts
 
   return (
     <section className="flex flex-col rounded-2xl bg-white w-auto p-2 lg:p-4 gap-2 flex-shrink-0">

@@ -12,7 +12,7 @@ export default function RecentTransaction() {
     isRefetching: isRecentTransactionRefetching,
   } = useQuery({
     queryKey: ['recentTransactions'],
-    queryFn: api.getRecentTransactions,
+    queryFn: api.oprGetRecentTransaction,
   });
 
   return (
@@ -44,18 +44,18 @@ export default function RecentTransaction() {
                     {item.name}
                   </td>
                   <td className="border-b px-4 py-2 lg:text-base text-xs">
-                    {item.qty}
+                    {item.quantity}
                   </td>
                   <td className="border-b px-4 py-2 lg:text-base text-xs">
                     Rp {item.total.toLocaleString()}
                   </td>
                   <td className="border-b px-4 py-2 lg:text-base text-xs">
-                    {new Date(item.datetime).toLocaleDateString('id-ID', {
+                    {new Date(item.date).toLocaleDateString('id-ID', {
                       day: '2-digit',
                       month: 'long',
                       year: 'numeric',
                     })}{' '}
-                    {new Date(item.datetime).toLocaleTimeString('id-ID', {
+                    {new Date(item.date).toLocaleTimeString('id-ID', {
                       hour: '2-digit',
                       minute: '2-digit',
                     })}
