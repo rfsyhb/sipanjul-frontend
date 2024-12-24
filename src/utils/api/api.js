@@ -100,14 +100,14 @@ const api = (() => {
   };
 
   const getGuestItems = async () => {
-    const response = await apiRequest('GET', '/inventory');
+    const response = await apiRequest('GET', '/product');
     return response.data;
   };
 
   const getStoreStatus = async () => {
-    const response = await apiRequest('GET', '/store-status/1')
+    const response = await apiRequest('GET', '/store-status/1');
     return response.storestatus;
-  }
+  };
 
   // OPERATORS
   const oprVerifyToken = async () => {

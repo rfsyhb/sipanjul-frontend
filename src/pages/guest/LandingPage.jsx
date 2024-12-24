@@ -13,20 +13,23 @@ export default function LandingPage() {
     error,
   } = useQuery({
     queryKey: ['guestInventory'],
-    queryFn: api.getPublicItems,
+    queryFn: api.getGuestItems,
   });
 
   const {
     data: storeStatus = false,
-    isStoreStatusLoading,
-    isStoreStatusError,
-    storeStatusError,
-  } = useStoreStatus();
+    isLoading: isStoreStatusLoading,
+    isError: isStoreStatusError,
+    error: storeStatusError,
+  } = useQuery({
+    queryKey: ['storeStatus'],
+    queryFn: api.getStoreStatus
+  })
 
   const items = publicItems;
 
-  const riceList = items.filter((item) => item.type === 'beras');
-  const otherList = items.filter((item) => item.type === 'lainnya');
+  const riceList = items.filter((item) => item.type === 'Beras');
+  const otherList = items.filter((item) => item.type === 'Lainnya');
   const navigate = useNavigate();
 
   const onClick = () => {
