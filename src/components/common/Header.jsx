@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStoreStatus } from '../../hooks/useStoreStatus.';
 import { useUpdateStoreStatus } from '../../hooks/useUpdateStoreStatus';
+import { useQuery } from '@tanstack/react-query';
+import api from '../../utils/api/api';
 
 // Setting the app element for accessibility
 Modal.setAppElement('#root');
@@ -12,22 +14,32 @@ Modal.setAppElement('#root');
 export default function Header() {
   const {
     data: storeStatus,
-    isStoreStatusLoading,
-    isStoreStatusError,
-    storeStatusError,
-  } = useStoreStatus();
+    isLoading: isStoreStatusLoading,
+    isError: isStoreStatusError,
+    error: storeStatusError,
+  } = useQuery({
+    queryKey: ['storeStatus'],
+    queryFn: api.getStoreStatus,
+  });
+
   const { mutate: updateStatus, isLoading: isUpdating } =
     useUpdateStoreStatus();
 
   const toggleStoreStatus = () => {
     console.log('Current status:', storeStatus);
-    updateStatus(storeStatus);
 
-    if (storeStatus) {
-      toast.success('Toko telah dibuka!', toastOptions);
-    } else {
-      toast.error('Toko telah ditutup!', toastOptions);
-    }
+    updateStatus(storeStatus, {
+      onSuccess: () => {
+        if (!storeStatus) {
+          toast.success('Toko telah dibuka!', toastOptions);
+        } else {
+          toast.error('Toko telah ditutup!', toastOptions);
+        }
+      },
+      onError: (error) => {
+        toast.error(`Terjadi kesalahan: ${error.message}`, toastOptions);
+      },
+    });
 
     setIsModalOpen(false);
   };
@@ -98,7 +110,7 @@ export default function Header() {
       >
         <h2 className="text-lg font-semibold mb-4">
           Apakah anda ingin{' '}
-          {storeStatus ? (
+          {!storeStatus ? (
             <span className="font-bold text-green-800 bg-green-200 px-1 rounded-sm">
               membuka
             </span>

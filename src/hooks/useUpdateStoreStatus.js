@@ -5,9 +5,9 @@ export const useUpdateStoreStatus = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (currentStatus) => api.toggleStoreStatus(currentStatus),
+    mutationFn: (currentStatus) => api.oprToggleStoreStatus(currentStatus),
     onSuccess: (data) => {
-      console.log(`Store status updated: ${data.status}`);
+      console.log(`Store status updated: ${data.storestatus}`);
       queryClient.invalidateQueries({ queryKey: ['storeStatus'] });
     },
     onError: (error) => {
