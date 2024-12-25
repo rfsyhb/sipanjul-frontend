@@ -56,13 +56,17 @@ export default function ChartPage() {
     data: chartData = [],
     isLoading,
     isError,
+    error,
   } = useQuery({
     queryKey: ['chartData'],
-    queryFn: api.getSalesStatistic,
+    queryFn: api.oprGetSalesStatistic,
   });
 
   if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error fetching data</p>;
+  if (isError) {
+    console.log('Error fetching data', error);
+    return <p>Error fetching data</p>;
+  };
   if (!Array.isArray(chartData)) return <p>Invalid data format</p>;
 
   return (

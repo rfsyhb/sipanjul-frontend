@@ -36,7 +36,6 @@ const api = (() => {
     retryDelay: (retryCount) => retryCount * 1000, // Exponential backoff delay
   });
 
-
   // Global interceptor untuk handle error
   instance.interceptors.response.use(
     (response) => response,
@@ -204,7 +203,7 @@ const api = (() => {
       stock: productData.stock,
       desc: productData.description,
       isNegative: productData.isNegative,
-    }
+    };
     const response = await apiRequest(
       'PUT',
       `opr/product/update-stock/${productData.id}`,
@@ -280,12 +279,17 @@ const api = (() => {
   const oprGetSalesStatistic = async () => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
     const response = await apiRequest('GET', '/opr/sales-statistic');
+    console.log(response); // Debugging response data
+    const responseData = response.data;
 
-    const payload = response.message[0]?.bulanan
-      ? response.message
-      : response.data;
-    return payload;
+    return [
+      { period: 'harian', data: responseData.harian },
+      { period: 'mingguan', data: responseData.mingguan },
+      { period: 'bulanan', data: responseData.bulanan },
+      { period: 'tahunan', data: responseData.tahunan },
+    ];
   };
+
 
   // Mock API
   const getPublicItems = async () => {
