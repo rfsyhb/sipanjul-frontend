@@ -86,52 +86,54 @@ export default function FlexibleTable({ data, selectedData }) {
   }
 
   return (
-    <table
-      {...getTableProps()}
-      className="w-full border border-black border-collapse"
-    >
-      <thead className="border border-black">
-        {headerGroups.map((headerGroup) => (
-          <tr
-            {...headerGroup.getHeaderGroupProps()}
-            key={headerGroup.id}
-            className="border border-black"
-          >
-            {headerGroup.headers.map((column) => (
-              <th
-                {...column.getHeaderProps(column.getSortByToggleProps())}
-                key={column.id}
-                className="border border-black p-2"
-              >
-                {column.render('Header')}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()} className="border border-black">
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
+    <div className="overflow-x-auto">
+      <table
+        {...getTableProps()}
+        className="w-full border border-black border-collapse text-sm md:text-base"
+      >
+        <thead className="border border-black">
+          {headerGroups.map((headerGroup) => (
             <tr
-              {...row.getRowProps()}
-              key={row.id}
-              className="border border-black"
+              {...headerGroup.getHeaderGroupProps()}
+              key={headerGroup.id}
+              className="border border-black bg-gray-100"
             >
-              {row.cells.map((cell) => (
-                <td
-                  {...cell.getCellProps()}
-                  key={cell.column.id}
-                  className="border border-black p-2"
+              {headerGroup.headers.map((column) => (
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  key={column.id}
+                  className="border border-black p-1 md:p-2 text-left"
                 >
-                  {cell.render('Cell')}
-                </td>
+                  {column.render('Header')}
+                </th>
               ))}
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()} className="border border-black">
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr
+                {...row.getRowProps()}
+                key={row.id}
+                className="border border-black hover:bg-gray-50"
+              >
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps()}
+                    key={cell.column.id}
+                    className="border border-black p-1 md:p-2"
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }
 

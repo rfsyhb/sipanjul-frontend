@@ -38,11 +38,11 @@ export default function Sidebar({ currentPath }) {
       )}
 
       <aside
-        className={`text-text flex flex-col ${isMobile ? 'w-12 bg-none h-auto' : ''} mt-14 md:mt-0 md:p-4 md:py-2 md:gap-4 items-center ${
+        className={`text-text flex flex-col ${isMobile ? 'w-12 bg-none h-auto' : ''} ${!isOpen ? 'hidden' : ''} mt-14 md:mt-0 md:p-4 md:py-2 md:gap-4 items-center ${
           isMobile
             ? 'fixed top-0 right-0 h-full z-40 transition-transform transform'
             : ''
-        } ${isMobile ? (isOpen ? 'translate-x-0' : 'translate-x-full') : ''}`}
+        } ${isMobile ? (isOpen ? 'translate-x-0 block' : 'translate-x-full') : ''}`}
       >
         {/* if desktop */}
         {!isMobile && (

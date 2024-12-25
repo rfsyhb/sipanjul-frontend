@@ -8,32 +8,38 @@ import api from '../utils/api/api';
 export default function ReportPage() {
   const [tableData, setTableData] = useState([]);
   const [selectedData, setSelectedData] = useState('');
+  const [isTableCleared, setIsTableCleared] = useState(false); // Track if table is cleared
 
-  // Mutation untuk mengambil data berdasarkan input form
+  // Mutation for fetching data based on form input
   const mutation = useMutation({
-    mutationFn: (payload) => api.oprGetReport(payload), // Panggil API dengan payload
+    mutationFn: (payload) => {
+      setIsTableCleared(true); // Mark table as cleared
+      setTableData([]); // Clear table data
+      return api.oprGetReport(payload);
+    }, // Call API with the payload
     onSuccess: (data) => {
-      setTableData(data || []); // Update data ke tabel
+      setIsTableCleared(false); // Fetch complete, reset state
+      setTableData(data || []); // Update table with fetched data
     },
     onError: (error) => {
+      setIsTableCleared(false); // Fetch failed, reset state
       console.error('Error fetching report data:', error);
     },
   });
 
-  // Fungsi untuk menghandle pencarian dari FlexibleForm
+  // Handle search from FlexibleForm
   const handleOnSearch = (formData) => {
-    // console.log('Form submitted with payload:', formData);
-    setSelectedData(formData.data); // Simpan jenis data yang dipilih
-    mutation.mutate(formData); // Kirim formData ke server melalui mutation
+    setSelectedData(formData.data); // Save selected data type
+    mutation.mutate(formData); // Send formData to the server via mutation
   };
 
   return (
-    <div className="p-4 flex flex-col gap-4 h-full">
-      {/* FlexibleForm memanggil handleOnSearch saat pengguna mencari */}
+    <div className="p-4 flex flex-col gap-4 h-full w-full">
+      {/* FlexibleForm calls handleOnSearch when the user submits */}
       <FlexibleForm onSearch={handleOnSearch} />
 
-      {/* Tampilkan loading, error, atau tabel data */}
-      {mutation.isLoading ? (
+      {/* Show loading, error, or table data */}
+      {mutation.isLoading || isTableCleared ? (
         <div className="flex flex-col items-center h-full justify-center">
           <p>Loading...</p>
         </div>

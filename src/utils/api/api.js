@@ -15,7 +15,7 @@ import axiosRetry from 'axios-retry';
 const api = (() => {
   const BASE_URL = 'https://backend-sipanjul.vercel.app';
 
-    // Retry request jika gagal
+  // Retry request jika gagal
   axiosRetry(axios, {
     retries: 10,
     retryCondition: (error) => {
@@ -34,6 +34,20 @@ const api = (() => {
     headers: {
       'Content-Type': 'application/json',
     },
+  });
+
+  // Retry request jika gagal
+  axiosRetry(instance, {
+    retries: 10,
+    retryCondition: (error) => {
+      return (
+        axiosRetry.isNetworkOrIdempotentRequestError(error) || // Network errors
+        error.code === 'ECONNABORTED' || // Request aborted (timeout)
+        error.response?.status === 504 || // Explicitly handle 504 Gateway Timeout
+        error.response?.data?.message === 'FUNCTION_INVOCATION_TIMEOUT' // Custom error message
+      );
+    },
+    retryDelay: (retryCount) => retryCount * 1000, // Exponential backoff delay
   });
 
   // Global interceptor untuk handle error
@@ -289,7 +303,6 @@ const api = (() => {
       { period: 'tahunan', data: responseData.tahunan },
     ];
   };
-
 
   // Mock API
   const getPublicItems = async () => {
