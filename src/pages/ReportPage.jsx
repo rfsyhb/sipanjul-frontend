@@ -11,7 +11,7 @@ export default function ReportPage() {
 
   // Mutation untuk mengambil data berdasarkan input form
   const mutation = useMutation({
-    mutationFn: (payload) => api.getReportData(payload), // Panggil API dengan payload
+    mutationFn: (payload) => api.oprGetReport(payload), // Panggil API dengan payload
     onSuccess: (data) => {
       setTableData(data || []); // Update data ke tabel
     },
@@ -22,7 +22,7 @@ export default function ReportPage() {
 
   // Fungsi untuk menghandle pencarian dari FlexibleForm
   const handleOnSearch = (formData) => {
-    console.log('Form submitted with payload:', formData);
+    // console.log('Form submitted with payload:', formData);
     setSelectedData(formData.data); // Simpan jenis data yang dipilih
     mutation.mutate(formData); // Kirim formData ke server melalui mutation
   };

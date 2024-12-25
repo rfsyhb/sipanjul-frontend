@@ -34,13 +34,11 @@ export default function FlexibleForm({ onSearch }) {
   const handleSearch = (e) => {
     e.preventDefault();
     const objectToSent = {
-      startDate,
-      endDate,
-      division: selectedDivision,
       data: selectedData,
-      ...(selectedData === 'perubahan' && {
-        detail: selectedDetail,
-      }),
+      startdate: startDate,
+      enddate: endDate,
+      divisi: selectedDivision === 'semua' ? '' : ( selectedData === 'perubahan' ? '' : selectedDivision ),
+      detail: selectedData === 'perubahan' ? (selectedDetail === 'semua' ? '' : selectedDetail) : '',
     };
 
     // Use function from parent to update state with collected data
@@ -78,8 +76,8 @@ export default function FlexibleForm({ onSearch }) {
         >
           <option value="">Pilih Divisi</option>
           <option value="semua">Semua Divisi</option>
-          <option value="supply">Supply Chain dan Pelayanan Publik</option>
-          <option value="komersil">Komersil</option>
+          <option value="SCPP">Supply Chain dan Pelayanan Publik</option>
+          <option value="Komersil">Komersil</option>
         </select>
 
         {/* Select 3: Detail/Data Penjualan Perdagangan */}
@@ -105,9 +103,9 @@ export default function FlexibleForm({ onSearch }) {
             required
           >
             <option value="">Pilih Detail</option>
-            <option value="detail">Semua Data</option>
-            <option value="tambah_stok">Penambahan Stok</option>
-            <option value="kurangi_stok">Pengurangan Stok</option>
+            <option value="semua">Semua Data</option>
+            <option value="penambahan">Penambahan Stok</option>
+            <option value="pengurangan">Pengurangan Stok</option>
           </select>
         )}
 
@@ -123,7 +121,7 @@ export default function FlexibleForm({ onSearch }) {
       {/* Print Button */}
       <button
         className="p-2 bg-actionBtn border border-actionBtn hover:bg-activeBtn text-white rounded"
-        onClick={api.customCetakExcel}
+        onClick={api.oprPrintReport({ startdate: startDate, enddate: endDate })}
       >
         Cetak
       </button>

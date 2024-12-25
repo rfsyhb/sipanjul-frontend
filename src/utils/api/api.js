@@ -15,15 +15,8 @@ import axiosRetry from 'axios-retry';
 const api = (() => {
   const BASE_URL = 'https://backend-sipanjul.vercel.app';
 
-  const instance = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  // Retry request jika gagal
-  axiosRetry(instance, {
+    // Retry request jika gagal
+  axiosRetry(axios, {
     retries: 10,
     retryCondition: (error) => {
       return (
@@ -34,6 +27,13 @@ const api = (() => {
       );
     },
     retryDelay: (retryCount) => retryCount * 1000, // Exponential backoff delay
+  });
+
+  const instance = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 
   // Global interceptor untuk handle error

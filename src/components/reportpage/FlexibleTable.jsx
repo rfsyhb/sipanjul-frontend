@@ -3,49 +3,87 @@ import { useTable, useSortBy } from 'react-table';
 import PropTypes from 'prop-types';
 
 export default function FlexibleTable({ data, selectedData }) {
-  // Jika tidak ada data, tidak perlu menampilkan tabel sama sekali
-  if (!data || data.length === 0) {
-    return null;
-  }
-  
-  // Definisikan kolom tabel secara dinamis
+  // Map server data to table-friendly format
+  const mappedData = React.useMemo(() => {
+    if (!data || data.length === 0) {
+      return [];
+    }
+
+    return data.map((item) => {
+      const formattedDate = item.date
+        ? new Date(item.date).toLocaleString('id-ID', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })
+        : '-';
+
+      if (selectedData === 'perubahan') {
+        return {
+          komoditi: item.name || '-',
+          stok_awal: null, // Not applicable for 'perubahan'
+          stok_masuk: item.quantity > 0 ? item.quantity : 0,
+          stok_keluar: item.quantity < 0 ? Math.abs(item.quantity) : 0,
+          keterangan: item.description || '-',
+          date: formattedDate,
+        };
+      }
+
+      if (selectedData === 'penjualan') {
+        return {
+          komoditi: item.komoditi || '-',
+          stok_awal: item.stockawal || 0,
+          stok_terjual: item.terjual || 0,
+          hasil_penjualan: item.hargapenjualan || 0,
+          stok_akhir: item.stockakhir || 0,
+          divisi: item.divisi || '-',
+          date: formattedDate,
+        };
+      }
+
+      return {};
+    });
+  }, [data, selectedData]);
+
+  // Define table columns dynamically
   const columns = React.useMemo(() => {
-    let columnsArray = [
+    const baseColumns = [
       { Header: 'Komoditi', accessor: 'komoditi' },
-      { Header: 'Divisi', accessor: 'divisi' },
-      { Header: 'Stok Awal', accessor: 'stok_awal' },
-      { Header: 'Stok Akhir', accessor: 'stok_akhir' },
+      { Header: 'Tanggal', accessor: 'date' },
     ];
 
     if (selectedData === 'perubahan') {
-      columnsArray.splice(3, 0, {
-        Header: 'Stok Masuk',
-        accessor: 'stok_masuk',
-      });
-      columnsArray.splice(4, 0, {
-        Header: 'Stok Keluar',
-        accessor: 'stok_keluar',
-      });
-      columnsArray.push({ Header: 'Keterangan', accessor: 'keterangan' });
+      return [
+        ...baseColumns,
+        { Header: 'Stok Masuk', accessor: 'stok_masuk' },
+        { Header: 'Stok Keluar', accessor: 'stok_keluar' },
+        { Header: 'Keterangan', accessor: 'keterangan' },
+      ];
     }
 
     if (selectedData === 'penjualan') {
-      columnsArray.splice(3, 0, {
-        Header: 'Stok Terjual',
-        accessor: 'stok_terjual',
-      });
-      columnsArray.splice(4, 0, {
-        Header: 'Hasil Penjualan',
-        accessor: 'hasil_penjualan',
-      });
+      return [
+        ...baseColumns,
+        { Header: 'Stok Awal', accessor: 'stok_awal' },
+        { Header: 'Stok Terjual', accessor: 'stok_terjual' },
+        { Header: 'Hasil Penjualan', accessor: 'hasil_penjualan' },
+        { Header: 'Stok Akhir', accessor: 'stok_akhir' },
+        { Header: 'Divisi', accessor: 'divisi' },
+      ];
     }
 
-    return columnsArray;
+    return baseColumns;
   }, [selectedData]);
 
-  // Menggunakan React Table untuk mengatur tabel dan sorting
+  // Using React Table for table structure
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data }, useSortBy);
+    useTable({ columns, data: mappedData }, useSortBy);
+
+  if (mappedData.length === 0) {
+    return <p className="text-center">No data available</p>;
+  }
 
   return (
     <table
