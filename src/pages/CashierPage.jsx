@@ -13,10 +13,11 @@ export default function CashierPage() {
     isRefetching: isItemsRefetching,
   } = useQuery({
     queryKey: ['items'],
-    queryFn: api.getProducts,
+    queryFn: api.oprGetProduct,
   })
 
-  const { mutate: checkout, isLoading: isCheckoutLoading } = useCheckout();
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const { mutate: checkout } = useCheckout();
   const [cart, setCart] = useState([]);
   const [receivedMoney, setReceivedMoney] = useState('');
   const isEnoughMoney = receivedMoney >= cart.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -82,18 +83,35 @@ export default function CashierPage() {
     id: item.id,
     name: item.name,
     quantity: item.quantity,
-    price: item.price,
+    price: item.price*item.quantity,
   }));
 
   const payload = {
     items: cartData,
-    totalAmount: cartData.reduce((total, item) => total + item.price * item.quantity, 0),
+    totalAmount: cartData.reduce((total, item) => total + item.price, 0),
   }
 
   const handleCheckout = () => {
-    checkout(payload);
-    setCart([]);
-  }
+    console.log('payload checkout', payload);
+    setIsCheckoutLoading(true);
+
+    checkout(payload, {
+      onSuccess: () => {
+        // Kosongkan keranjang hanya jika checkout berhasil
+        setCart([]);
+        // Tambahkan notifikasi atau log jika diperlukan
+        console.log('Checkout berhasil!');
+        alert('Checkout berhasil!');
+        setIsCheckoutLoading(false);
+      },
+      onError: (error) => {
+        // Tangani error jika diperlukan
+        console.error('Checkout gagal:', error.message);
+        alert('Checkout gagal, silakan coba lagi!');
+        setIsCheckoutLoading(false);
+      },
+    });
+  };
 
   return (
     <div className="flex flex-col gap-2 lg:flex-row justify-between p-2 lg:p-4">
@@ -102,7 +120,8 @@ export default function CashierPage() {
         {(isItemsLoading || isItemsRefetching) && <p>Loading...</p>}
         {isItemsError && <p>Error fetching items</p>}
         {!isItemsLoading &&
-          !isItemsError && !isItemsRefetching &&
+          !isItemsError &&
+          !isItemsRefetching &&
           items.map((item) => {
             const cartItem = cart.find((cartItem) => cartItem.id === item.id);
             const quantity = cartItem ? cartItem.quantity : 0;
@@ -197,11 +216,14 @@ export default function CashierPage() {
               {/* Check out button to alert object of cart */}
               <div>
                 <button
-                  className="bg-actionBtn text-white text-xs py-1 px-2 rounded w-full hover:bg-activeBtn group"
-                  onClick={handleCheckout}
+                  className={`bg-actionBtn text-white text-xs py-1 px-2 rounded w-full hover:bg-activeBtn group ${
+                    isCheckoutLoading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
+                  onClick={isCheckoutLoading ? null : handleCheckout}
+                  disabled={isCheckoutLoading}
                 >
                   <span className="font-medium text-lg group-hover:text-inactiveBtn">
-                    Check Out
+                    {isCheckoutLoading ? 'Processing...' : 'Check Out'}
                   </span>
                 </button>
               </div>

@@ -24,16 +24,18 @@ const api = (() => {
 
   // Retry request jika gagal
   axiosRetry(instance, {
-    retries: 3,
+    retries: 10,
     retryCondition: (error) => {
       return (
-        axiosRetry.isNetworkOrIdempotentRequestError(error) ||
-        error.code === 'ECONNABORTED' ||
-        error.response?.data?.message === 'FUNCTION_INVOCATION_TIMEOUT'
+        axiosRetry.isNetworkOrIdempotentRequestError(error) || // Network errors
+        error.code === 'ECONNABORTED' || // Request aborted (timeout)
+        error.response?.status === 504 || // Explicitly handle 504 Gateway Timeout
+        error.response?.data?.message === 'FUNCTION_INVOCATION_TIMEOUT' // Custom error message
       );
     },
-    retryDelay: (retryCount) => retryCount * 1000,
+    retryDelay: (retryCount) => retryCount * 1000, // Exponential backoff delay
   });
+
 
   // Global interceptor untuk handle error
   instance.interceptors.response.use(
@@ -123,7 +125,7 @@ const api = (() => {
     });
 
     return response.status;
-  }
+  };
 
   /**
    * Page: Homepage
@@ -132,25 +134,30 @@ const api = (() => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
     const response = await apiRequest('GET', '/opr/sales-report');
 
-    const payload = response.message?.bulanan ? response.message : response.data;
+    const payload = response.message?.bulanan
+      ? response.message
+      : response.data;
     return payload;
-  }
+  };
 
   const oprGetBestSellingItem = async () => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
     const response = await apiRequest('GET', '/opr/bestselling-product');
 
     const payload = response.message[0].id ? response.message : response.data;
+    console.log('payload api.js', payload);
     return payload;
-  }
+  };
 
   const oprGetRecentTransaction = async () => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
     const response = await apiRequest('GET', '/opr/recent-transaction');
 
-    const payload = response.message[0]?.name ? response.message : response.data;
+    const payload = response.message[0]?.name
+      ? response.message
+      : response.data;
     return payload;
-  }
+  };
 
   /**
    * Page: Cashier
@@ -160,7 +167,7 @@ const api = (() => {
     const response = await apiRequest('POST', '/opr/checkout', cartPayload);
 
     return response.status;
-  }
+  };
 
   /**
    * Page: Inventory
@@ -171,35 +178,43 @@ const api = (() => {
 
     const payload = response.message[0]?.id ? response.message : response.data;
     return payload;
-  }
+  };
 
   const oprAddProduct = async (productData) => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
     const response = await apiRequest('POST', '/opr/product', productData);
 
     return response.status;
-  }
+  };
 
   const oprEditProduct = async (productData) => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
-    const response = await apiRequest('PUT', `opr/product/${productData.id}`, productData);
+    const response = await apiRequest(
+      'PUT',
+      `opr/product/${productData.id}`,
+      productData
+    );
 
     return response.status;
-  }
+  };
 
   const oprEditProductStock = async (productData) => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
-    const response = await apiRequest('PUT', `opr/product/update-stock/${productData.id}`, productData);
+    const response = await apiRequest(
+      'PUT',
+      `opr/product/update-stock/${productData.id}`,
+      productData
+    );
 
     return response.status;
-  }
+  };
 
   const oprDeleteProduct = async (productId) => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
     const response = await apiRequest('DELETE', `opr/product/${productId}`);
 
     return response.status;
-  }
+  };
 
   /**
    * Page: Report
@@ -210,21 +225,23 @@ const api = (() => {
       data: reportPayload.data, // 'perubahan' atau 'penjualan'
       startdate: reportPayload.startdate,
       enddate: reportPayload.enddate,
-      divisi: reportPayload.divisi || "",
-      detail: reportPayload.detail || "",
-    }
-    
+      divisi: reportPayload.divisi || '',
+      detail: reportPayload.detail || '',
+    };
+
     const response = await apiRequest('POST', '/opr/report', payload);
-    const responsePayload = response.message[0]?.id ? response.message : response.data;
+    const responsePayload = response.message[0]?.id
+      ? response.message
+      : response.data;
     return responsePayload;
-  }
+  };
 
   const oprPrintReport = async (reportPayload) => {
     const payload = {
       startdate: reportPayload.startdate,
-      enddate: reportPayload.enddate
-    }
-    
+      enddate: reportPayload.enddate,
+    };
+
     try {
       // Configure headers and make the request
       const response = await axios.post(
@@ -259,9 +276,11 @@ const api = (() => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
     const response = await apiRequest('GET', '/opr/sales-statistic');
 
-    const payload = response.message[0]?.bulanan ? response.message : response.data;
+    const payload = response.message[0]?.bulanan
+      ? response.message
+      : response.data;
     return payload;
-  }
+  };
 
   // Mock API
   const getPublicItems = async () => {
@@ -273,18 +292,18 @@ const api = (() => {
     });
   };
 
-    const toggleStoreStatus = async (currentStatus) => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const updatedStatus = !currentStatus; // Toggle status
-          console.log('Toggled store status:', updatedStatus);
-          resolve({
-            status: updatedStatus,
-            message: 'Store status updated successfully',
-          });
-        }, 500); // Simulasi delay 500ms
-      });
-    };
+  const toggleStoreStatus = async (currentStatus) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const updatedStatus = !currentStatus; // Toggle status
+        console.log('Toggled store status:', updatedStatus);
+        resolve({
+          status: updatedStatus,
+          message: 'Store status updated successfully',
+        });
+      }, 500); // Simulasi delay 500ms
+    });
+  };
 
   // Homepage
   const getSalesReport = async () => {
