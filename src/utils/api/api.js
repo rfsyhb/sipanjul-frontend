@@ -200,10 +200,15 @@ const api = (() => {
 
   const oprEditProductStock = async (productData) => {
     instance.defaults.headers.common.Authorization = `Bearer ${getAccessToken()}`;
+    const requestPayload = {
+      stock: productData.stock,
+      desc: productData.description,
+      isNegative: productData.isNegative,
+    }
     const response = await apiRequest(
       'PUT',
       `opr/product/update-stock/${productData.id}`,
-      productData
+      requestPayload
     );
 
     return response.status;

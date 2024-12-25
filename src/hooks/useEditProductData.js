@@ -5,7 +5,7 @@ export const useEditProductData = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload) => api.editProductData(payload),
+    mutationFn: (payload) => api.oprEditProduct(payload),
     onSuccess: (data) => {
       queryClient.invalidateQueries(['adminInventory']);
       console.log(data.message);

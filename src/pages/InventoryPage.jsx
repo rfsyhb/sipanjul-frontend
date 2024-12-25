@@ -3,7 +3,7 @@ import { produce } from 'immer';
 import Modal from 'react-modal';
 import InventoryItemCard from '../components/inventorypage/InventoryItemCard';
 import useIsMobile from '../hooks/useIsMobile';
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import api from '../utils/api/api';
 import { itemList } from '../utils/dummyData';
 import { useAddNewProduct } from '../hooks/useAddNewProduct';
@@ -13,16 +13,16 @@ import { useDeleteProduct } from '../hooks/useDeleteProduct';
 Modal.setAppElement('#root');
 
 export default function InventoryPage() {
-  const queryClient = useQueryClient();
   const [searchInput, setSearchInput] = useState(''); // Untuk pencarian
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const [newItem, setNewItem] = useState({
     name: '',
     stock: '',
-    price: '',
-    packageSize: '',
     type: '',
-    imageUrl: '',
+    packagesize: '',
+    price: '',
+    image_url: '',
+    division: '',
   });
   const isMobile = useIsMobile(768);
 
@@ -34,7 +34,7 @@ export default function InventoryPage() {
     isRefetching: isAdminInventoryRefetching,
   } = useQuery({
     queryKey: ['adminInventory'], // Key unik untuk query ini
-    queryFn: api.getInventories, // Fungsi untuk fetch data
+    queryFn: api.oprGetProduct, // Fungsi untuk fetch data
   });
 
   // Gunakan dummy data jika items API kurang dari 2
@@ -56,10 +56,11 @@ export default function InventoryPage() {
     setNewItem({
       name: '',
       stock: '',
-      price: '',
-      packageSize: '',
       type: '',
-      imageUrl: '',
+      packagesize: '',
+      price: '',
+      image_url: '',
+      division: '',
     });
   };
 
@@ -174,14 +175,14 @@ export default function InventoryPage() {
               Ukuran Paket:
               <input
                 type="text"
-                value={newItem.packageSize}
-                onChange={(e) => handleChange('packageSize', e.target.value)}
+                value={newItem.packagesize}
+                onChange={(e) => handleChange('packagesize', e.target.value)}
                 className="border p-2 w-full"
                 required
               />
             </label>
             <label>
-              Tipe Barang:
+              Tipe:
               <select
                 value={newItem.type}
                 onChange={(e) => handleChange('type', e.target.value)}
@@ -194,11 +195,24 @@ export default function InventoryPage() {
               </select>
             </label>
             <label>
+              Divisi:
+              <select
+                value={newItem.division}
+                onChange={(e) => handleChange('division', e.target.value)}
+                className="border p-2 w-full"
+                required
+              >
+                <option value="">Pilih divisi barang</option>
+                <option value="SCPP">Supply Chain dan Pelayanan Publik</option>
+                <option value="Komersil">Komersil</option>
+              </select>
+            </label>
+            <label>
               URL Gambar:
               <input
                 type="url"
-                value={newItem.imageUrl}
-                onChange={(e) => handleChange('imageUrl', e.target.value)}
+                value={newItem.image_url}
+                onChange={(e) => handleChange('image_url', e.target.value)}
                 className="border p-2 w-full"
                 required
               />

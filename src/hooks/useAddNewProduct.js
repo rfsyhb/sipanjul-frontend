@@ -5,7 +5,7 @@ export const useAddNewProduct = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (newProduct) => api.addNewProduct(newProduct),
+    mutationFn: (newProduct) => api.oprAddProduct(newProduct),
     onSuccess: (data) => {
       queryClient.invalidateQueries(['adminInventory']);
       console.log(data.message);

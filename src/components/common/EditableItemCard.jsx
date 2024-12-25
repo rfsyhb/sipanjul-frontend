@@ -8,12 +8,14 @@ import { useEditProductData } from '../../hooks/useEditProductData';
 Modal.setAppElement('#root');
 
 export default function EditableItemCard({
+  id,
   imageUrl,
   name,
   stock,
   price,
   type,
   packageSize,
+  division,
   onDelete,
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -24,6 +26,7 @@ export default function EditableItemCard({
   const [editedPrice, setEditedPrice] = useState(price);
   const [editedType, setEditedType] = useState(type);
   const [editedPackageSize, setEditedPackageSize] = useState(packageSize);
+  const [editedDivision, setEditedDivision] = useState(division);
   const [addStock, setAddStock] = useState(0);
   const [reduceStock, setReduceStock] = useState(0);
   const [descEdit, setDescEdit] = useState('');
@@ -53,10 +56,11 @@ export default function EditableItemCard({
     e.preventDefault();
     const editedData = {
       name: editedName,
-      price: editedPrice,
       type: editedType,
       packagesize: editedPackageSize,
+      price: editedPrice,
       image_url: editedImageUrl,
+      division: editedDivision,
     };
     editProductData(editedData);
     closeEditModal();
@@ -65,7 +69,8 @@ export default function EditableItemCard({
   const handleEditStock = (e) => {
     e.preventDefault();
     const editedStockData = {
-      stock: reduceStock > 0 ? -reduceStock : addStock,
+      id,
+      stock: reduceStock > 0 ? reduceStock : addStock,
       description: descEdit,
       isNegative: reduceStock > 0,
     };
@@ -180,6 +185,19 @@ export default function EditableItemCard({
               </select>
             </label>
             <label>
+              Divisi:
+              <select
+                value={editedDivision}
+                onChange={(e) => setEditedDivision(e.target.value)}
+                className="border p-2 w-full"
+                required
+              >
+                <option value="">Pilih divisi barang</option>
+                <option value="SCPP">Supply Chain dan Pelayanan Publik</option>
+                <option value="Komersil">Komersil</option>
+              </select>
+            </label>
+            <label>
               Ukuran Paket:
               <input
                 type="text"
@@ -289,6 +307,7 @@ export default function EditableItemCard({
 }
 
 EditableItemCard.propTypes = {
+  id: PropTypes.number.isRequired,
   imageUrl: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   stock: PropTypes.number.isRequired,
@@ -296,4 +315,5 @@ EditableItemCard.propTypes = {
   type: PropTypes.string.isRequired,
   packageSize: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
+  division: PropTypes.string.isRequired,
 };

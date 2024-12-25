@@ -5,7 +5,7 @@ export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id) => api.deleteProduct(id),
+    mutationFn: (id) => api.oprDeleteProduct(id),
     onSuccess: (data) => {
       queryClient.invalidateQueries(['adminInventory']);
       console.log(data.message);

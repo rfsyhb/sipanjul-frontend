@@ -5,12 +5,14 @@ export default function InventoryItemCard({ item, onDelete }) {
   return (
     <div className='w-40'>
       <EditableItemCard
+        id={item.id}
         imageUrl={item.image_url}
         name={item.name}
         stock={item.stock}
         price={item.price}
         type={item.type}
         packageSize={item.packagesize}
+        division={item.division}
         onDelete={() => onDelete(item.id)}
       />
       <h3>{item.name}</h3>
@@ -26,6 +28,8 @@ InventoryItemCard.propTypes = {
     packagesize: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     image_url: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    division: PropTypes.string.isRequired,
   }).isRequired,
   onDelete: PropTypes.func.isRequired,
 };
