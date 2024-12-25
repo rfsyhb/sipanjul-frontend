@@ -55,6 +55,7 @@ export default function EditableItemCard({
   const handleEditData = (e) => {
     e.preventDefault();
     const editedData = {
+      id,
       name: editedName,
       type: editedType,
       packagesize: editedPackageSize,
