@@ -11,7 +11,7 @@ import api from '../../utils/api/api';
 Modal.setAppElement('#root');
 
 export default function Header() {
-  const { data: storeStatus } = useQuery({
+  const { data: storeStatus, isLoading: isStoreStatusLoading } = useQuery({
     queryKey: ['storeStatus'],
     queryFn: api.getStoreStatus,
   });
@@ -77,13 +77,13 @@ export default function Header() {
           {/* on off toko */}
           <div className="flex flex-row p-1 bg-white rounded-full">
             <div
-              className={`p-1 px-2 md:p-4 md:px-6 ${storeStatus ? 'bg-green-400' : ''} ${isStoreLoading ? 'cursor-not-allowed bg-white' : ''} rounded-full cursor-pointer`}
+              className={`p-1 px-2 md:p-4 md:px-6 ${storeStatus ? 'bg-green-400' : ''} ${isStoreLoading || isStoreStatusLoading ? 'cursor-not-allowed bg-white' : ''} rounded-full cursor-pointer`}
               onClick={isStoreLoading || storeStatus ? undefined : openModal}
             >
               <BsUnlockFill size={24} />
             </div>
             <div
-              className={`p-1 px-2 md:p-4 md:px-6 ${!storeStatus ? 'bg-red-400' : ''} ${isStoreLoading ? 'cursor-not-allowed bg-white' : ''} rounded-full cursor-pointer`}
+              className={`p-1 px-2 md:p-4 md:px-6 ${!storeStatus ? 'bg-red-400' : ''} ${isStoreLoading || isStoreStatusLoading ? 'cursor-not-allowed bg-white' : ''} rounded-full cursor-pointer`}
               onClick={isStoreLoading || !storeStatus ? undefined : openModal}
             >
               <BsFillLockFill size={24} />
