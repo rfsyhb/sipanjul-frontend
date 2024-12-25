@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import api from '../../utils/api/api';
 import useIsMobile from '../../hooks/useIsMobile';
 
-export default function FlexibleForm({ onSearch }) {
+export default function FlexibleForm({ onSearch, printReport, isPrintLoading }) {
   const isMobile = useIsMobile(768);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -154,10 +153,11 @@ export default function FlexibleForm({ onSearch }) {
 
       {/* Print Button */}
       <button
-        className="p-2 bg-actionBtn border border-actionBtn hover:bg-activeBtn text-white rounded"
-        onClick={() => api.oprPrintReport({ startdate: startDate, enddate: endDate })}
+        className={`p-2 bg-actionBtn border border-actionBtn hover:bg-activeBtn text-white rounded ${isPrintLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+        onClick={() => printReport({ startdate: startDate, enddate: endDate })}
+        disabled={isPrintLoading}
       >
-        Cetak
+        {isPrintLoading ? 'Loading...' : 'Cetak Laporan'}
       </button>
     </div>
   );
@@ -165,4 +165,6 @@ export default function FlexibleForm({ onSearch }) {
 
 FlexibleForm.propTypes = {
   onSearch: PropTypes.func.isRequired,
+  printReport: PropTypes.func.isRequired,
+  isPrintLoading: PropTypes.bool.isRequired,
 };

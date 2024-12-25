@@ -3,41 +3,43 @@ import { BsFillLockFill, BsUnlockFill } from 'react-icons/bs';
 import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useStoreStatus } from '../../hooks/useStoreStatus.';
 import { useUpdateStoreStatus } from '../../hooks/useUpdateStoreStatus';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import api from '../../utils/api/api';
 
 // Setting the app element for accessibility
 Modal.setAppElement('#root');
 
 export default function Header() {
-  const {
-    data: storeStatus,
-    isLoading: isStoreStatusLoading,
-    isError: isStoreStatusError,
-    error: storeStatusError,
-  } = useQuery({
+  const { data: storeStatus } = useQuery({
     queryKey: ['storeStatus'],
     queryFn: api.getStoreStatus,
   });
 
-  const { mutate: updateStatus, isLoading: isUpdating } =
-    useUpdateStoreStatus();
+  const [isStoreLoading, setIsStoreLoading] = useState(false);
+  const queryClient = useQueryClient();
+  const { mutate: updateStatus } = useUpdateStoreStatus();
 
   const toggleStoreStatus = () => {
     console.log('Current status:', storeStatus);
+    setIsStoreLoading(true);
 
     updateStatus(storeStatus, {
-      onSuccess: () => {
-        if (!storeStatus) {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(['storeStatus']); // Wait for the query to refetch
+        const updatedStatus = queryClient.getQueryData(['storeStatus']);
+
+        if (updatedStatus) {
           toast.success('Toko telah dibuka!', toastOptions);
         } else {
           toast.error('Toko telah ditutup!', toastOptions);
         }
+
+        setIsStoreLoading(false);
       },
       onError: (error) => {
         toast.error(`Terjadi kesalahan: ${error.message}`, toastOptions);
+        setIsStoreLoading(false);
       },
     });
 
@@ -75,14 +77,14 @@ export default function Header() {
           {/* on off toko */}
           <div className="flex flex-row p-1 bg-white rounded-full">
             <div
-              className={`p-1 px-2 md:p-4 md:px-6 ${storeStatus ? 'bg-green-400' : ''} rounded-full cursor-pointer`}
-              onClick={storeStatus ? undefined : openModal}
+              className={`p-1 px-2 md:p-4 md:px-6 ${storeStatus ? 'bg-green-400' : ''} ${isStoreLoading ? 'cursor-not-allowed bg-white' : ''} rounded-full cursor-pointer`}
+              onClick={isStoreLoading || storeStatus ? undefined : openModal}
             >
               <BsUnlockFill size={24} />
             </div>
             <div
-              className={`p-1 px-2 md:p-4 md:px-6 ${!storeStatus ? 'bg-red-400' : ''} rounded-full cursor-pointer`}
-              onClick={!storeStatus ? undefined : openModal}
+              className={`p-1 px-2 md:p-4 md:px-6 ${!storeStatus ? 'bg-red-400' : ''} ${isStoreLoading ? 'cursor-not-allowed bg-white' : ''} rounded-full cursor-pointer`}
+              onClick={isStoreLoading || !storeStatus ? undefined : openModal}
             >
               <BsFillLockFill size={24} />
             </div>

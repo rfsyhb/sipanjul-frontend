@@ -4,11 +4,14 @@ import FlexibleTable from '../components/reportpage/FlexibleTable';
 import { FaRegFrownOpen } from 'react-icons/fa';
 import { useMutation } from '@tanstack/react-query';
 import api from '../utils/api/api';
+import useIsMobile from '../hooks/useIsMobile';
 
 export default function ReportPage() {
+  const isMobile = useIsMobile(768);
   const [tableData, setTableData] = useState([]);
   const [selectedData, setSelectedData] = useState('');
   const [isTableCleared, setIsTableCleared] = useState(false); // Track if table is cleared
+  const [isPrintLoading, setIsPrintLoading] = useState(false);
 
   // Mutation for fetching data based on form input
   const mutation = useMutation({
@@ -27,6 +30,22 @@ export default function ReportPage() {
     },
   });
 
+  // Mutation for printing report
+  const { mutate: printReport } = useMutation({
+    mutationFn: (payload) => {
+      setIsPrintLoading(true);
+      return api.oprPrintReport(payload);
+    },
+    onSuccess: () => {
+      setIsPrintLoading(false);
+      console.log('Print success:');
+    },
+    onError: (error) => {
+      setIsPrintLoading(false);
+      console.error('Error printing report:', error);
+    },
+  });
+
   // Handle search from FlexibleForm
   const handleOnSearch = (formData) => {
     setSelectedData(formData.data); // Save selected data type
@@ -36,7 +55,7 @@ export default function ReportPage() {
   return (
     <div className="p-4 flex flex-col gap-4 h-full w-full">
       {/* FlexibleForm calls handleOnSearch when the user submits */}
-      <FlexibleForm onSearch={handleOnSearch} />
+      <FlexibleForm onSearch={handleOnSearch} printReport={printReport} isPrintLoading={isPrintLoading} />
 
       {/* Show loading, error, or table data */}
       {mutation.isLoading || isTableCleared ? (
