@@ -190,8 +190,8 @@ export default function InventoryPage() {
                 required
               >
                 <option value="">Pilih tipe barang</option>
-                <option value="beras">Beras</option>
-                <option value="lainnya">Lainnya</option>
+                <option value="Beras">Beras</option>
+                <option value="Lainnya">Lainnya</option>
               </select>
             </label>
             <label>
