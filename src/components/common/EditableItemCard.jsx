@@ -199,8 +199,8 @@ export default function EditableItemCard({
                 value={editedType}
                 onChange={(e) => setEditedType(e.target.value)}
               >
-                <option value="beras">Beras</option>
-                <option value="lainnya">Lainnya</option>
+                <option value="Beras">Beras</option>
+                <option value="Lainnya">Lainnya</option>
               </select>
             </label>
             <label>
