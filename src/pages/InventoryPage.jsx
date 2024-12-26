@@ -229,6 +229,7 @@ export default function InventoryPage() {
             <button
               type="submit"
               className={`bg-blue-500 text-white px-4 py-2 rounded ${isLoading ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
+              disabled={isLoading}
             >
               {isLoading ? 'Loading...' : 'Submit'}
             </button>
