@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import ToggleButton from '../common/ToggleButton';
 import ItemCard from './ItemCard';
-import { bestSellingList } from '../../utils/dummyData';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../utils/api/api';
 
@@ -10,7 +9,7 @@ export default function BestSellingCard({ notify }) {
   const {
     data: bestSellingProducts = {},
     isLoading: isBestSellingLoading,
-    isError: isBestSellingError,
+    isRefetching: isBestSellingRefetching,
   } = useQuery({
     queryKey: ['bestSellingProducts'],
     queryFn: api.oprGetBestSellingItem,
@@ -27,7 +26,7 @@ export default function BestSellingCard({ notify }) {
       : bestSellingProducts?.bulanan || [];
 
   return (
-    <section className="flex flex-col rounded-2xl bg-white w-auto p-2 lg:p-4 gap-2 flex-shrink-0">
+    <section className="flex flex-col rounded-2xl bg-white w-auto p-4 lg:p-4 gap-2 flex-shrink-0">
       {/* w-full adalah koentji */}
       <div className="flex flex-row items-center justify-between w-full">
         <h2 className="text-base lg:text-lg font-medium">
@@ -53,9 +52,9 @@ export default function BestSellingCard({ notify }) {
         </div>
       </div>
       {/* w-full dan max-w adalah koentji */}
-      <div className="flex flex-row overflow-x-auto w-full max-w-[88vw]">
-        {isBestSellingLoading && (<p>loading...</p>)}
-        {!isBestSellingLoading && selectedItems.map((item) => (
+      <div className="flex flex-row h-32 lg:h-auto overflow-x-auto w-full max-w-[88vw]">
+        {(isBestSellingLoading || isBestSellingRefetching) && (<p>loading...</p>)}
+        {!isBestSellingLoading && !isBestSellingRefetching && selectedItems.map((item) => (
           <ItemCard key={item.name} imageUrl={item.imageUrl} name={item.name} />
         ))}
       </div>

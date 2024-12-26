@@ -17,7 +17,7 @@ export default function Homepage() {
   const {
     data: salesDataObject = {},
     isLoading: isSalesDataLoading,
-    isError: isSalesDataError,
+    isRefetching: isSalesDataRefetching,
   } = useQuery({
     queryKey: ['salesData'],
     queryFn: api.oprGetSalesReport,
@@ -58,32 +58,42 @@ export default function Homepage() {
                   </div>
                 </div>
                 <div className="flex flex-col">
-                  <div className="flex gap-2">
-                    <p className="font-medium text-xl">
-                      Rp. {data.currentValue?.toLocaleString('id-ID') || 0}
-                    </p>
-                    <div
-                      className={`flex flex-row items-center gap-1 px-2 rounded-xl ${
-                        data.isNegative ? 'bg-red-300' : 'bg-green-300'
-                      }`}
-                    >
-                      {data.isNegative ? (
-                        <FaArrowDown className="text-red-700" size={14} />
-                      ) : (
-                        <FaArrowUp className="text-green-700" size={14} />
-                      )}
-                      <p
-                        className={`font-medium ${
-                          data.isNegative ? 'text-red-700' : 'text-green-700'
-                        }`}
-                      >
-                        {Math.abs(data.percentage || 0).toFixed(1)}%
+                  {(isSalesDataLoading || isSalesDataRefetching) && (
+                    <p>loading...</p>
+                  )}
+                  {!isSalesDataLoading && !isSalesDataRefetching && (
+                    <>
+                      <div className="flex gap-2">
+                        <p className="font-medium text-xl">
+                          Rp. {data.currentValue?.toLocaleString('id-ID') || 0}
+                        </p>
+                        <div
+                          className={`flex flex-row items-center gap-1 px-2 rounded-xl ${
+                            data.isNegative ? 'bg-red-300' : 'bg-green-300'
+                          }`}
+                        >
+                          {data.isNegative ? (
+                            <FaArrowDown className="text-red-700" size={14} />
+                          ) : (
+                            <FaArrowUp className="text-green-700" size={14} />
+                          )}
+                          <p
+                            className={`font-medium ${
+                              data.isNegative
+                                ? 'text-red-700'
+                                : 'text-green-700'
+                            }`}
+                          >
+                            {Math.abs(data.percentage || 0).toFixed(1)}%
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-sm">
+                        perbandingan {['hari', 'minggu', 'bulan'][index]}{' '}
+                        kemarin
                       </p>
-                    </div>
-                  </div>
-                  <p className="text-sm">
-                    perbandingan {['hari', 'minggu', 'bulan'][index]} kemarin
-                  </p>
+                    </>
+                  )}
                 </div>
               </div>
             );
@@ -111,30 +121,35 @@ export default function Homepage() {
             </div>
           </div>
           <div className="flex flex-col">
-            <div className="flex gap-2">
-              <p className="font-medium text-xl">
-                Rp. {salesData.currentValue?.toLocaleString('id-ID') || 0}
-              </p>
-              <div
-                className={`flex flex-row items-center gap-1 px-2 rounded-xl ${
-                  salesData.isNegative ? 'bg-red-300' : 'bg-green-300'
-                }`}
-              >
-                {salesData.isNegative ? (
-                  <FaArrowDown className="text-red-700" size={14} />
-                ) : (
-                  <FaArrowUp className="text-green-700" size={14} />
-                )}
-                <p
-                  className={`font-medium ${
-                    salesData.isNegative ? 'text-red-700' : 'text-green-700'
-                  }`}
-                >
-                  {Math.abs(salesData.percentage || 0).toFixed(1)}%
-                </p>
-              </div>
-            </div>
-            <p className="text-sm">perbandingan {selectedPeriod} kemarin</p>
+            {(isSalesDataLoading || isSalesDataRefetching) && <p>loading...</p>}
+            {!isSalesDataLoading && !isSalesDataRefetching && (
+              <>
+                <div className="flex gap-2">
+                  <p className="font-medium text-xl">
+                    Rp. {salesData.currentValue?.toLocaleString('id-ID') || 0}
+                  </p>
+                  <div
+                    className={`flex flex-row items-center gap-1 px-2 rounded-xl ${
+                      salesData.isNegative ? 'bg-red-300' : 'bg-green-300'
+                    }`}
+                  >
+                    {salesData.isNegative ? (
+                      <FaArrowDown className="text-red-700" size={14} />
+                    ) : (
+                      <FaArrowUp className="text-green-700" size={14} />
+                    )}
+                    <p
+                      className={`font-medium ${
+                        salesData.isNegative ? 'text-red-700' : 'text-green-700'
+                      }`}
+                    >
+                      {Math.abs(salesData.percentage || 0).toFixed(1)}%
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm">perbandingan {selectedPeriod} kemarin</p>
+              </>
+            )}
           </div>
         </div>
       )}
