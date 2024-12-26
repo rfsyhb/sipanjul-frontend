@@ -222,7 +222,8 @@ export default function InventoryPage() {
             <button
               type="button"
               onClick={closeModal}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+              className={`bg-gray-500 text-white px-4 py-2 rounded ${isLoading ? 'cursor-not-allowed' : 'hover:bg-gray-600'}`}
+              disabled={isLoading}
             >
               Cancel
             </button>

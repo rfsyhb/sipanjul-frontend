@@ -71,9 +71,9 @@ export default function EditableItemCard({
       onSuccess: () => {
         closeEditModal();
         setIsLoading(false);
-      }
+      },
     });
-  }
+  };
 
   const handleEditStock = (e) => {
     e.preventDefault();
@@ -91,9 +91,9 @@ export default function EditableItemCard({
         setReduceStock(0);
         closeStockModal();
         closeEditModal();
-      }
+      },
     });
-  }
+  };
 
   const handleDeleteProduct = (id) => {
     setIsDeleteLoading(true);
@@ -101,9 +101,9 @@ export default function EditableItemCard({
       onSuccess: () => {
         closeEditModal();
         setIsDeleteLoading(false);
-      }
+      },
     });
-  }
+  };
 
   return (
     <div
@@ -240,13 +240,14 @@ export default function EditableItemCard({
               <button
                 type="button"
                 onClick={closeEditModal}
-                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+                className={`bg-gray-500 text-white px-4 py-2 rounded ${isLoading ? 'cursor-not-allowed' : 'hover:bg-gray-600'}`}
+                disabled={isLoading}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                className={`bg-blue-500 text-white px-4 py-2 rounded ${isLoading ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
                 disabled={isLoading}
               >
                 {isLoading ? 'Loading...' : 'Update'}
@@ -256,7 +257,7 @@ export default function EditableItemCard({
               type="button"
               className={`bg-red-500 text-white px-4 py-2 rounded ${isDeleteLoading ? 'cursor-not-allowed opacity-50' : 'hover:bg-red-600'}`}
               onClick={handleDeleteProduct}
-              disabled={isDeleteLoading}
+              disabled={isDeleteLoading || isLoading}
             >
               {isDeleteLoading ? 'Loading...' : 'Delete'}
             </button>
@@ -310,7 +311,8 @@ export default function EditableItemCard({
             <button
               type="button"
               onClick={closeStockModal}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+              className={`bg-gray-500 text-white px-4 py-2 rounded ${isLoading ? 'cursor-not-allowed' : 'hover:bg-gray-600'}`}
+              disabled={isLoading}
             >
               Cancel
             </button>
