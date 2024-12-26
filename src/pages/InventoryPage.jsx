@@ -7,7 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 import api from '../utils/api/api';
 import { itemList } from '../utils/dummyData';
 import { useAddNewProduct } from '../hooks/useAddNewProduct';
-import { useDeleteProduct } from '../hooks/useDeleteProduct';
 
 // Atur root element untuk modal agar rendering benar
 Modal.setAppElement('#root');
@@ -15,6 +14,7 @@ Modal.setAppElement('#root');
 export default function InventoryPage() {
   const [searchInput, setSearchInput] = useState(''); // Untuk pencarian
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [isLoading, setIsLoading] = useState(false);
   const [newItem, setNewItem] = useState({
     name: '',
     stock: '',
@@ -41,7 +41,6 @@ export default function InventoryPage() {
   const items = adminInventories.length >= 3 ? adminInventories : itemList;
 
   const { mutate: addProduct } = useAddNewProduct();
-  const { mutate: deleteProduct } = useDeleteProduct();
 
   const handleSearch = (e) => {
     setSearchInput(e.target.value);
@@ -66,8 +65,13 @@ export default function InventoryPage() {
 
   const handleAddItem = (e) => {
     e.preventDefault();
-    addProduct(newItem);
-    closeModal();
+    setIsLoading(true);
+    addProduct(newItem, {
+      onSuccess: () => {
+        closeModal();
+        setIsLoading(false);
+      }
+    });
   };
 
   const handleChange = (field, value) => {
@@ -76,10 +80,6 @@ export default function InventoryPage() {
         draft[field] = value;
       })
     );
-  };
-
-  const handleDeleteItem = (id) => {
-    deleteProduct(id);
   };
 
   // Filter data berdasarkan input pencarian
@@ -222,15 +222,15 @@ export default function InventoryPage() {
             <button
               type="button"
               onClick={closeModal}
-              className="bg-gray-500 text-white px-4 py-2 rounded"
+              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className={`bg-blue-500 text-white px-4 py-2 rounded ${isLoading ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
             >
-              Save
+              {isLoading ? 'Loading...' : 'Submit'}
             </button>
           </div>
         </form>

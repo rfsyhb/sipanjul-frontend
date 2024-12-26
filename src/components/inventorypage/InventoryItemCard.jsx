@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import EditableItemCard from '../common/EditableItemCard';
 
-export default function InventoryItemCard({ item, onDelete }) {
+export default function InventoryItemCard({ item }) {
   return (
     <div className='w-40'>
       <EditableItemCard
@@ -13,7 +13,6 @@ export default function InventoryItemCard({ item, onDelete }) {
         type={item.type}
         packageSize={item.packagesize}
         division={item.division}
-        onDelete={() => onDelete(item.id)}
       />
       <h3>{item.name}</h3>
     </div>
@@ -31,5 +30,4 @@ InventoryItemCard.propTypes = {
     type: PropTypes.string.isRequired,
     division: PropTypes.string.isRequired,
   }).isRequired,
-  onDelete: PropTypes.func.isRequired,
 };

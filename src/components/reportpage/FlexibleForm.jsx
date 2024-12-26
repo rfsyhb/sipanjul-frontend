@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import useIsMobile from '../../hooks/useIsMobile';
 
-export default function FlexibleForm({ onSearch, printReport, isPrintLoading }) {
+export default function FlexibleForm({ onSearch, isSearchLoading, printReport, isPrintLoading }) {
   const isMobile = useIsMobile(768);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -62,10 +62,10 @@ export default function FlexibleForm({ onSearch, printReport, isPrintLoading }) 
     >
       <form
         onSubmit={handleSearch}
-        className={`flex ${isMobile ? 'flex-col gap-1' : 'flex-row gap-4'} flex-wrap`}
+        className={`flex ${isMobile ? 'flex-col gap-1' : 'flex-row gap-1'} flex-wrap`}
       >
         <div
-          className={` items-center flex justify-between ${isMobile ? ' flex-row' : ' flex-row gap-4'}`}
+          className={` items-center flex justify-between ${isMobile ? ' flex-row' : ' flex-row gap-1'}`}
         >
           {/* Start Date Selector */}
           <input
@@ -90,7 +90,7 @@ export default function FlexibleForm({ onSearch, printReport, isPrintLoading }) 
 
         {/* Select Utama */}
         <div
-          className={`flex flex-wrap ${isMobile ? 'gap-1' : 'gap-4'} items-center justify-between`}
+          className={`flex flex-wrap ${isMobile ? 'gap-1' : 'gap-1'} items-center justify-between`}
         >
           {/* Select 1: Division */}
           <div className="flex-1 min-w-[60px]">
@@ -144,9 +144,9 @@ export default function FlexibleForm({ onSearch, printReport, isPrintLoading }) 
           {/* Search Button */}
           <button
             type="submit"
-            className="p-2 bg-actionBtn border border-actionBtn hover:bg-activeBtn text-white rounded"
+            className={`p-2 bg-actionBtn border border-actionBtn hover:bg-activeBtn text-white rounded ${isSearchLoading ? 'cursor-not-allowed opacity-50' : ''}`}
           >
-            Search
+            {isSearchLoading ? 'Loading...' : 'Cari'}
           </button>
         </div>
       </form>
@@ -165,6 +165,7 @@ export default function FlexibleForm({ onSearch, printReport, isPrintLoading }) 
 
 FlexibleForm.propTypes = {
   onSearch: PropTypes.func.isRequired,
+  isSearchLoading: PropTypes.bool.isRequired,
   printReport: PropTypes.func.isRequired,
   isPrintLoading: PropTypes.bool.isRequired,
 };

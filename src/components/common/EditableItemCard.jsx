@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Modal from 'react-modal';
 import { useEditProductStock } from '../../hooks/useEditProductStock';
 import { useEditProductData } from '../../hooks/useEditProductData';
+import { useDeleteProduct } from '../../hooks/useDeleteProduct';
 
 // Atur root element untuk modal agar rendering benar
 Modal.setAppElement('#root');
@@ -16,7 +17,6 @@ export default function EditableItemCard({
   type,
   packageSize,
   division,
-  onDelete,
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isStockModalOpen, setIsStockModalOpen] = useState(false);
@@ -32,6 +32,9 @@ export default function EditableItemCard({
   const [descEdit, setDescEdit] = useState('');
   const { mutate: editProductData } = useEditProductData();
   const { mutate: editProductStock } = useEditProductStock();
+  const { mutate: onDelete } = useDeleteProduct();
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fungsi untuk membuka dan menutup modal edit item
   const openEditModal = () => {
@@ -54,6 +57,7 @@ export default function EditableItemCard({
 
   const handleEditData = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const editedData = {
       id,
       name: editedName,
@@ -63,28 +67,42 @@ export default function EditableItemCard({
       image_url: editedImageUrl,
       division: editedDivision,
     };
-    editProductData(editedData);
-    closeEditModal();
+    editProductData(editedData, {
+      onSuccess: () => {
+        closeEditModal();
+        setIsLoading(false);
+      }
+    });
   }
 
   const handleEditStock = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const editedStockData = {
       id,
       stock: reduceStock > 0 ? reduceStock : addStock,
       description: descEdit,
       isNegative: reduceStock > 0,
     };
-    editProductStock(editedStockData);
-    setAddStock(0);
-    setReduceStock(0);
-    closeStockModal();
-    closeEditModal();
+    editProductStock(editedStockData, {
+      onSuccess: () => {
+        setIsLoading(false);
+        setAddStock(0);
+        setReduceStock(0);
+        closeStockModal();
+        closeEditModal();
+      }
+    });
   }
 
   const handleDeleteProduct = (id) => {
-    onDelete(id);
-    closeEditModal();
+    setIsDeleteLoading(true);
+    onDelete(id, {
+      onSuccess: () => {
+        closeEditModal();
+        setIsDeleteLoading(false);
+      }
+    });
   }
 
   return (
@@ -222,23 +240,23 @@ export default function EditableItemCard({
               <button
                 type="button"
                 onClick={closeEditModal}
-                className="bg-gray-500 text-white px-4 py-2 rounded"
+                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
               >
-                Save
+                {isLoading ? 'Loading...' : 'Update'}
               </button>
             </div>
             <button
               type="button"
-              className="bg-red-500 text-white px-4 py-2 rounded"
+              className={`bg-red-500 text-white px-4 py-2 rounded ${isDeleteLoading ? 'cursor-not-allowed opacity-50' : 'hover:bg-red-600'}`}
               onClick={handleDeleteProduct}
             >
-              Delete
+              {isDeleteLoading ? 'Loading...' : 'Delete'}
             </button>
           </div>
         </form>
@@ -290,15 +308,15 @@ export default function EditableItemCard({
             <button
               type="button"
               onClick={closeStockModal}
-              className="bg-gray-500 text-white px-4 py-2 rounded"
+              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className={`bg-blue-500 text-white px-4 py-2 rounded ${isLoading ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
             >
-              Update
+              {isLoading ? 'Loading...' : 'Update'}
             </button>
           </div>
         </form>
@@ -315,6 +333,5 @@ EditableItemCard.propTypes = {
   price: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   packageSize: PropTypes.string.isRequired,
-  onDelete: PropTypes.func.isRequired,
   division: PropTypes.string.isRequired,
 };
