@@ -15,6 +15,7 @@ export default function SidebarItem({ icon, to, isLogout = false }) {
             <button
               onClick={() => {
                 localStorage.removeItem('accessToken');
+                localStorage.removeItem('userId');
                 window.location.href = '/login';
               }}
               className="w-full p-3 rounded-full hover:bg-text"

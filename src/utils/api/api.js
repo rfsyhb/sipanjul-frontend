@@ -107,11 +107,14 @@ const api = (() => {
   const putAccessToken = (accessToken) =>
     localStorage.setItem('accessToken', accessToken);
   const clearAccessToken = () => localStorage.removeItem('accessToken');
+  const getUserId = () => localStorage.getItem('userId');
+  const putUserId = (userId) => localStorage.setItem('userId', userId);
+  const clearUserId = () => localStorage.removeItem('userId');
 
   // API Endpoints
   const login = async ({ name, password }) => {
     const response = await apiRequest('POST', '/login', { name, password });
-    return response.data.token;
+    return response.data;
   };
 
   const getGuestItems = async () => {
@@ -119,8 +122,8 @@ const api = (() => {
     return response.data;
   };
 
-  const getStoreStatus = async () => {
-    const response = await apiRequest('GET', '/store-status/1');
+  const getStoreStatus = async (id) => {
+    const response = await apiRequest('GET', `/store-status/${id}`);
     return response.storestatus;
   };
 
@@ -502,6 +505,9 @@ const api = (() => {
     getAccessToken,
     putAccessToken,
     clearAccessToken,
+    getUserId,
+    putUserId,
+    clearUserId,
     // Public API
     login,
     getGuestItems,

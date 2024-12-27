@@ -11,9 +11,11 @@ import api from '../../utils/api/api';
 Modal.setAppElement('#root');
 
 export default function Header() {
+  const userId = localStorage.getItem('userId');
+
   const { data: storeStatus, isLoading: isStoreStatusLoading } = useQuery({
     queryKey: ['storeStatus'],
-    queryFn: api.getStoreStatus,
+    queryFn: () => api.getStoreStatus(userId),
   });
 
   const [isStoreLoading, setIsStoreLoading] = useState(false);

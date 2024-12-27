@@ -23,7 +23,7 @@ export default function LandingPage() {
     error: storeStatusError,
   } = useQuery({
     queryKey: ['storeStatus'],
-    queryFn: api.getStoreStatus
+    queryFn: () => api.getStoreStatus(2)
   })
 
   const items = publicItems;

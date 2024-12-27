@@ -22,8 +22,9 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const token = await api.login({ name: username, password });
-      api.putAccessToken(token); // Simpan token ke localStorage
+      const data = await api.login({ name: username, password });
+      api.putAccessToken(data.token); // Simpan token ke localStorage
+      api.putUserId(data.id); // Simpan id pengguna ke localStorage
       setIsAuthed(true); // Set isAuthed menjadi true
       setError('');
       alert(`Login success. Welcome, ${username}!`);
