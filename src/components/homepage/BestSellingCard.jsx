@@ -55,7 +55,7 @@ export default function BestSellingCard({ notify }) {
       <div className="flex flex-row h-32 lg:h-auto overflow-x-auto w-full max-w-[88vw]">
         {(isBestSellingLoading || isBestSellingRefetching) && (<p>loading...</p>)}
         {!isBestSellingLoading && !isBestSellingRefetching && selectedItems.map((item) => (
-          <ItemCard key={item.name} imageUrl={item.imageUrl} name={item.name} />
+          <ItemCard key={item.name} imageUrl={item.imageurl} name={item.name} />
         ))}
       </div>
     </section>
