@@ -119,7 +119,6 @@ export default function InventoryPage() {
             <InventoryItemCard
               key={item.id}
               item={item}
-              onDelete={() => handleDeleteItem(item.id)}
             />
           ))}
       </div>

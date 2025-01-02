@@ -256,7 +256,7 @@ export default function EditableItemCard({
             <button
               type="button"
               className={`bg-red-500 text-white px-4 py-2 rounded ${isDeleteLoading ? 'cursor-not-allowed opacity-50' : 'hover:bg-red-600'}`}
-              onClick={handleDeleteProduct}
+              onClick={() => handleDeleteProduct(id)}
               disabled={isDeleteLoading || isLoading}
             >
               {isDeleteLoading ? 'Loading...' : 'Delete'}
